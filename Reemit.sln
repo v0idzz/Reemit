@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Decompiler.PE", "Reemit.Decompiler.PE\Reemit.Decompiler.PE.csproj", "{419A4727-CBCC-4696-A635-C6B619B1A3E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Decompiler.PE.UnitTests", "Reemit.Decompiler.PE.UnitTests\Reemit.Decompiler.PE.UnitTests.csproj", "{1957AD7F-B08D-49C5-B28D-41CDCC1D803B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Common", "Reemit.Common\Reemit.Common.csproj", "{8242D0FA-6E29-4872-AAFD-4A340F28491B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{419A4727-CBCC-4696-A635-C6B619B1A3E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{419A4727-CBCC-4696-A635-C6B619B1A3E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{419A4727-CBCC-4696-A635-C6B619B1A3E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{419A4727-CBCC-4696-A635-C6B619B1A3E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1957AD7F-B08D-49C5-B28D-41CDCC1D803B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1957AD7F-B08D-49C5-B28D-41CDCC1D803B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1957AD7F-B08D-49C5-B28D-41CDCC1D803B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1957AD7F-B08D-49C5-B28D-41CDCC1D803B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8242D0FA-6E29-4872-AAFD-4A340F28491B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8242D0FA-6E29-4872-AAFD-4A340F28491B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8242D0FA-6E29-4872-AAFD-4A340F28491B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8242D0FA-6E29-4872-AAFD-4A340F28491B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
