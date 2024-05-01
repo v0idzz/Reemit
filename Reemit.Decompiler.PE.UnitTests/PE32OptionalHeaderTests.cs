@@ -50,11 +50,7 @@ public sealed class PE32OptionalHeaderTests
         Assert.Equal(16u, header.WindowsSpecificFields.NumberOfRvaAndSizes);
         
         Assert.Collection(header.WindowsSpecificFields.DataDirectories,
-            x =>
-            {
-                Assert.Equal(0u, x.Size);
-                Assert.Equal(0u, x.VirtualAddress);
-            },
+            x => Assert.Equal(PETestsHelper.EmptyImageDataDirectory, x),
             x =>
             {
                 Assert.Equal(79u, x.Size);
@@ -65,16 +61,8 @@ public sealed class PE32OptionalHeaderTests
                 Assert.Equal(1300u, x.Size);
                 Assert.Equal(0x00006000u, x.VirtualAddress);
             },
-            x =>
-            {
-                Assert.Equal(0u, x.Size);
-                Assert.Equal(0u, x.VirtualAddress);
-            },
-            x =>
-            {
-                Assert.Equal(0u, x.Size);
-                Assert.Equal(0u, x.VirtualAddress);
-            },
+            x => Assert.Equal(PETestsHelper.EmptyImageDataDirectory, x),
+            x => Assert.Equal(PETestsHelper.EmptyImageDataDirectory, x),
             x =>
             {
                 Assert.Equal(12u, x.Size);
@@ -85,50 +73,22 @@ public sealed class PE32OptionalHeaderTests
                 Assert.Equal(84u, x.Size);
                 Assert.Equal(0x00004FD4u, x.VirtualAddress);
             },
-            x =>
-            {
-                Assert.Equal(0u, x.Size);
-                Assert.Equal(0u, x.VirtualAddress);
-            },
-            x =>
-            {
-                Assert.Equal(0u, x.Size);
-                Assert.Equal(0u, x.VirtualAddress);
-            },
-            x =>
-            {
-                Assert.Equal(0u, x.Size);
-                Assert.Equal(0u, x.VirtualAddress);
-            },
-            x =>
-            {
-                Assert.Equal(0u, x.Size);
-                Assert.Equal(0u, x.VirtualAddress);
-            },
-            x =>
-            {
-                Assert.Equal(0u, x.Size);
-                Assert.Equal(0u, x.VirtualAddress);
-            },
+            x => Assert.Equal(PETestsHelper.EmptyImageDataDirectory, x),
+            x => Assert.Equal(PETestsHelper.EmptyImageDataDirectory, x),
+            x => Assert.Equal(PETestsHelper.EmptyImageDataDirectory, x),
+            x => Assert.Equal(PETestsHelper.EmptyImageDataDirectory, x),
+            x => Assert.Equal(PETestsHelper.EmptyImageDataDirectory, x),
             x =>
             {
                 Assert.Equal(8u, x.Size);
                 Assert.Equal(0x00002000u, x.VirtualAddress);
             },
-            x =>
-            {
-                Assert.Equal(0u, x.Size);
-                Assert.Equal(0u, x.VirtualAddress);
-            },
+            x => Assert.Equal(PETestsHelper.EmptyImageDataDirectory, x),
             x =>
             {
                 Assert.Equal(72u, x.Size);
                 Assert.Equal(0x00002008u, x.VirtualAddress);
             },
-            x =>
-            {
-                Assert.Equal(0u, x.Size);
-                Assert.Equal(0u, x.VirtualAddress);
-            });
+            x => Assert.Equal(PETestsHelper.EmptyImageDataDirectory, x));
     }
 }
