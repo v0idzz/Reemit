@@ -10,10 +10,10 @@ public sealed class PEHeaderTests
         using var reader = new BinaryReader(fileStream);
 
         // Act
-        var header = new COFFHeader(reader);
+        var header = new CoffHeader(reader);
 
         // Assert
-        Assert.Equal(COFFHeader.SignatureValue, header.Signature);
+        Assert.Equal(CoffHeader.SignatureValue, header.Signature);
         Assert.Equal(MachineType.ImageFileMachineI386, header.Machine);
         Assert.Equal(3, header.NumberOfSections);
         Assert.Equal(2592383461, header.TimeDateStamp);

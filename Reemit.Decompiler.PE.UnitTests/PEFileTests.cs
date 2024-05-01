@@ -3,7 +3,7 @@ namespace Reemit.Decompiler.PE.UnitTests;
 public sealed class PEFileTests
 {
     [Fact]
-    public async Task GetStructureDescribedByDataDirectory_ValidPEImageWithCLIHeader_ReadsCLIHeader()
+    public async Task GetStructureDescribedByDataDirectory_ValidPEImageWithCliHeader_ReadsCliHeader()
     {
         // Arrange
         await using var fileStream = File.OpenRead("Resources/NetAssembly.dll");
@@ -12,7 +12,7 @@ public sealed class PEFileTests
         var cliHeaderDataDirectory = peFile.DataDirectories.ElementAt(^2);
 
         // Act
-        var cliHeader = peFile.GetStructureDescribedByDataDirectory<CLIHeader>(cliHeaderDataDirectory);
+        var cliHeader = peFile.GetStructureDescribedByDataDirectory<CliHeader>(cliHeaderDataDirectory);
 
         // Assert
         Assert.Equal(72L, cliHeader.Cb);

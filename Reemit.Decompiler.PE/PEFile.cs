@@ -2,8 +2,8 @@ namespace Reemit.Decompiler.PE;
 
 public class PEFile
 {
-    public MSDOSHeader MSDOSHeader { get; }
-    public COFFHeader CoffHeader { get; }
+    public MSDosHeader MSDosHeader { get; }
+    public CoffHeader CoffHeader { get; }
     public OptionalHeaderBase? OptionalHeader { get; }
     public IReadOnlyCollection<SectionHeader> SectionHeaders { get; }
     public IReadOnlyCollection<ImageDataDirectory> DataDirectories { get; }
@@ -16,8 +16,8 @@ public class PEFile
     {
         _binaryReader = binaryReader;
 
-        MSDOSHeader = new MSDOSHeader(binaryReader);
-        CoffHeader = new COFFHeader(binaryReader);
+        MSDosHeader = new MSDosHeader(binaryReader);
+        CoffHeader = new CoffHeader(binaryReader);
         
         var optionalHeaderMagic = (OptionalHeaderMagic) binaryReader.ReadUInt16();
         binaryReader.BaseStream.Seek(-sizeof(OptionalHeaderMagic), SeekOrigin.Current);

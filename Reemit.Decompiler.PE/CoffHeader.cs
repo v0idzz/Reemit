@@ -2,7 +2,7 @@ using Reemit.Common;
 
 namespace Reemit.Decompiler.PE;
 
-public class COFFHeader
+public class CoffHeader
 {
     public string Signature { get; }
     public MachineType Machine { get; }
@@ -15,7 +15,7 @@ public class COFFHeader
     
     public const string SignatureValue = "PE\0\0";
 
-    public COFFHeader(BinaryReader reader)
+    public CoffHeader(BinaryReader reader)
     {
         Signature = reader.ReadAsciiString(4);
 

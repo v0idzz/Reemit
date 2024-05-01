@@ -3,13 +3,13 @@ using System.Runtime.InteropServices;
 namespace Reemit.Decompiler.PE;
 
 [StructLayout(LayoutKind.Sequential)]
-public class MSDOSHeader
+public class MSDosHeader
 {
     public byte[] StartingBytes { get; }
     public uint Lfanew { get; }
     public byte[] EndingBytes { get; }
 
-    public MSDOSHeader(BinaryReader reader)
+    public MSDosHeader(BinaryReader reader)
     {
         StartingBytes = reader.ReadBytes(60);
         Lfanew = reader.ReadUInt32();
