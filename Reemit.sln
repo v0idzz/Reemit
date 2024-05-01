@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Decompiler.PE.UnitTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Common", "Reemit.Common\Reemit.Common.csproj", "{8242D0FA-6E29-4872-AAFD-4A340F28491B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Decompiler.Clr", "Reemit.Decompiler.Clr\Reemit.Decompiler.Clr.csproj", "{7F5BEF62-1C4B-4654-ADBB-6A247BA027D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{8242D0FA-6E29-4872-AAFD-4A340F28491B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8242D0FA-6E29-4872-AAFD-4A340F28491B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8242D0FA-6E29-4872-AAFD-4A340F28491B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F5BEF62-1C4B-4654-ADBB-6A247BA027D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F5BEF62-1C4B-4654-ADBB-6A247BA027D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F5BEF62-1C4B-4654-ADBB-6A247BA027D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F5BEF62-1C4B-4654-ADBB-6A247BA027D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
