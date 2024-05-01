@@ -1,4 +1,5 @@
 using Reemit.Common;
+using Reemit.Decompiler.PE.Enums;
 
 namespace Reemit.Decompiler.PE;
 

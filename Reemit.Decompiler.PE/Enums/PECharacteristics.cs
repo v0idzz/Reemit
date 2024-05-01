@@ -1,4 +1,4 @@
-namespace Reemit.Decompiler.PE;
+namespace Reemit.Decompiler.PE.Enums;
 
 [Flags]
 public enum PECharacteristics : ushort

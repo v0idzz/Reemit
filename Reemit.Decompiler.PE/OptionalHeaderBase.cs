@@ -1,3 +1,5 @@
+using Reemit.Decompiler.PE.Enums;
+
 namespace Reemit.Decompiler.PE;
 
 public abstract class OptionalHeaderBase
