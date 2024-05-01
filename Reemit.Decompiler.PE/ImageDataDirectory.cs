@@ -1,6 +1,6 @@
 namespace Reemit.Decompiler.PE;
 
-public class ImageDataDirectory
+public record ImageDataDirectory
 {
     public uint VirtualAddress { get; }
     public uint Size { get; }
