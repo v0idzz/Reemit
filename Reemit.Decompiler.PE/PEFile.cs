@@ -1,3 +1,4 @@
+using Reemit.Common;
 using Reemit.Decompiler.PE.Enums;
 
 namespace Reemit.Decompiler.PE;
@@ -18,43 +19,46 @@ public class PEFile
     {
         _binaryReader = binaryReader;
 
-        MSDosHeader = new MSDosHeader(binaryReader);
-        CoffHeader = new CoffHeader(binaryReader);
-        
-        var optionalHeaderMagic = (OptionalHeaderMagic) binaryReader.ReadUInt16();
-        binaryReader.BaseStream.Seek(-sizeof(OptionalHeaderMagic), SeekOrigin.Current);
-        
-        if (CoffHeader.SizeOfOptionalHeader == 0)
+        lock (_readLock)
         {
-            OptionalHeader = null;
-        }
-        else
-        {
-            OptionalHeaderBase optionalHeader = optionalHeaderMagic switch
+            MSDosHeader = new MSDosHeader(binaryReader);
+            CoffHeader = new CoffHeader(binaryReader);
+
+            var optionalHeaderMagic = (OptionalHeaderMagic)binaryReader.ReadUInt16();
+            binaryReader.BaseStream.Seek(-sizeof(OptionalHeaderMagic), SeekOrigin.Current);
+
+            if (CoffHeader.SizeOfOptionalHeader == 0)
             {
-                OptionalHeaderMagic.PE32 => new PE32OptionalHeader(binaryReader),
-                OptionalHeaderMagic.PE32Plus => new PE32PlusOptionalHeader(binaryReader),
+                OptionalHeader = null;
+            }
+            else
+            {
+                OptionalHeaderBase optionalHeader = optionalHeaderMagic switch
+                {
+                    OptionalHeaderMagic.PE32 => new PE32OptionalHeader(binaryReader),
+                    OptionalHeaderMagic.PE32Plus => new PE32PlusOptionalHeader(binaryReader),
+                    _ => throw new BadImageFormatException("Unrecognized Optional Header Magic value in PE header.")
+                };
+
+                OptionalHeader = optionalHeader;
+            }
+
+            var sectionHeaders = new SectionHeader[CoffHeader.NumberOfSections];
+
+            for (var i = 0; i < CoffHeader.NumberOfSections; i++)
+            {
+                sectionHeaders[i] = new SectionHeader(binaryReader);
+            }
+
+            SectionHeaders = sectionHeaders.AsReadOnly();
+
+            DataDirectories = OptionalHeader switch
+            {
+                PE32OptionalHeader h => h.WindowsSpecificFields.DataDirectories,
+                PE32PlusOptionalHeader h => h.WindowsSpecificFields.DataDirectories,
                 _ => throw new BadImageFormatException("Unrecognized Optional Header Magic value in PE header.")
             };
-
-            OptionalHeader = optionalHeader;
         }
-        
-        var sectionHeaders = new SectionHeader[CoffHeader.NumberOfSections];
-
-        for (var i = 0; i < CoffHeader.NumberOfSections; i++)
-        {
-            sectionHeaders[i] = new SectionHeader(binaryReader);
-        }
-
-        SectionHeaders = sectionHeaders.AsReadOnly();
-        
-        DataDirectories = OptionalHeader switch
-        {
-            PE32OptionalHeader h => h.WindowsSpecificFields.DataDirectories,
-            PE32PlusOptionalHeader h => h.WindowsSpecificFields.DataDirectories,
-            _ => throw new BadImageFormatException("Unrecognized Optional Header Magic value in PE header.")
-        };
     }
 
     public uint GetFileOffset(uint rva)
@@ -82,4 +86,6 @@ public class PEFile
 
         return structure;
     }
+
+    public SharedReader CreateReaderAt(uint offset) => new((int)offset, _binaryReader, _readLock);
 }
