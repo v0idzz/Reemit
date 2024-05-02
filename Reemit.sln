@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Common", "Reemit.Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Decompiler.Clr", "Reemit.Decompiler.Clr\Reemit.Decompiler.Clr.csproj", "{7F5BEF62-1C4B-4654-ADBB-6A247BA027D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Decompiler.Clr.UnitTests", "Reemit.Decompiler.Clr.UnitTests\Reemit.Decompiler.Clr.UnitTests.csproj", "{7333055B-3E37-4C17-9D47-CB4E26596939}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{7F5BEF62-1C4B-4654-ADBB-6A247BA027D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F5BEF62-1C4B-4654-ADBB-6A247BA027D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F5BEF62-1C4B-4654-ADBB-6A247BA027D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7333055B-3E37-4C17-9D47-CB4E26596939}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7333055B-3E37-4C17-9D47-CB4E26596939}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7333055B-3E37-4C17-9D47-CB4E26596939}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7333055B-3E37-4C17-9D47-CB4E26596939}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
