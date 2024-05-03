@@ -21,6 +21,36 @@ public sealed class MetadataRootTests
         Assert.Equal(0u, header.Reserved);
         Assert.Equal("v4.0.30319", header.Version);
         Assert.Equal(0u, header.Flags);
-        Assert.Equal(5u, header.Streams);
+        Assert.Collection(header.StreamHeaders,
+            h =>
+            {
+                Assert.Equal("#~", h.Name);
+                Assert.Equal(108u, h.Offset);
+                Assert.Equal(368u, h.Size);
+            },
+            h =>
+            {
+                Assert.Equal("#Strings", h.Name);
+                Assert.Equal(476u, h.Offset);
+                Assert.Equal(492u, h.Size);
+            },
+            h =>
+            {
+                Assert.Equal("#US", h.Name);
+                Assert.Equal(968u, h.Offset);
+                Assert.Equal(4u, h.Size);
+            },
+            h =>
+            {
+                Assert.Equal("#GUID", h.Name);
+                Assert.Equal(972u, h.Offset);
+                Assert.Equal(16u, h.Size);
+            },
+            h =>
+            {
+                Assert.Equal("#Blob", h.Name);
+                Assert.Equal(988u, h.Offset);
+                Assert.Equal(204u, h.Size);
+            });
     }
 }

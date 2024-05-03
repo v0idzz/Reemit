@@ -10,7 +10,7 @@ public class MetadataRoot
     public uint Reserved { get; }
     public string Version { get; }
     public ushort Flags { get; }
-    public ushort Streams { get; }
+    public IReadOnlyList<StreamHeader> StreamHeaders { get; }
 
     private const uint MetadataSignatureMagic = 0x424A5342;
 
@@ -33,6 +33,14 @@ public class MetadataRoot
         Version = Encoding.UTF8.GetString(versionBytes[..indexOfNull]);
 
         Flags = reader.ReadUInt16();
-        Streams = reader.ReadUInt16();
+        var streams = reader.ReadUInt16();
+
+        var streamHeaders = new List<StreamHeader>(streams);
+        for (var i = 0; i < streams; i++)
+        {
+            streamHeaders.Add(new StreamHeader(reader));
+        }
+
+        StreamHeaders = streamHeaders.AsReadOnly();
     }
 }

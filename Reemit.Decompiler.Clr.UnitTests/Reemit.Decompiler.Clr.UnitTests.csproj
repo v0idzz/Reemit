@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Reemit.Decompiler.Clr\Reemit.Decompiler.Clr.csproj" />
+      <ProjectReference Include="..\Reemit.Decompiler.PE\Reemit.Decompiler.PE.csproj" />
     </ItemGroup>
 
     <ItemGroup>
