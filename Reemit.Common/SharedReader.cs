@@ -92,4 +92,17 @@ public sealed class SharedReader(int offset, BinaryReader reader, object lockObj
             return value;
         }
     }
+
+    public override char ReadChar()
+    {
+        lock (lockObj)
+        {
+            var offsetCopy = BaseStream.Position;
+            BaseStream.Seek(offset, SeekOrigin.Begin);
+            var value = base.ReadChar();
+            BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
+            offset += sizeof(char);
+            return value;
+        }
+    }
 }
