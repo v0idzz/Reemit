@@ -9,6 +9,14 @@ public class CodedIndex
         new()
         {
             {
+                CodedIndexTagFamily.TypeDefOrRef,
+                [
+                    MetadataTableName.TypeDef,
+                    MetadataTableName.TypeRef,
+                    MetadataTableName.TypeSpec
+                ]
+            },
+            {
                 CodedIndexTagFamily.HasConstant,
                 [
                     MetadataTableName.Field,
@@ -37,7 +45,8 @@ public class CodedIndex
             .Select(x => x.Value)
             .Max();
 
-        var value = maxNumberOfRows < Math.Pow(2, 16 - Math.Log2(tags.Length))
+        var read16Bits = maxNumberOfRows < Math.Pow(2, 16 - Math.Log2(tags.Length));
+        var value = read16Bits 
             ? reader.ReadUInt16()
             : reader.ReadUInt32();
 

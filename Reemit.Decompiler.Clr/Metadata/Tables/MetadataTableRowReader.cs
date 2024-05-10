@@ -13,4 +13,9 @@ public class MetadataTableDataReader(BinaryReader reader, HeapSizes heapSizes,
         heapSizes.HasFlag(heapSize) ? reader.ReadUInt32() : reader.ReadUInt16();
 
     public CodedIndex ReadCodedRid(CodedIndexTagFamily family) => new(this, family, rowsCounts);
+
+    public uint ReadRidIntoTable(MetadataTableName tableName) =>
+        !rowsCounts.TryGetValue(tableName, out var value) || value <= ushort.MaxValue 
+            ? reader.ReadUInt16() 
+            : reader.ReadUInt32();
 }

@@ -13,6 +13,7 @@ public class MetadataTablesStream
     
     public MetadataTable<ModuleRow>? Module { get; }
     public MetadataTable<TypeRefRow>? TypeRef { get; }
+    public MetadataTable<TypeDefRow> TypeDef { get; }
     
     public MetadataTablesStream(BinaryReader reader)
     {
@@ -48,6 +49,11 @@ public class MetadataTablesStream
         if (validBits[1])
         {
             TypeRef = new MetadataTable<TypeRefRow>(rowsCounts[MetadataTableName.TypeRef], tableReader);
+        }
+
+        if (validBits[2])
+        {
+            TypeDef = new MetadataTable<TypeDefRow>(rowsCounts[MetadataTableName.TypeDef], tableReader);
         }
     }
 }
