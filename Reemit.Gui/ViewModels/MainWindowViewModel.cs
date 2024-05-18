@@ -13,7 +13,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen, IActivatableViewModel
         Activator = new ViewModelActivator();
         this.WhenActivated(disposable =>
         {
-            Router.Navigate.Execute(new HomeViewModel(this))
+            Router.Navigate.Execute(new HelloViewModel(this))
                 .Subscribe()
                 .DisposeWith(disposable);
         });
