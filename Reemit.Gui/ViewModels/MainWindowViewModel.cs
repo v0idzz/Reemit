@@ -1,6 +1,23 @@
-﻿namespace Reemit.Gui.ViewModels;
+﻿using System;
+using System.Reactive.Disposables;
+using ReactiveUI;
 
-public class MainWindowViewModel : ViewModelBase
+namespace Reemit.Gui.ViewModels;
+
+public class MainWindowViewModel : ViewModelBase, IScreen, IActivatableViewModel
 {
-    public string Greeting => "Welcome to Avalonia!";
+    public RoutingState Router { get; } = new();
+
+    public MainWindowViewModel()
+    {
+        Activator = new ViewModelActivator();
+        this.WhenActivated(disposable =>
+        {
+            Router.Navigate.Execute(new HomeViewModel(this))
+                .Subscribe()
+                .DisposeWith(disposable);
+        });
+    }
+
+    public ViewModelActivator Activator { get; }
 }
