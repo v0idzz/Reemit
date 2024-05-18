@@ -10,11 +10,15 @@ public class MetadataTablesStream
     public byte MinorVersion { get; }
     public HeapSizes HeapSizes { get; }
     public byte Reserved1 { get; }
-    
+
     public MetadataTable<ModuleRow>? Module { get; }
     public MetadataTable<TypeRefRow>? TypeRef { get; }
-    public MetadataTable<TypeDefRow> TypeDef { get; }
-    
+    public MetadataTable<TypeDefRow>? TypeDef { get; }
+    public MetadataTable<FieldRow>? Field { get; }
+
+    private readonly Dictionary<MetadataTableName, uint> _rowsCounts;
+    private readonly MetadataTableDataReader _metadataTableDataReader;
+
     public MetadataTablesStream(BinaryReader reader)
     {
         Reserved = reader.ReadUInt32();
@@ -27,7 +31,7 @@ public class MetadataTablesStream
         // var sortedBits = new BitArray(
         reader.ReadBytes(8);
 
-        var rowsCounts = new Dictionary<MetadataTableName, uint>(validBits.Count(x => x));
+        _rowsCounts = new Dictionary<MetadataTableName, uint>(validBits.Count(x => x));
 
         foreach (var (member, index) in Enum.GetValues<MetadataTableName>()
                      .OrderBy(x => (int)x)
@@ -35,25 +39,18 @@ public class MetadataTablesStream
         {
             if (validBits[index])
             {
-                rowsCounts[member] = reader.ReadUInt32();
+                _rowsCounts[member] = reader.ReadUInt32();
             }
         }
 
-        var tableReader = new MetadataTableDataReader(reader, HeapSizes, rowsCounts);
+        _metadataTableDataReader = new MetadataTableDataReader(reader, HeapSizes, _rowsCounts);
 
-        if (validBits[0])
-        {
-            Module = new MetadataTable<ModuleRow>(rowsCounts[MetadataTableName.Module], tableReader);
-        }
-
-        if (validBits[1])
-        {
-            TypeRef = new MetadataTable<TypeRefRow>(rowsCounts[MetadataTableName.TypeRef], tableReader);
-        }
-
-        if (validBits[2])
-        {
-            TypeDef = new MetadataTable<TypeDefRow>(rowsCounts[MetadataTableName.TypeDef], tableReader);
-        }
+        Module = ReadTableIfExists<ModuleRow>(MetadataTableName.Module);
+        TypeRef = ReadTableIfExists<TypeRefRow>(MetadataTableName.TypeRef);
+        TypeDef = ReadTableIfExists<TypeDefRow>(MetadataTableName.TypeDef);
+        Field = ReadTableIfExists<FieldRow>(MetadataTableName.Field);
     }
+
+    private MetadataTable<T>? ReadTableIfExists<T>(MetadataTableName name) where T : IMetadataTableRow, new() =>
+        !_rowsCounts.TryGetValue(name, out var count) ? null : new MetadataTable<T>(count, _metadataTableDataReader);
 }
