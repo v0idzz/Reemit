@@ -1,5 +1,5 @@
-using Reemit.Decompiler.Cli.Metadata;
-using Reemit.Decompiler.Cli.Metadata.Streams;
+using Reemit.Decompiler.Clr.Metadata;
+using Reemit.Decompiler.Clr.Metadata.Streams;
 
 namespace Reemit.Decompiler.Clr.UnitTests.Metadata.Streams;
 

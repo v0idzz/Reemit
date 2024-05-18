@@ -1,4 +1,4 @@
-namespace Reemit.Decompiler.Cli.Metadata.Tables;
+namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
 public class ModuleRow : IMetadataTableRow
 {

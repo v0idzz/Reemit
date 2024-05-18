@@ -1,4 +1,4 @@
-using Reemit.Decompiler.Cli.Metadata;
+using Reemit.Decompiler.Clr.Metadata;
 
 namespace Reemit.Decompiler.Clr.UnitTests.Metadata;
 

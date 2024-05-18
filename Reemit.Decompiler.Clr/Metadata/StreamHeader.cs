@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Reemit.Decompiler.Cli.Metadata;
+namespace Reemit.Decompiler.Clr.Metadata;
 
 public class StreamHeader
 {

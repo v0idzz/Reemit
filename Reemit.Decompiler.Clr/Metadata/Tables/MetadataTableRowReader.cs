@@ -1,4 +1,4 @@
-namespace Reemit.Decompiler.Cli.Metadata.Tables;
+namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
 public class MetadataTableDataReader(BinaryReader reader, HeapSizes heapSizes,
     IReadOnlyDictionary<MetadataTableName, uint> rowsCounts) : BinaryReader(reader.BaseStream)

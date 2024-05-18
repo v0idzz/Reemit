@@ -1,4 +1,4 @@
-namespace Reemit.Decompiler.Cli.Metadata;
+namespace Reemit.Decompiler.Clr.Metadata;
 
 public enum CodedIndexTagFamily
 {

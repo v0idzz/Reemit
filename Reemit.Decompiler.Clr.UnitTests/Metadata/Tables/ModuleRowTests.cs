@@ -1,5 +1,5 @@
-using Reemit.Decompiler.Cli.Metadata;
-using Reemit.Decompiler.Cli.Metadata.Tables;
+using Reemit.Decompiler.Clr.Metadata;
+using Reemit.Decompiler.Clr.Metadata.Tables;
 
 namespace Reemit.Decompiler.Clr.UnitTests.Metadata.Tables;
 

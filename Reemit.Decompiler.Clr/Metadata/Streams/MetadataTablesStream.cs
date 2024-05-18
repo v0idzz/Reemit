@@ -1,7 +1,7 @@
 using System.Collections;
-using Reemit.Decompiler.Cli.Metadata.Tables;
+using Reemit.Decompiler.Clr.Metadata.Tables;
 
-namespace Reemit.Decompiler.Cli.Metadata.Streams;
+namespace Reemit.Decompiler.Clr.Metadata.Streams;
 
 public class MetadataTablesStream
 {
