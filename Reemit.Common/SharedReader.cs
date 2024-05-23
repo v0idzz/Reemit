@@ -1,16 +1,25 @@
 namespace Reemit.Common;
 
-public sealed class SharedReader(int offset, BinaryReader reader, object lockObj) : BinaryReader(reader.BaseStream)
+// TODO: Consider allowing SharedReader to be used lock-free
+public class SharedReader(int startOffset, BinaryReader reader, object lockObj) : BinaryReader(reader.BaseStream)
 {
+    private readonly int _startOffset = startOffset;
+
+    public int Offset { get; private set; } = startOffset;
+
+    public object SynchronizationObject => lockObj;
+
+    public int RelativeOffset => Offset - _startOffset;
+
     public override long ReadInt64()
     {
         lock (lockObj)
         {
             var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(offset, SeekOrigin.Begin);
+            BaseStream.Seek(Offset, SeekOrigin.Begin);
             var value = base.ReadInt64();
             BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            offset += sizeof(long);
+            Offset += sizeof(long);
             return value;
         }
     }
@@ -20,10 +29,10 @@ public sealed class SharedReader(int offset, BinaryReader reader, object lockObj
         lock (lockObj)
         {
             var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(offset, SeekOrigin.Begin);
+            BaseStream.Seek(Offset, SeekOrigin.Begin);
             var value = base.ReadInt32();
             BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            offset += sizeof(int);
+            Offset += sizeof(int);
             return value;
         }
     }
@@ -33,10 +42,10 @@ public sealed class SharedReader(int offset, BinaryReader reader, object lockObj
         lock (lockObj)
         {
             var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(offset, SeekOrigin.Begin);
+            BaseStream.Seek(Offset, SeekOrigin.Begin);
             var value = base.ReadInt16();
             BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            offset += sizeof(short);
+            Offset += sizeof(short);
             return value;
         }
     }
@@ -46,10 +55,10 @@ public sealed class SharedReader(int offset, BinaryReader reader, object lockObj
         lock (lockObj)
         {
             var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(offset, SeekOrigin.Begin);
+            BaseStream.Seek(Offset, SeekOrigin.Begin);
             var value = base.ReadUInt64();
             BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            offset += sizeof(ulong);
+            Offset += sizeof(ulong);
             return value;
         }
     }
@@ -59,10 +68,10 @@ public sealed class SharedReader(int offset, BinaryReader reader, object lockObj
         lock (lockObj)
         {
             var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(offset, SeekOrigin.Begin);
+            BaseStream.Seek(Offset, SeekOrigin.Begin);
             var value = base.ReadUInt32();
             BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            offset += sizeof(uint);
+            Offset += sizeof(uint);
             return value;
         }
     }
@@ -72,10 +81,10 @@ public sealed class SharedReader(int offset, BinaryReader reader, object lockObj
         lock (lockObj)
         {
             var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(offset, SeekOrigin.Begin);
+            BaseStream.Seek(Offset, SeekOrigin.Begin);
             var value = base.ReadUInt16();
             BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            offset += sizeof(ushort);
+            Offset += sizeof(ushort);
             return value;
         }
     }
@@ -85,10 +94,10 @@ public sealed class SharedReader(int offset, BinaryReader reader, object lockObj
         lock (lockObj)
         {
             var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(offset, SeekOrigin.Begin);
+            BaseStream.Seek(Offset, SeekOrigin.Begin);
             var value = base.ReadBytes(count);
             BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            offset += sizeof(byte) * count;
+            Offset += sizeof(byte) * count;
             return value;
         }
     }
@@ -98,11 +107,26 @@ public sealed class SharedReader(int offset, BinaryReader reader, object lockObj
         lock (lockObj)
         {
             var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(offset, SeekOrigin.Begin);
+            BaseStream.Seek(Offset, SeekOrigin.Begin);
             var value = base.ReadChar();
             BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            offset += sizeof(char);
+            Offset += sizeof(char);
             return value;
         }
     }
+
+    public override byte ReadByte()
+    {
+        lock (lockObj)
+        {
+            var offsetCopy = BaseStream.Position;
+            BaseStream.Seek(Offset, SeekOrigin.Begin);
+            var value = base.ReadByte();
+            BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
+            Offset += sizeof(byte);
+            return value;
+        }
+    }
+
+    public SharedReader CreateDerivedAtRelativeOffset(uint relativeOffset) => new((int)(_startOffset + relativeOffset), this, lockObj);
 }

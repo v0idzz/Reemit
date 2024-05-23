@@ -27,7 +27,7 @@ public abstract class WindowsSpecificFields<T>
     public T SizeOfHeapCommit { get; }
     public uint LoaderFlags { get; }
     public uint NumberOfRvaAndSizes { get; }
-    public IReadOnlyCollection<ImageDataDirectory> DataDirectories { get; }
+    public IReadOnlyList<ImageDataDirectory> DataDirectories { get; }
 
     internal WindowsSpecificFields(BinaryReader reader)
     {

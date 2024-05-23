@@ -3,13 +3,13 @@ using Reemit.Decompiler.PE.Enums;
 
 namespace Reemit.Decompiler.PE;
 
-public class PEFile
+public class PEFile : IDisposable
 {
     public MSDosHeader MSDosHeader { get; }
     public CoffHeader CoffHeader { get; }
     public OptionalHeaderBase? OptionalHeader { get; }
-    public IReadOnlyCollection<SectionHeader> SectionHeaders { get; }
-    public IReadOnlyCollection<ImageDataDirectory> DataDirectories { get; }
+    public IReadOnlyList<SectionHeader> SectionHeaders { get; }
+    public IReadOnlyList<ImageDataDirectory> DataDirectories { get; }
 
     private readonly BinaryReader _binaryReader;
 
@@ -88,4 +88,9 @@ public class PEFile
     }
 
     public SharedReader CreateReaderAt(uint offset) => new((int)offset, _binaryReader, _readLock);
+
+    public void Dispose()
+    {
+        _binaryReader.Dispose();
+    }
 }

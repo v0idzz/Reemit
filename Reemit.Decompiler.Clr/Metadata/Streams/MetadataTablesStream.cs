@@ -1,10 +1,13 @@
 using System.Collections;
+using Reemit.Common;
 using Reemit.Decompiler.Clr.Metadata.Tables;
 
 namespace Reemit.Decompiler.Clr.Metadata.Streams;
 
 public class MetadataTablesStream
 {
+    public const string Name = "#~";
+
     public uint Reserved { get; }
     public byte MajorVersion { get; }
     public byte MinorVersion { get; }

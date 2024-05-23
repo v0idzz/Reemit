@@ -1,7 +1,9 @@
+using Reemit.Common;
+
 namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
 public class MetadataTableDataReader(BinaryReader reader, HeapSizes heapSizes,
-    IReadOnlyDictionary<MetadataTableName, uint> rowsCounts) : BinaryReader(reader.BaseStream)
+    IReadOnlyDictionary<MetadataTableName, uint> rowsCounts) : SharedReader((reader as SharedReader)?.Offset ?? 0, reader, (reader as SharedReader)?.SynchronizationObject ?? new object())
 {
     public uint ReadStringRid() => ReadRid(HeapSizes.StringStream);
 
@@ -10,12 +12,12 @@ public class MetadataTableDataReader(BinaryReader reader, HeapSizes heapSizes,
     public uint ReadBlobRid() => ReadRid(HeapSizes.BlobStream);
 
     private uint ReadRid(HeapSizes heapSize) =>
-        heapSizes.HasFlag(heapSize) ? reader.ReadUInt32() : reader.ReadUInt16();
+        heapSizes.HasFlag(heapSize) ? ReadUInt32() : ReadUInt16();
 
     public CodedIndex ReadCodedRid(CodedIndexTagFamily family) => new(this, family, rowsCounts);
 
     public uint ReadRidIntoTable(MetadataTableName tableName) =>
         !rowsCounts.TryGetValue(tableName, out var value) || value <= ushort.MaxValue 
-            ? reader.ReadUInt16() 
-            : reader.ReadUInt32();
+            ? ReadUInt16() 
+            : ReadUInt32();
 }
