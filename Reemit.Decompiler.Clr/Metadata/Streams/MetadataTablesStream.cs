@@ -18,6 +18,8 @@ public class MetadataTablesStream
     public MetadataTable<TypeRefRow>? TypeRef { get; }
     public MetadataTable<TypeDefRow>? TypeDef { get; }
     public MetadataTable<FieldRow>? Field { get; }
+    public MetadataTable<ClassLayoutRow>? ClassLayout { get; }
+    public MetadataTable<ExportedTypeRow>? ExportedType { get; }
 
     private readonly Dictionary<MetadataTableName, uint> _rowsCounts;
     private readonly MetadataTableDataReader _metadataTableDataReader;
@@ -52,6 +54,8 @@ public class MetadataTablesStream
         TypeRef = ReadTableIfExists<TypeRefRow>(MetadataTableName.TypeRef);
         TypeDef = ReadTableIfExists<TypeDefRow>(MetadataTableName.TypeDef);
         Field = ReadTableIfExists<FieldRow>(MetadataTableName.Field);
+        ClassLayout = ReadTableIfExists<ClassLayoutRow>(MetadataTableName.ClassLayout);
+        ExportedType = ReadTableIfExists<ExportedTypeRow>(MetadataTableName.ExportedType);
     }
 
     private MetadataTable<T>? ReadTableIfExists<T>(MetadataTableName name) where T : IMetadataTableRow, new() =>

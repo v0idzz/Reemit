@@ -25,6 +25,14 @@ public class CodedIndex
                 ]
             },
             {
+                CodedIndexTagFamily.Implementation,
+                [
+                    MetadataTableName.File,
+                    MetadataTableName.AssemblyRef,
+                    MetadataTableName.ExportedType
+                ]
+            },
+            {
                 CodedIndexTagFamily.ResolutionScope,
                 [
                     MetadataTableName.Module,
