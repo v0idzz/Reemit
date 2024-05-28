@@ -1,5 +1,4 @@
 using System.Collections;
-using Reemit.Common;
 using Reemit.Decompiler.Clr.Metadata.Tables;
 
 namespace Reemit.Decompiler.Clr.Metadata.Streams;
@@ -48,12 +47,14 @@ public class MetadataTablesStream
 
         _metadataTableDataReader = new MetadataTableDataReader(reader, HeapSizes, _rowsCounts);
 
-        Module = ReadTableIfExists<ModuleRow>(MetadataTableName.Module);
-        TypeRef = ReadTableIfExists<TypeRefRow>(MetadataTableName.TypeRef);
-        TypeDef = ReadTableIfExists<TypeDefRow>(MetadataTableName.TypeDef);
-        Field = ReadTableIfExists<FieldRow>(MetadataTableName.Field);
+        Module = ReadTableIfExists<ModuleRow>();
+        TypeRef = ReadTableIfExists<TypeRefRow>();
+        TypeDef = ReadTableIfExists<TypeDefRow>();
+        Field = ReadTableIfExists<FieldRow>();
     }
 
-    private MetadataTable<T>? ReadTableIfExists<T>(MetadataTableName name) where T : IMetadataTableRow, new() =>
-        !_rowsCounts.TryGetValue(name, out var count) ? null : new MetadataTable<T>(count, _metadataTableDataReader);
+    private MetadataTable<T>? ReadTableIfExists<T>() where T : IMetadataTableRow, new() =>
+        !_rowsCounts.TryGetValue(T.TableName, out var count)
+            ? null
+            : new MetadataTable<T>(count, _metadataTableDataReader);
 }

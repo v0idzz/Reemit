@@ -2,6 +2,8 @@ namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
 public class FieldRow : IMetadataTableRow
 {
+    public static MetadataTableName TableName => MetadataTableName.Field;
+
     public FieldAttributes Flags { get; private set; }
     public uint Name { get; private set; }
     public uint Signature { get; private set; }

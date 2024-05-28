@@ -2,6 +2,8 @@ namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
 public class ModuleRow : IMetadataTableRow
 {
+    public static MetadataTableName TableName => MetadataTableName.Module;
+
     public byte[] Generation { get; private set; } = null!;
     public uint Name { get; private set; }
     public uint Mvid { get; private set; }

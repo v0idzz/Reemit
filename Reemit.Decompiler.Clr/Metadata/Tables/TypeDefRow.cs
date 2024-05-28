@@ -2,6 +2,8 @@ namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
 public class TypeDefRow : IMetadataTableRow
 {
+    public static MetadataTableName TableName => MetadataTableName.TypeDef;
+
     public TypeAttributes Flags { get; private set; }
     public uint TypeName { get; private set; }
     public uint TypeNamespace { get; private set; }
