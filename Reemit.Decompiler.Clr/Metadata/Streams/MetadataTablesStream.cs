@@ -35,14 +35,12 @@ public class MetadataTablesStream
 
         _rowsCounts = new Dictionary<MetadataTableName, uint>(validBits.Count(x => x));
 
-        foreach (var (member, index) in Enum.GetValues<MetadataTableName>()
-                     .OrderBy(x => (int)x)
-                     .Select((m, i) => (m, i)))
+        foreach (var name in validBits
+            .Select((x, i) => (IsValid: x, TableName: (MetadataTableName)i))
+            .Where(x => x.IsValid)
+            .Select(X => X.TableName))
         {
-            if (validBits[index])
-            {
-                _rowsCounts[member] = reader.ReadUInt32();
-            }
+            _rowsCounts[name] = reader.ReadUInt32();
         }
 
         _metadataTableDataReader = new MetadataTableDataReader(reader, HeapSizes, _rowsCounts);
