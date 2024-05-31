@@ -9,7 +9,6 @@
         x:DataType="vm:MainWindowViewModel"
         TransparencyLevelHint="AcrylicBlur"
         Background="Transparent"
-        ExtendClientAreaToDecorationsHint="True"
         Icon="/Assets/avalonia-logo.ico"
         Title="Reemit.Gui">
 
