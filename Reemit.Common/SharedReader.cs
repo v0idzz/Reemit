@@ -50,4 +50,28 @@ public class SharedReader(int startOffset, BinaryReader reader, object lockObj) 
     public override byte ReadByte() => ReadUnmanaged(base.ReadByte);
 
     public SharedReader CreateDerivedAtRelativeOffset(uint relativeOffset) => new((int)(_startOffset + relativeOffset), this, lockObj);
+
+    public override int Read(byte[] buffer, int index, int count) => throw new NotImplementedException();
+
+    public override int Read(char[] buffer, int index, int count) => throw new NotImplementedException();
+
+    public override int Read(Span<byte> buffer) => throw new NotImplementedException();
+
+    public override int Read(Span<char> buffer) => throw new NotImplementedException();
+
+    public override bool ReadBoolean() => throw new NotImplementedException();
+
+    public override char[] ReadChars(int count) => throw new NotImplementedException();
+
+    public override decimal ReadDecimal() => throw new NotImplementedException();
+
+    public override double ReadDouble() => throw new NotImplementedException();
+
+    public override Half ReadHalf() => throw new NotImplementedException();
+
+    public override sbyte ReadSByte() => throw new NotImplementedException();
+
+    public override float ReadSingle() => throw new NotImplementedException();
+
+    public override string ReadString() => throw new NotImplementedException();
 }
