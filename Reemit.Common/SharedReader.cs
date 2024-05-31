@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 namespace Reemit.Common;
 
@@ -15,7 +15,7 @@ public class SharedReader(int startOffset, BinaryReader reader, object lockObj) 
 
     private T ReadUnmanaged<T>(Func<T> readFunc)
         where T : unmanaged =>
-        ReadUnmanaged(readFunc, Marshal.SizeOf<T>);
+        ReadUnmanaged(readFunc, Unsafe.SizeOf<T>);
 
     private T ReadUnmanaged<T>(Func<T> readFunc, Func<int> getSizeFunc)
     {

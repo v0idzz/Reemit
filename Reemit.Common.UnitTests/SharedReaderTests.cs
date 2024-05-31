@@ -1,6 +1,5 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace Reemit.Common.UnitTests;
 
@@ -34,7 +33,7 @@ public sealed class SharedReaderTests
         where T : unmanaged
     {
         // Arrange
-        var size = Marshal.SizeOf<T>();
+        var size = Unsafe.SizeOf<T>();
 
         var getBytes =
             typeof(T) != typeof(byte) ?
@@ -73,10 +72,9 @@ public sealed class SharedReaderTests
             CreatedReadUnmanagedTestCases(
                 new byte[] { 0xef, 0xbe, 0xad, 0xde },
                 r => r.ReadByte()),
-            // Doesn't work--need to figure out exactly how SharedReader.ReadChar should behave.
-            //CreatedReadUnmanagedTestCases(
-            //    "Hello world".ToCharArray(),
-            //    r => r.ReadChar()),
+            CreatedReadUnmanagedTestCases(
+                "Hello world".ToCharArray(),
+                r => r.ReadChar()),
             CreatedReadUnmanagedTestCases(
                 new ushort[] { 0xdead, 0xbeef, 0x5230, 0x1592, ushort.MinValue, ushort.MaxValue },
                 r => r.ReadUInt16()),
