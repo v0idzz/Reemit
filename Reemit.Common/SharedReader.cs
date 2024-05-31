@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace Reemit.Common;
 
 // TODO: Consider allowing SharedReader to be used lock-free
@@ -11,122 +13,41 @@ public class SharedReader(int startOffset, BinaryReader reader, object lockObj) 
 
     public int RelativeOffset => Offset - _startOffset;
 
-    public override long ReadInt64()
+    private T ReadUnmanaged<T>(Func<T> readFunc)
+        where T : unmanaged =>
+        ReadUnmanaged(readFunc, Marshal.SizeOf<T>);
+
+    private T ReadUnmanaged<T>(Func<T> readFunc, Func<int> getSizeFunc)
     {
         lock (lockObj)
         {
             var offsetCopy = BaseStream.Position;
             BaseStream.Seek(Offset, SeekOrigin.Begin);
-            var value = base.ReadInt64();
+            var value = readFunc();
             BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            Offset += sizeof(long);
+            Offset += getSizeFunc();
             return value;
         }
     }
 
-    public override int ReadInt32()
-    {
-        lock (lockObj)
-        {
-            var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(Offset, SeekOrigin.Begin);
-            var value = base.ReadInt32();
-            BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            Offset += sizeof(int);
-            return value;
-        }
-    }
-    
-    public override short ReadInt16()
-    {
-        lock (lockObj)
-        {
-            var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(Offset, SeekOrigin.Begin);
-            var value = base.ReadInt16();
-            BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            Offset += sizeof(short);
-            return value;
-        }
-    }
-    
-    public override ulong ReadUInt64()
-    {
-        lock (lockObj)
-        {
-            var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(Offset, SeekOrigin.Begin);
-            var value = base.ReadUInt64();
-            BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            Offset += sizeof(ulong);
-            return value;
-        }
-    }
+    public override long ReadInt64() => ReadUnmanaged(base.ReadInt64);
 
-    public override uint ReadUInt32()
-    {
-        lock (lockObj)
-        {
-            var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(Offset, SeekOrigin.Begin);
-            var value = base.ReadUInt32();
-            BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            Offset += sizeof(uint);
-            return value;
-        }
-    }
-    
-    public override ushort ReadUInt16()
-    {
-        lock (lockObj)
-        {
-            var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(Offset, SeekOrigin.Begin);
-            var value = base.ReadUInt16();
-            BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            Offset += sizeof(ushort);
-            return value;
-        }
-    }
+    public override int ReadInt32() => ReadUnmanaged(base.ReadInt32);
 
-    public override byte[] ReadBytes(int count)
-    {
-        lock (lockObj)
-        {
-            var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(Offset, SeekOrigin.Begin);
-            var value = base.ReadBytes(count);
-            BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            Offset += sizeof(byte) * count;
-            return value;
-        }
-    }
+    public override short ReadInt16() => ReadUnmanaged(base.ReadInt16);
 
-    public override char ReadChar()
-    {
-        lock (lockObj)
-        {
-            var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(Offset, SeekOrigin.Begin);
-            var value = base.ReadChar();
-            BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            Offset += sizeof(char);
-            return value;
-        }
-    }
+    public override ulong ReadUInt64() => ReadUnmanaged(base.ReadUInt64);
 
-    public override byte ReadByte()
-    {
-        lock (lockObj)
-        {
-            var offsetCopy = BaseStream.Position;
-            BaseStream.Seek(Offset, SeekOrigin.Begin);
-            var value = base.ReadByte();
-            BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            Offset += sizeof(byte);
-            return value;
-        }
-    }
+    public override uint ReadUInt32() => ReadUnmanaged(base.ReadUInt32);
+
+    public override ushort ReadUInt16() => ReadUnmanaged(base.ReadUInt16);
+
+    public override byte[] ReadBytes(int count) =>
+        ReadUnmanaged(() => base.ReadBytes(count), () => sizeof(byte) * count);
+
+    public override char ReadChar() => ReadUnmanaged(base.ReadChar);
+
+    public override byte ReadByte() => ReadUnmanaged(base.ReadByte);
 
     public SharedReader CreateDerivedAtRelativeOffset(uint relativeOffset) => new((int)(_startOffset + relativeOffset), this, lockObj);
 }
