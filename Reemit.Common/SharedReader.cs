@@ -13,41 +13,38 @@ public class SharedReader(int startOffset, BinaryReader reader, object lockObj) 
 
     public int RelativeOffset => Offset - _startOffset;
 
-    private T ReadUnmanaged<T>(Func<T> readFunc)
-        where T : unmanaged =>
-        ReadUnmanaged(readFunc, Unsafe.SizeOf<T>);
-
-    private T ReadUnmanaged<T>(Func<T> readFunc, Func<int> getSizeFunc)
+    private T Read<T>(Func<T> readFunc)
     {
         lock (lockObj)
         {
             var offsetCopy = BaseStream.Position;
             BaseStream.Seek(Offset, SeekOrigin.Begin);
             var value = readFunc();
+            var size = BaseStream.Position - Offset;
             BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            Offset += getSizeFunc();
+            Offset += (int)size;
+
             return value;
         }
     }
 
-    public override long ReadInt64() => ReadUnmanaged(base.ReadInt64);
+    public override long ReadInt64() => Read(base.ReadInt64);
 
-    public override int ReadInt32() => ReadUnmanaged(base.ReadInt32);
+    public override int ReadInt32() => Read(base.ReadInt32);
 
-    public override short ReadInt16() => ReadUnmanaged(base.ReadInt16);
+    public override short ReadInt16() => Read(base.ReadInt16);
 
-    public override ulong ReadUInt64() => ReadUnmanaged(base.ReadUInt64);
+    public override ulong ReadUInt64() => Read(base.ReadUInt64);
 
-    public override uint ReadUInt32() => ReadUnmanaged(base.ReadUInt32);
+    public override uint ReadUInt32() => Read(base.ReadUInt32);
 
-    public override ushort ReadUInt16() => ReadUnmanaged(base.ReadUInt16);
+    public override ushort ReadUInt16() => Read(base.ReadUInt16);
 
-    public override byte[] ReadBytes(int count) =>
-        ReadUnmanaged(() => base.ReadBytes(count), () => sizeof(byte) * count);
+    public override byte[] ReadBytes(int count) => Read(() => base.ReadBytes(count));
 
-    public override char ReadChar() => ReadUnmanaged(base.ReadChar);
+    public override char ReadChar() => Read(base.ReadChar);
 
-    public override byte ReadByte() => ReadUnmanaged(base.ReadByte);
+    public override byte ReadByte() => Read(base.ReadByte);
 
     public SharedReader CreateDerivedAtRelativeOffset(uint relativeOffset) => new((int)(_startOffset + relativeOffset), this, lockObj);
 
