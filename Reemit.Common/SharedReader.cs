@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-
 namespace Reemit.Common;
 
 // TODO: Consider allowing SharedReader to be used lock-free
