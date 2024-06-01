@@ -1,38 +1,41 @@
 namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
-public class ModuleRow : IMetadataTableRow
+public class ModuleRow(byte[] generation, uint name, uint mvid, uint encId, uint encBaseId)
+    : IMetadataTableRow<ModuleRow>
 {
     public static MetadataTableName TableName => MetadataTableName.Module;
 
-    public byte[] Generation { get; private set; } = null!;
-    public uint Name { get; private set; }
-    public uint Mvid { get; private set; }
-    public uint EncId { get; private set; }
-    public uint EncBaseId { get; private set; }
+    public byte[] Generation { get; } = generation;
+    public uint Name { get; } = name;
+    public uint Mvid { get; } = mvid;
+    public uint EncId { get; } = encId;
+    public uint EncBaseId { get; } = encBaseId;
 
-    public void Read(MetadataTableDataReader reader)
+    public static ModuleRow Read(MetadataTableDataReader reader)
     {
-        Generation = reader.ReadBytes(2);
+        var generation = reader.ReadBytes(2);
 
-        if (Generation.Any(x => x != 0))
+        if (generation.Any(x => x != 0))
         {
-            throw new BadImageFormatException($"{nameof(Generation)} shall be zero.");
+            throw new BadImageFormatException($"{nameof(generation)} shall be zero.");
         }
-        
-        Name = reader.ReadStringRid();
-        Mvid = reader.ReadGuidRid();
-        EncId = reader.ReadGuidRid();
 
-        if (EncId != 0)
-        {
-            throw new BadImageFormatException($"{nameof(EncId)} shall be zero.");
-        }
-        
-        EncBaseId = reader.ReadGuidRid();
+        var name = reader.ReadStringRid();
+        var mvid = reader.ReadGuidRid();
+        var encId = reader.ReadGuidRid();
 
-        if (EncBaseId != 0)
+        if (encId != 0)
         {
-            throw new BadImageFormatException($"{nameof(EncBaseId)} shall be zero.");
+            throw new BadImageFormatException($"{nameof(encId)} shall be zero.");
         }
+
+        var encBaseId = reader.ReadGuidRid();
+
+        if (encBaseId != 0)
+        {
+            throw new BadImageFormatException($"{nameof(encBaseId)} shall be zero.");
+        }
+
+        return new(generation, name, mvid, encId, encBaseId);
     }
 }

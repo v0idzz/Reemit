@@ -1,6 +1,6 @@
 namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
-public class MetadataTable<TRow> where TRow : IMetadataTableRow, new()
+public class MetadataTable<TRow> where TRow : IMetadataTableRow<TRow>
 {
     public IReadOnlyList<TRow> Rows { get; }
 
@@ -10,10 +10,7 @@ public class MetadataTable<TRow> where TRow : IMetadataTableRow, new()
 
         for (var i = 0; i < rowCount; i++)
         {
-            var row = new TRow();
-            row.Read(reader);
-
-            rows.Add(row);
+            rows.Add(TRow.Read(reader));
         }
 
         Rows = rows.AsReadOnly();

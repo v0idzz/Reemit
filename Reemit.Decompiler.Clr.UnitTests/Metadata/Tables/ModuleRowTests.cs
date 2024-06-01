@@ -12,10 +12,9 @@ public class ModuleRowTests
         byte[] bytes = [0x00, 0x00, 0x68, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00];
         await using var memoryStream = new MemoryStream(bytes);
         using var reader = new BinaryReader(memoryStream);
-        var header = new ModuleRow();
 
         // Act
-        header.Read(new MetadataTableDataReader(reader, 0, new Dictionary<MetadataTableName, uint>()));
+        var header = ModuleRow.Read(new MetadataTableDataReader(reader, 0, new Dictionary<MetadataTableName, uint>()));
         
         // Assert
         Assert.Equal([0, 0], header.Generation);
