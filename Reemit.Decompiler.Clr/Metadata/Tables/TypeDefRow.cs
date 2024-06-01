@@ -1,23 +1,29 @@
 namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
-public class TypeDefRow : IMetadataTableRow
+public class TypeDefRow(
+    TypeAttributes flags,
+    uint typeName,
+    uint typeNamespace,
+    CodedIndex extends,
+    uint fieldList,
+    uint methodList)
+    : IMetadataTableRow<TypeDefRow>
 {
     public static MetadataTableName TableName => MetadataTableName.TypeDef;
 
-    public TypeAttributes Flags { get; private set; }
-    public uint TypeName { get; private set; }
-    public uint TypeNamespace { get; private set; }
-    public CodedIndex Extends { get; private set; } = null!;
-    public uint FieldList { get; private set; }
-    public uint MethodList { get; private set; }
+    public TypeAttributes Flags { get; private set; } = flags;
+    public uint TypeName { get; private set; } = typeName;
+    public uint TypeNamespace { get; private set; } = typeNamespace;
+    public CodedIndex Extends { get; private set; } = extends;
+    public uint FieldList { get; private set; } = fieldList;
+    public uint MethodList { get; private set; } = methodList;
 
-    public void Read(MetadataTableDataReader reader)
-    {
-        Flags = (TypeAttributes)(reader.ReadUInt32() & FlagMasks.TypeAttributesMask);
-        TypeName = reader.ReadStringRid();
-        TypeNamespace = reader.ReadStringRid();
-        Extends = reader.ReadCodedRid(CodedIndexTagFamily.TypeDefOrRef);
-        FieldList = reader.ReadRidIntoTable(MetadataTableName.Field);
-        MethodList = reader.ReadRidIntoTable(MetadataTableName.MethodDef);
-    }
+    public static TypeDefRow Read(MetadataTableDataReader reader) =>
+        new(
+            (TypeAttributes)(reader.ReadUInt32() & FlagMasks.TypeAttributesMask),
+            reader.ReadStringRid(),
+            reader.ReadStringRid(),
+            reader.ReadCodedRid(CodedIndexTagFamily.TypeDefOrRef),
+            reader.ReadRidIntoTable(MetadataTableName.Field),
+            reader.ReadRidIntoTable(MetadataTableName.MethodDef));
 }

@@ -51,7 +51,7 @@ public class MetadataTablesStream
         Field = ReadTableIfExists<FieldRow>();
     }
 
-    private MetadataTable<T>? ReadTableIfExists<T>() where T : IMetadataTableRow, new() =>
+    private MetadataTable<T>? ReadTableIfExists<T>() where T : IMetadataTableRow<T> =>
         !_rowsCounts.TryGetValue(T.TableName, out var count)
             ? null
             : new MetadataTable<T>(count, _metadataTableDataReader);

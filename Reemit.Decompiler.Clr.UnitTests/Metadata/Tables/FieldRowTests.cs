@@ -12,10 +12,9 @@ public class FieldRowTests
         byte[] bytes = [0x01, 0x00, 0x11, 0x00, 0x1E, 0x00];
         await using var memoryStream = new MemoryStream(bytes);
         using var reader = new BinaryReader(memoryStream);
-        var row = new FieldRow();
 
         // Act
-        row.Read(new MetadataTableDataReader(reader, 0, new Dictionary<MetadataTableName, uint>()));
+        var row = FieldRow.Read(new MetadataTableDataReader(reader, 0, new Dictionary<MetadataTableName, uint>()));
         
         // Assert
         Assert.Equal(FieldAttributes.Private, row.Flags);

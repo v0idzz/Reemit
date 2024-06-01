@@ -12,10 +12,9 @@ public class TypeDefRowTests
         byte[] bytes = [0x01, 0x00, 0x10, 0x00, 0x01, 0x00, 0xEB, 0x01, 0x35, 0x00, 0x01, 0x00, 0x01, 0x00];
         await using var memoryStream = new MemoryStream(bytes);
         using var reader = new BinaryReader(memoryStream);
-        var row = new TypeDefRow();
 
         // Act
-        row.Read(new MetadataTableDataReader(reader, 0, new Dictionary<MetadataTableName, uint>
+        var row = TypeDefRow.Read(new MetadataTableDataReader(reader, 0, new Dictionary<MetadataTableName, uint>
         {
             { MetadataTableName.TypeRef, 1 },
             { MetadataTableName.Field, 1 },

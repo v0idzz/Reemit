@@ -1,17 +1,17 @@
 namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
-public class FieldRow : IMetadataTableRow
+public class FieldRow(FieldAttributes flags, uint name, uint signature)
+    : IMetadataTableRow<FieldRow>
 {
     public static MetadataTableName TableName => MetadataTableName.Field;
 
-    public FieldAttributes Flags { get; private set; }
-    public uint Name { get; private set; }
-    public uint Signature { get; private set; }
+    public FieldAttributes Flags { get; } = flags;
+    public uint Name { get; } = name;
+    public uint Signature { get; } = signature;
 
-    public void Read(MetadataTableDataReader reader)
-    {
-        Flags = (FieldAttributes)(reader.ReadUInt16() & FlagMasks.FieldAccessMask);
-        Name = reader.ReadStringRid();
-        Signature = reader.ReadBlobRid();
-    }
+    public static FieldRow Read(MetadataTableDataReader reader) =>
+        new(
+            (FieldAttributes)(reader.ReadUInt16() & FlagMasks.FieldAccessMask),
+            reader.ReadStringRid(),
+            reader.ReadBlobRid());
 }
