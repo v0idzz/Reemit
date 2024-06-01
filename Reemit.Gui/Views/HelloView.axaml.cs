@@ -92,7 +92,7 @@ public partial class HelloView : ReactiveUserControl<HelloViewModel>
             FileTypeFilter =
             [
                 new FilePickerFileType(".NET Module") { Patterns = ["*.dll", "*.exe"] },
-                new FilePickerFileType("All files")
+                new FilePickerFileType("All files") { Patterns = ["*.*"] }
             ]
         });
 
