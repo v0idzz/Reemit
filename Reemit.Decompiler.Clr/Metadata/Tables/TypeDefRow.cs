@@ -11,12 +11,12 @@ public class TypeDefRow(
 {
     public static MetadataTableName TableName => MetadataTableName.TypeDef;
 
-    public TypeAttributes Flags { get; private set; } = flags;
-    public uint TypeName { get; private set; } = typeName;
-    public uint TypeNamespace { get; private set; } = typeNamespace;
-    public CodedIndex Extends { get; private set; } = extends;
-    public uint FieldList { get; private set; } = fieldList;
-    public uint MethodList { get; private set; } = methodList;
+    public TypeAttributes Flags { get; } = flags;
+    public uint TypeName { get; } = typeName;
+    public uint TypeNamespace { get; } = typeNamespace;
+    public CodedIndex Extends { get; } = extends;
+    public uint FieldList { get; } = fieldList;
+    public uint MethodList { get; } = methodList;
 
     public static TypeDefRow Read(MetadataTableDataReader reader) =>
         new(
