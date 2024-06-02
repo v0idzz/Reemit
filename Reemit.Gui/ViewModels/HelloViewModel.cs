@@ -65,7 +65,11 @@ public class HelloViewModel : ReactiveObject, IRoutableViewModel
     private async Task<Unit> OpenFilesAsync(Unit _)
     {
         var files = await ShowOpenFileDialog.Handle(Unit.Default);
-        await OpenFilesAsync(files);
+
+        if (files.Count > 0)
+        {
+            await OpenFilesAsync(files);
+        }
 
         return Unit.Default;
     }
