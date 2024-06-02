@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 
 namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
