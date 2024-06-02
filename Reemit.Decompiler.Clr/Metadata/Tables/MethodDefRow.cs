@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
@@ -62,11 +63,21 @@ public class MethodDefRow(
     {
         var rva = reader.ReadUInt32();
 
-        // Todo:
-        // Validate these by ORing all flags, then AND NOTing to verify
-        // no unexpected bits are set.
         var implFlags = reader.ReadUInt16();
+        var invalidImplFlags = implFlags & ~FlagMasks.MethodImplAttributesMask;
+
+        if (implFlags != (ushort)MethodImplAttributes.MaxMethodImplVal && invalidImplFlags != 0x0)
+        {
+            ThrowWordFlagsImageException("MethodImplAttributes", (ushort)invalidImplFlags);
+        }
+
         var flags = reader.ReadUInt16();
+        var invalidFlags = flags & ~FlagMasks.MethodAttributesMask;
+
+        if (invalidFlags != 0x0)
+        {
+            ThrowWordFlagsImageException("MethodAttributes", (ushort)invalidFlags);
+        }
 
         return new(
             rva,
@@ -76,4 +87,9 @@ public class MethodDefRow(
             reader.ReadBlobRid(),
             reader.ReadRidIntoTable(MetadataTableName.Param));
     }
+
+    [DoesNotReturn]
+    private static void ThrowWordFlagsImageException(string flagsName, ushort flagsWord) =>
+        throw new BadImageFormatException(
+                $"Invalid {flagsName}: {string.Format("{0:x4}", flagsWord)}.");
 }

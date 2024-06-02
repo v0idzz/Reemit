@@ -21,6 +21,7 @@ public enum MethodImplAttributes : ushort
         ForwardRef |
         PreserveSig |
         InternalCall |
+        Synchronized |
         NoInlining |
         NoOptimization
 }
