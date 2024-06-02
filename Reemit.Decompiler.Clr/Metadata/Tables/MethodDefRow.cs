@@ -37,6 +37,14 @@ public class MethodDefRow(
     public MethodAttributes MethodFlags =>
         (MethodAttributes)(Flags & (ushort)MethodAttributes.Mask);
 
+    public bool IsForwardRef => (MethodImpl & MethodImplAttributes.ForwardRef) != 0;
+    public bool IsPreserveSig => (MethodImpl & MethodImplAttributes.PreserveSig) != 0;
+    public bool IsInternalCall => (MethodImpl & MethodImplAttributes.InternalCall) != 0;
+    public bool IsSynchronized => (MethodImpl & MethodImplAttributes.Synchronized) != 0;
+    public bool IsNoInlining => (MethodImpl & MethodImplAttributes.NoInlining) != 0;
+    public bool IsNoOptimization => (MethodImpl & MethodImplAttributes.NoOptimization) != 0;
+    public bool IsMaxMethodImplVal => MethodImpl == MethodImplAttributes.MaxMethodImplVal;
+
     public bool IsStatic => (MethodFlags & MethodAttributes.Static) != 0;
     public bool IsFinal => (MethodFlags & MethodAttributes.Final) != 0;
     public bool IsVirtual => (MethodFlags & MethodAttributes.Virtual) != 0;
