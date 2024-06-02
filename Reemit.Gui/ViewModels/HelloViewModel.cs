@@ -59,7 +59,7 @@ public class HelloViewModel : ReactiveObject, IRoutableViewModel
             Span<string> allowedExtensions = [".dll", ".exe"];
 
             var absolutePath = i.Path.AbsolutePath;
-            return allowedExtensions.Contains(Path.GetExtension(absolutePath));
+            return allowedExtensions.Contains(Path.GetExtension(absolutePath).ToLower());
         });
     }
 
