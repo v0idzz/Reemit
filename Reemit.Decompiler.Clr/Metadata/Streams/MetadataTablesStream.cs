@@ -13,7 +13,7 @@ public class MetadataTablesStream
     public HeapSizes HeapSizes { get; }
     public byte Reserved1 { get; }
 
-    public MetadataTable<ModuleRow>? Module { get; }
+    public MetadataTable<ModuleRow> Module { get; }
     public MetadataTable<TypeRefRow>? TypeRef { get; }
     public MetadataTable<TypeDefRow>? TypeDef { get; }
     public MetadataTable<FieldRow>? Field { get; }
@@ -45,7 +45,16 @@ public class MetadataTablesStream
 
         _metadataTableDataReader = new MetadataTableDataReader(reader, HeapSizes, _rowsCounts);
 
-        Module = ReadTableIfExists<ModuleRow>();
+        var moduleTable = ReadTableIfExists<ModuleRow>();
+        
+        // From II.22.30, informative text entry 1: The Module table shall contain one and only one row [ERROR]
+        if (moduleTable is not { Rows.Count: 1 })
+        {
+            throw new BadImageFormatException("The Module table shall contain one and only one row");
+        }
+
+        Module = moduleTable;
+
         TypeRef = ReadTableIfExists<TypeRefRow>();
         TypeDef = ReadTableIfExists<TypeDefRow>();
         Field = ReadTableIfExists<FieldRow>();
