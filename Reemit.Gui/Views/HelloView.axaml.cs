@@ -22,14 +22,14 @@ public partial class HelloView : ReactiveUserControl<HelloViewModel>
 
         this.WhenActivated(disposable =>
         {
-            this.OneWayBind(ViewModel, vm => vm.IsAcceptedFileDraggedOver, v => v.DragBorderRectangle.IsVisible)
+            this.OneWayBind(ViewModel, vm => vm.AreAcceptedFilesDraggedOver, v => v.DragBorderRectangle.IsVisible)
                 .DisposeWith(disposable);
 
-            this.OneWayBind(ViewModel, vm => vm.IsAcceptedFileDraggedOver, v => v.OpenFileControlsStackPanel.IsVisible,
+            this.OneWayBind(ViewModel, vm => vm.AreAcceptedFilesDraggedOver, v => v.OpenFileControlsStackPanel.IsVisible,
                     v => !v)
                 .DisposeWith(disposable);
 
-            this.OneWayBind(ViewModel, vm => vm.IsAcceptedFileDraggedOver, v => v.DropHintText.IsVisible)
+            this.OneWayBind(ViewModel, vm => vm.AreAcceptedFilesDraggedOver, v => v.DropHintText.IsVisible)
                 .DisposeWith(disposable);
 
             this.BindCommand(ViewModel, vm => vm.OpenFiles, v => v.PickFileButton)
@@ -41,7 +41,7 @@ public partial class HelloView : ReactiveUserControl<HelloViewModel>
             Observable.FromEventPattern<DragEventArgs>(
                     handler => AddHandler(DragDrop.DragOverEvent, handler),
                     handler => RemoveHandler(DragDrop.DragOverEvent, handler))
-                .CombineLatest(ViewModel.WhenAnyValue(vm => vm.IsAcceptedFileDraggedOver))
+                .CombineLatest(ViewModel.WhenAnyValue(vm => vm.AreAcceptedFilesDraggedOver))
                 .Subscribe(x => x.First.EventArgs.DragEffects = x.Second
                     ? DragDropEffects.Move | DragDropEffects.Copy | DragDropEffects.Link
                     : DragDropEffects.None)

@@ -22,7 +22,7 @@ public class HelloViewModel : ReactiveObject, IRoutableViewModel
     public IReadOnlyList<IStorageItem>? FilesDraggedOver { get; set; }
 
     [ObservableAsProperty]
-    public bool IsAcceptedFileDraggedOver { get; }
+    public bool AreAcceptedFilesDraggedOver { get; }
 
     public string UrlPathSegment => nameof(HelloViewModel);
     
@@ -36,15 +36,14 @@ public class HelloViewModel : ReactiveObject, IRoutableViewModel
 
         this.WhenAnyValue(vm => vm.FilesDraggedOver)
             .Select(ShouldAcceptDraggedFiles)
-            .ToPropertyEx(this, vm => vm.IsAcceptedFileDraggedOver);
+            .ToPropertyEx(this, vm => vm.AreAcceptedFilesDraggedOver);
 
         OpenFiles = ReactiveCommand.CreateFromTask<Unit, Unit>(OpenFilesAsync);
 
-        var hasAnyDraggedOverFiles = this.WhenAnyValue(vm => vm.FilesDraggedOver)
-            .Select(x => x is { Count: > 0 });
+        var hasAcceptedFilesDraggedOver = this.WhenAnyValue(vm => vm.AreAcceptedFilesDraggedOver);
 
         OpenDroppedFiles =
-            ReactiveCommand.CreateFromTask<Unit, Unit>(OpenDroppedFilesAsync, hasAnyDraggedOverFiles);
+            ReactiveCommand.CreateFromTask<Unit, Unit>(OpenDroppedFilesAsync, hasAcceptedFilesDraggedOver);
     }
     
     private static bool ShouldAcceptDraggedFiles(IReadOnlyList<IStorageItem>? items)
