@@ -78,17 +78,70 @@ public class MethodDefRow(
             ThrowWordFlagsImageException("MethodAttributes", (ushort)invalidFlags);
         }
 
-        return new(
+        var row = new MethodDefRow(
             rva,
             implFlags,
             flags,
             reader.ReadStringRid(),
             reader.ReadBlobRid(),
             reader.ReadRidIntoTable(MetadataTableName.Param));
+
+        // From 22.26 MethodDef : 0x06, informative text entry 7.
+        if (row.IsStatic && row.IsFinal)
+        {
+            ThrowInvalidFlagsImageException(MethodAttributes.Static, MethodAttributes.Final);
+        }
+        else if (row.IsStatic && row.IsVirtual)
+        {
+            ThrowInvalidFlagsImageException(MethodAttributes.Static, MethodAttributes.Virtual);
+        }
+        else if (row.IsStatic && row.MethodVtableLayout == MethodVtableLayoutAttributes.NewSlot)
+        {
+            ThrowInvalidFlagsImageException(MethodAttributes.Static, MethodVtableLayoutAttributes.NewSlot);
+        }
+        else if (row.IsFinal && row.IsAbstract)
+        {
+            ThrowInvalidFlagsImageException(MethodAttributes.Final, MethodAttributes.Abstract);
+        }
+        else if (row.IsAbstract && row.IsPInvokeImpl)
+        {
+            ThrowInvalidFlagsImageException(MethodAttributes.Abstract, MethodAttributes.PInvokeImpl);
+        }
+        else if (row.MethodMemberAccess == MethodMemberAccessAttributes.CompilerControlled && row.IsSpecialName)
+        {
+            ThrowInvalidFlagsImageException(
+                MethodMemberAccessAttributes.CompilerControlled,
+                MethodAttributes.SpecialName);
+        }
+        else if (row.MethodMemberAccess == MethodMemberAccessAttributes.CompilerControlled && row.IsRTSpecialName)
+        {
+            ThrowInvalidFlagsImageException(
+                MethodMemberAccessAttributes.CompilerControlled,
+                MethodAttributes.RTSpecialName);
+        }
+
+        // From 22.26 MethodDef : 0x06, informative text entry 8.
+        if (row.IsAbstract && !row.IsVirtual)
+        {
+            throw new BadImageFormatException("Abstract methods must be virtual.");
+        }
+
+        // From 22.26 MethodDef : 0x06, informative text entry 9.
+        if (row.IsRTSpecialName && !row.IsSpecialName)
+        {
+            throw new BadImageFormatException("SpecialName is required when RTSpecialName is set.");
+        }
+
+        return row;
     }
 
     [DoesNotReturn]
     private static void ThrowWordFlagsImageException(string flagsName, ushort flagsWord) =>
         throw new BadImageFormatException(
                 $"Invalid {flagsName}: {string.Format("{0:x4}", flagsWord)}.");
+
+    [DoesNotReturn]
+    private static void ThrowInvalidFlagsImageException(params Enum[] flags) =>
+        throw new BadImageFormatException(
+                $"Invalid flags: {string.Join(", ", flags.Select(x => x.ToString()))}.");
 }
