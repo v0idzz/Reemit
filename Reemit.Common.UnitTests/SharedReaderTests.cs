@@ -24,7 +24,6 @@ public sealed class SharedReaderTests
         Assert.Equal(sharedReaderOffset + readBytesCount, sharedReader.Offset);
         Assert.Equal(readBytesCount, sharedReader.RelativeOffset);
         Assert.Equal(readBytesCount, actualBytes.Length);
-        Assert.NotNull(actualBytes);
         Assert.Equal([0x1, 0x2], actualBytes);
     }
 
@@ -82,10 +81,9 @@ public sealed class SharedReaderTests
         using var stream = new MemoryStream(bytes);
         using var binaryReader = new BinaryReader(stream);
         using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader, new object());
-
-        // Act
         var actualUnmanagedValues = new T[expectedUnmanagedValues.Length];
 
+        // Act
         for (var i = 0; i < actualUnmanagedValues.Length; i++)
         {
             actualUnmanagedValues[i] = readUnmanaged(sharedReader);
