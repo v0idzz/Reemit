@@ -4,19 +4,29 @@
                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                           xmlns:rxui="http://reactiveui.net"
                           xmlns:viewModels="clr-namespace:Reemit.Gui.ViewModels"
+                          DragDrop.AllowDrop="True"
+                          Background="Transparent"
                           mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-                          x:Class="Reemit.Gui.Views.HelloView"
-                          HorizontalContentAlignment="Center"
-                          VerticalContentAlignment="Center">
-    <StackPanel Spacing="8">
-        <StackPanel.Styles>
-            <Style Selector="TextBlock">
-                <Setter Property="HorizontalAlignment" Value="Center" />
-            </Style>
-        </StackPanel.Styles>
-        <TextBlock FontSize="32" FontWeight="Heavy" Foreground="White">Reemit</TextBlock>
-        <TextBlock Foreground="White">Drop a .NET assembly here</TextBlock>
-        <TextBlock Foreground="White" Opacity=".5">or</TextBlock>
-        <Button Foreground="White" HorizontalAlignment="Center">Pick a file</Button>
-    </StackPanel>
+                          x:Class="Reemit.Gui.Views.HelloView">
+    <Grid>
+        <Rectangle StrokeDashArray="4, 2" Stroke="Gray" StrokeThickness="3" HorizontalAlignment="Stretch"
+                   VerticalAlignment="Stretch" Margin="8" RadiusX="16" RadiusY="16" Name="DragBorderRectangle" />
+
+        <StackPanel Spacing="8" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Name="OpenFileControlsStackPanel">
+            <StackPanel.Styles>
+                <Style Selector="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                </Style>
+            </StackPanel.Styles>
+            <TextBlock FontSize="32" FontWeight="Heavy" Foreground="White">Reemit</TextBlock>
+            <TextBlock Foreground="White">Drop a .NET assembly here</TextBlock>
+            <TextBlock Foreground="White" Opacity=".5">or</TextBlock>
+            <Button Foreground="White" HorizontalAlignment="Center" Name="PickFileButton">Pick a file</Button>
+        </StackPanel>
+
+        <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Name="DropHintText">
+            Drop the assembly to open it
+        </TextBlock>
+    </Grid>
 </rxui:ReactiveUserControl>
