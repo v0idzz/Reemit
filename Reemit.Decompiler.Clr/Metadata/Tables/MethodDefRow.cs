@@ -37,26 +37,26 @@ public class MethodDefRow(
     public MethodAttributes MethodFlags =>
         (MethodAttributes)(Flags & (ushort)MethodAttributes.Mask);
 
-    public bool IsForwardRef => (MethodImpl & MethodImplAttributes.ForwardRef) != 0;
-    public bool IsPreserveSig => (MethodImpl & MethodImplAttributes.PreserveSig) != 0;
-    public bool IsInternalCall => (MethodImpl & MethodImplAttributes.InternalCall) != 0;
-    public bool IsSynchronized => (MethodImpl & MethodImplAttributes.Synchronized) != 0;
-    public bool IsNoInlining => (MethodImpl & MethodImplAttributes.NoInlining) != 0;
-    public bool IsNoOptimization => (MethodImpl & MethodImplAttributes.NoOptimization) != 0;
+    public bool IsForwardRef => MethodImpl.HasFlag(MethodImplAttributes.ForwardRef);
+    public bool IsPreserveSig => MethodImpl.HasFlag(MethodImplAttributes.PreserveSig);
+    public bool IsInternalCall => MethodImpl.HasFlag(MethodImplAttributes.InternalCall);
+    public bool IsSynchronized => MethodImpl.HasFlag(MethodImplAttributes.Synchronized);
+    public bool IsNoInlining => MethodImpl.HasFlag(MethodImplAttributes.NoInlining);
+    public bool IsNoOptimization => MethodImpl.HasFlag(MethodImplAttributes.NoOptimization);
     public bool IsMaxMethodImplVal => MethodImpl == MethodImplAttributes.MaxMethodImplVal;
 
-    public bool IsStatic => (MethodFlags & MethodAttributes.Static) != 0;
-    public bool IsFinal => (MethodFlags & MethodAttributes.Final) != 0;
-    public bool IsVirtual => (MethodFlags & MethodAttributes.Virtual) != 0;
-    public bool IsHideBySig => (MethodFlags & MethodAttributes.HideBySig) != 0;
-    public bool IsStrict => (MethodFlags & MethodAttributes.Strict) != 0;
-    public bool IsAbstract => (MethodFlags & MethodAttributes.Abstract) != 0;
-    public bool IsSpecialName => (MethodFlags & MethodAttributes.SpecialName) != 0;
-    public bool IsPInvokeImpl => (MethodFlags & MethodAttributes.PInvokeImpl) != 0;
-    public bool IsUnmanagedExport => (MethodFlags & MethodAttributes.UnmanagedExport) != 0;
-    public bool IsRTSpecialName => (MethodFlags & MethodAttributes.RTSpecialName) != 0;
-    public bool HasSecurity => (MethodFlags & MethodAttributes.HasSecurity) != 0;
-    public bool RequireSecObject => (MethodFlags & MethodAttributes.RequireSecObject) != 0;
+    public bool IsStatic => MethodFlags.HasFlag(MethodAttributes.Static);
+    public bool IsFinal => MethodFlags.HasFlag(MethodAttributes.Final);
+    public bool IsVirtual => MethodFlags.HasFlag(MethodAttributes.Virtual);
+    public bool IsHideBySig => MethodFlags.HasFlag(MethodAttributes.HideBySig);
+    public bool IsStrict => MethodFlags.HasFlag(MethodAttributes.Strict);
+    public bool IsAbstract => MethodFlags.HasFlag(MethodAttributes.Abstract);
+    public bool IsSpecialName => MethodFlags.HasFlag(MethodAttributes.SpecialName);
+    public bool IsPInvokeImpl => MethodFlags.HasFlag(MethodAttributes.PInvokeImpl);
+    public bool IsUnmanagedExport => MethodFlags.HasFlag(MethodAttributes.UnmanagedExport);
+    public bool IsRTSpecialName => MethodFlags.HasFlag(MethodAttributes.RTSpecialName);
+    public bool HasSecurity => MethodFlags.HasFlag(MethodAttributes.HasSecurity);
+    public bool RequireSecObject => MethodFlags.HasFlag(MethodAttributes.RequireSecObject);
 
     public static MethodDefRow Read(MetadataTableDataReader reader)
     {
@@ -119,15 +119,13 @@ public class MethodDefRow(
                 MethodMemberAccessAttributes.CompilerControlled,
                 MethodAttributes.RTSpecialName);
         }
-
         // From 22.26 MethodDef : 0x06, informative text entry 8.
-        if (row.IsAbstract && !row.IsVirtual)
+        else if (row.IsAbstract && !row.IsVirtual)
         {
             throw new BadImageFormatException("Abstract methods must be virtual.");
         }
-
         // From 22.26 MethodDef : 0x06, informative text entry 9.
-        if (row.IsRTSpecialName && !row.IsSpecialName)
+        else if (row.IsRTSpecialName && !row.IsSpecialName)
         {
             throw new BadImageFormatException("SpecialName is required when RTSpecialName is set.");
         }
