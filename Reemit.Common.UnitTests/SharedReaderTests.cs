@@ -52,7 +52,7 @@ public sealed class SharedReaderTests
     public void ReadUnmanaged_Called_AdvancesRelativeOffsetAndOffset<T>(
         int sharedReaderOffset,
         T[] expectedUnmanagedValues,
-        Func<SharedReader, T> readUnmanaged)
+        Delegate readUnmanaged)
         where T : unmanaged
     {
         // Arrange
@@ -82,17 +82,44 @@ public sealed class SharedReaderTests
         using var binaryReader = new BinaryReader(stream);
         using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader, new object());
         var actualUnmanagedValues = new T[expectedUnmanagedValues.Length];
+        var isRangeMapped = false;
+        var expectedPositions = new int[expectedUnmanagedValues.Length];
+        var actualRangeMaps = new IRangeMapped[expectedUnmanagedValues.Length];
 
         // Act
         for (var i = 0; i < actualUnmanagedValues.Length; i++)
         {
-            actualUnmanagedValues[i] = readUnmanaged(sharedReader);
+            var expectedPosition = sharedReader.Offset;
+            var actualValue = ((Delegate)readUnmanaged).DynamicInvoke(sharedReader)!;
+
+            if (actualValue is IRangeMapped rangeMapped)
+            {
+                isRangeMapped = true;
+                var actualValueType = actualValue.GetType()!;
+                var valueProp = actualValueType.GetProperty(nameof(RangeMapped<T>.Value))!;
+                actualUnmanagedValues[i] = (T)valueProp.GetValue(actualValue)!;
+                actualRangeMaps[i] = rangeMapped;
+                expectedPositions[i] = expectedPosition;
+            }
+            else
+            {
+                actualUnmanagedValues[i] = (T)actualValue;
+            }
         }
 
         // Assert
         Assert.Equal(expectedUnmanagedValues, actualUnmanagedValues);
         Assert.Equal(sharedReaderOffset + actualUnmanagedValues.Length * size, sharedReader.Offset);
         Assert.Throws<EndOfStreamException>(() => sharedReader.ReadByte());
+
+        if (isRangeMapped)
+        {
+            Assert.Equal(expectedPositions, actualRangeMaps.Select(x => x.Position));
+
+            Assert.Equal(
+                Enumerable.Repeat(size, expectedUnmanagedValues.Length),
+                actualRangeMaps.Select(x => x.Length));
+        }
     }
 
     public static IEnumerable<object[]> GetReadUnmanagedData() =>
@@ -100,48 +127,55 @@ public sealed class SharedReaderTests
         {
             CreatedReadUnmanagedTestCases(
                 new byte[] { 0xef, 0xbe, 0xad, 0xde },
-                r => r.ReadByte()),
+                r => r.ReadByte(),
+                r => r.ReadMappedByte()),
             CreatedReadUnmanagedTestCases(
                 "Hello world".ToCharArray(),
-                r => r.ReadChar()),
+                r => r.ReadChar(),
+                r => r.ReadMappedChar()),
             CreatedReadUnmanagedTestCases(
                 "\x00\x01\x02\x03\x04\x05\x06".ToCharArray(),
-                r => r.ReadChar()),
+                r => r.ReadChar(),
+                r => r.ReadMappedChar()),
             CreatedReadUnmanagedTestCases(
                 new ushort[] { 0xdead, 0xbeef, 0x5230, 0x1592, ushort.MinValue, ushort.MaxValue },
-                r => r.ReadUInt16()),
+                r => r.ReadUInt16(),
+                r => r.ReadMappedUInt16()),
             CreatedReadUnmanagedTestCases(
                 new uint[] { 0xdeadbeef, 0xcafebabe, 0xcdcdcdcd, 0xc0c0c0c0, uint.MinValue, uint.MaxValue },
-                r => r.ReadUInt32()),
+                r => r.ReadUInt32(),
+                r => r.ReadMappedUInt32()),
             CreatedReadUnmanagedTestCases(
                 new ulong[] { 0xdeadbeefcafebabe, 0xcdcdcdcdcdcdcdcd, 0xc0c0c0c0c0c0c0c0, 0xffffffffffffffff, ulong.MinValue, uint.MaxValue },
-                r => r.ReadUInt64()),
+                r => r.ReadUInt64(),
+                r => r.ReadMappedUInt64()),
             CreatedReadUnmanagedTestCases(
                 new short[] { 123, 456, 789, 1011, short.MinValue, short.MaxValue },
-                r => r.ReadInt16()),
+                r => r.ReadInt16(),
+                r => r.ReadMappedInt16()),
             CreatedReadUnmanagedTestCases(
                 new int[] { 12345, 678910, 1112131415, 1617181920, int.MinValue, int.MaxValue },
-                r => r.ReadInt32()),
+                r => r.ReadInt32(),
+                r => r.ReadMappedInt32()),
             CreatedReadUnmanagedTestCases(
                 new long[] { 123456789101112, 131415161718192021, 222324252627282930, 313233343536373839, long.MinValue, int.MaxValue },
-                r => r.ReadInt64()),
+                r => r.ReadInt64(),
+                r => r.ReadMappedInt64()),
         }
         .SelectMany(x => x);
 
     private static IEnumerable<object[]> CreatedReadUnmanagedTestCases<T>(
         T[] expectedUnmanagedValues,
-        Func<SharedReader, T> readUnmanaged)
+        Func<SharedReader, T> readUnmanaged,
+        Func<SharedReader, RangeMapped<T>> readRangeMappedUnmanaged)
         where T : unmanaged =>
         Enumerable
             .Range(1, expectedUnmanagedValues.Length)
             .SelectMany(x =>
                 new[] { 0, 1, 512 }
-                    .Select(y => new object[]
-                    {
-                        y,
-                        expectedUnmanagedValues.Take(x).ToArray(),
-                        readUnmanaged
-                    }));
+                    .SelectMany(y =>
+                        new object[] { (Delegate)readUnmanaged, (Delegate)readRangeMappedUnmanaged }
+                            .Select(z => new object[] { y, expectedUnmanagedValues.Take(x).ToArray(), z })));
 
     [Theory]
     [MemberData(nameof(GetNotImplementedData))]
