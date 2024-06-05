@@ -1,8 +1,7 @@
-﻿namespace Reemit.Common
+﻿namespace Reemit.Common;
+
+public interface IRangeMapped
 {
-    public interface IRangeMapped
-    {
-        int Length { get; }
-        int Position { get; }
-    }
+    int Length { get; }
+    int Position { get; }
 }

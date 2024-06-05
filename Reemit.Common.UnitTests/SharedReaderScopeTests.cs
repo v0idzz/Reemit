@@ -43,8 +43,8 @@ public sealed class SharedReaderScopeTests
         const int sharedReaderOffset = 1;
         using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader, new object());
         const int readBytesCount = 2;
-        byte[] actualOuterBytes = new byte[readBytesCount], actualInnerBytes;
-        RangeMapped<byte[]> actualRangeMappedOuterBytes, actualRangeMappedInnerBytes;
+        byte[] actualOuterBytes = new byte[readBytesCount];
+        RangeMapped<byte[]> actualInnerBytes, actualRangeMappedOuterBytes, actualRangeMappedInnerBytes;
 
         // Act
         using (var outerScope = sharedReader.CreateRangeScope())
@@ -53,7 +53,7 @@ public sealed class SharedReaderScopeTests
 
             using (var innerScope = sharedReader.CreateRangeScope())
             {
-                actualInnerBytes = sharedReader.ReadBytes(readBytesCount);
+                actualInnerBytes = sharedReader.ReadMappedBytes(readBytesCount);
                 actualRangeMappedInnerBytes = innerScope.ToRangeMapped(actualInnerBytes);
             }
 
@@ -70,10 +70,13 @@ public sealed class SharedReaderScopeTests
         Assert.Equal([0x1, 0x4], actualRangeMappedOuterBytes.Value);
         Assert.Equal(1, actualRangeMappedOuterBytes.Position);
         Assert.Equal(readBytesCount * 2, actualRangeMappedOuterBytes.Length);
-        
-        Assert.Equal([0x2, 0x3], actualInnerBytes);
+
+        Assert.Equal([0x2, 0x3], actualInnerBytes.Value);
         Assert.Equal([0x2, 0x3], actualRangeMappedInnerBytes.Value);
         Assert.Equal(2, actualRangeMappedInnerBytes.Position);
         Assert.Equal(readBytesCount, actualRangeMappedInnerBytes.Length);
+
+        Assert.Equal(2, actualInnerBytes.Position);
+        Assert.Equal(readBytesCount, actualInnerBytes.Length);
     }
 }
