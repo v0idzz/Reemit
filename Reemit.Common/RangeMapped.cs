@@ -1,6 +1,6 @@
 ﻿namespace Reemit.Common;
 
-public class RangeMapped<TValue>(int position, int length, TValue value) : IRangeMapped
+public readonly struct RangeMapped<TValue>(int position, int length, TValue value) : IRangeMapped
 {
     public int Position { get; } = position;
     public int Length { get; } = length;
