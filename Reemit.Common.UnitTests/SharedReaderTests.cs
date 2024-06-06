@@ -95,7 +95,7 @@ public sealed class SharedReaderTests
             if (actualValue is IRangeMapped rangeMapped)
             {
                 isRangeMapped = true;
-                var actualValueType = actualValue.GetType()!;
+                var actualValueType = actualValue.GetType();
                 var valueProp = actualValueType.GetProperty(nameof(RangeMapped<T>.Value))!;
                 actualUnmanagedValues[i] = (T)valueProp.GetValue(actualValue)!;
                 actualRangeMaps[i] = rangeMapped;
