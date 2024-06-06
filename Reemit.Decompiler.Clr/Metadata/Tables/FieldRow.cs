@@ -1,17 +1,21 @@
+using Reemit.Common;
+
 namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
-public class FieldRow(FieldAttributes flags, uint name, uint signature)
+public class FieldRow(RangeMapped<FieldAttributes> flags, RangeMapped<uint> name, RangeMapped<uint> signature)
     : IMetadataTableRow<FieldRow>
 {
     public static MetadataTableName TableName => MetadataTableName.Field;
 
-    public FieldAttributes Flags { get; } = flags;
-    public uint Name { get; } = name;
-    public uint Signature { get; } = signature;
+    public RangeMapped<FieldAttributes> Flags { get; } = flags;
+    public RangeMapped<uint> Name { get; } = name;
+    public RangeMapped<uint> Signature { get; } = signature;
 
     public static FieldRow Read(MetadataTableDataReader reader) =>
         new(
-            (FieldAttributes)(reader.ReadUInt16() & FlagMasks.FieldAccessMask),
-            reader.ReadStringRid(),
-            reader.ReadBlobRid());
+            reader
+                .ReadMappedUInt16()
+                .Select(x => (FieldAttributes)(x & FlagMasks.FieldAccessMask)),
+            reader.ReadMappedStringRid(),
+            reader.ReadMappedBlobRid());
 }

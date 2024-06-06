@@ -17,7 +17,7 @@ public class ModuleRowTests
         var header = ModuleRow.Read(new MetadataTableDataReader(reader, 0, new Dictionary<MetadataTableName, uint>()));
         
         // Assert
-        Assert.Equal([0, 0], header.Generation);
+        Assert.Equal([0, 0], header.Generation.Value);
         Assert.Equal(360u, header.Name);
         Assert.Equal(1u, header.Mvid);
         Assert.Equal(0u, header.EncId);

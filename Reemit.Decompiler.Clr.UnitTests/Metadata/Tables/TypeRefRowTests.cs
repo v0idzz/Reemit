@@ -20,8 +20,8 @@ public class TypeRefRowTests
         }));
         
         // Assert
-        Assert.Equal(MetadataTableName.AssemblyRef, row.ResolutionScope.ReferencedTable);
-        Assert.Equal(1u, row.ResolutionScope.Rid);
+        Assert.Equal(MetadataTableName.AssemblyRef, row.ResolutionScope.Value.ReferencedTable);
+        Assert.Equal(1u, row.ResolutionScope.Value.Rid);
         Assert.Equal(43u, row.TypeName);
         Assert.Equal(418u, row.TypeNamespace);
     }

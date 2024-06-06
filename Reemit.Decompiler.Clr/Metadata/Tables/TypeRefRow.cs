@@ -1,17 +1,22 @@
+using Reemit.Common;
+
 namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
-public class TypeRefRow(CodedIndex resolutionScope, uint typeName, uint typeNamespace)
+public class TypeRefRow(
+    RangeMapped<CodedIndex> resolutionScope,
+    RangeMapped<uint> typeName,
+    RangeMapped<uint> typeNamespace)
     : IMetadataTableRow<TypeRefRow>
 {
     public static MetadataTableName TableName => MetadataTableName.TypeRef;
 
-    public CodedIndex ResolutionScope { get; } = resolutionScope;
-    public uint TypeName { get; } = typeName;
-    public uint TypeNamespace { get; } = typeNamespace;
+    public RangeMapped<CodedIndex> ResolutionScope { get; } = resolutionScope;
+    public RangeMapped<uint> TypeName { get; } = typeName;
+    public RangeMapped<uint> TypeNamespace { get; } = typeNamespace;
 
     public static TypeRefRow Read(MetadataTableDataReader reader) =>
         new(
-            reader.ReadCodedRid(CodedIndexTagFamily.ResolutionScope),
-            reader.ReadStringRid(),
-            reader.ReadStringRid());
+            reader.ReadMappedCodedRid(CodedIndexTagFamily.ResolutionScope),
+            reader.ReadMappedStringRid(),
+            reader.ReadMappedStringRid());
 }
