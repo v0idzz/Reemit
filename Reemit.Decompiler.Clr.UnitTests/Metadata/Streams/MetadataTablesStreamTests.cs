@@ -1,3 +1,4 @@
+using Reemit.Common;
 using Reemit.Decompiler.Clr.Metadata;
 using Reemit.Decompiler.Clr.Metadata.Streams;
 
@@ -11,9 +12,10 @@ public class MetadataTablesStreamTests
         // Arrange
         await using var fileStream = File.OpenRead("Resources/metadatatablesstream.bin");
         using var reader = new BinaryReader(fileStream);
+        using var sharedReader = new SharedReader(0, reader, new());
 
         // Act
-        var header = new MetadataTablesStream(reader);
+        var header = new MetadataTablesStream(sharedReader);
         
         // Assert
         Assert.Equal(0u, header.Reserved);
