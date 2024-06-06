@@ -90,7 +90,7 @@ public sealed class SharedReaderTests
         for (var i = 0; i < actualUnmanagedValues.Length; i++)
         {
             var expectedPosition = sharedReader.Offset;
-            var actualValue = ((Delegate)readUnmanaged).DynamicInvoke(sharedReader)!;
+            var actualValue = readUnmanaged.DynamicInvoke(sharedReader)!;
 
             if (actualValue is IRangeMapped rangeMapped)
             {
@@ -174,7 +174,7 @@ public sealed class SharedReaderTests
             .SelectMany(x =>
                 new[] { 0, 1, 512 }
                     .SelectMany(y =>
-                        new object[] { (Delegate)readUnmanaged, (Delegate)readRangeMappedUnmanaged }
+                        new object[] { readUnmanaged, readRangeMappedUnmanaged }
                             .Select(z => new object[] { y, expectedUnmanagedValues.Take(x).ToArray(), z })));
 
     [Theory]
