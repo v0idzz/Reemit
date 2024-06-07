@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using System.Reactive.Disposables;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
@@ -15,8 +13,7 @@ public partial class HomeView : ReactiveUserControl<HomeViewModel>
 
         this.WhenActivated(disposable =>
         {
-            this.OneWayBind(ViewModel, vm => vm.Modules, v => v.OpenAssembliesText.Text,
-                    v => string.Join(Environment.NewLine, v.Select(x => x.DebugDump())))
+            this.OneWayBind(ViewModel, vm => vm.ModuleExplorerTreeViewModel, v => v.ModuleExplorerTreeView.ViewModel)
                 .DisposeWith(disposable);
         });
     }

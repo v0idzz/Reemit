@@ -22,7 +22,12 @@ public class TypeDefRowTests
         }));
         
         // Assert
-        Assert.Equal(TypeAttributes.Public, row.Flags);
+        Assert.Equal(TypeClassLayoutAttributes.AutoLayout, row.ClassLayout);
+        Assert.Equal(TypeClassSemanticsAttributes.Class, row.ClassSemantics);
+        Assert.Equal((TypeImplementationAttributes)0, row.Implementation);
+        Assert.Equal(TypeStringFormattingAttributes.AnsiClass, row.StringFormatting);
+        Assert.Equal(TypeVisibilityAttributes.Public, row.Visibility);
+        Assert.Equal(1048577u, row.Flags);
         Assert.Equal(1u, row.TypeName);
         Assert.Equal(491u, row.TypeNamespace);
         Assert.Equal(MetadataTableName.TypeRef, row.Extends.ReferencedTable);

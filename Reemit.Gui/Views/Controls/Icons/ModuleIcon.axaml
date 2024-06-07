@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Reemit.Gui.Views.Controls.Icons.ModuleIcon">
+    <Viewbox Width="16" Height="16">
+        <Rectangle Width="16" Height="16">
+            <Rectangle.Resources>
+                <SolidColorBrush x:Key="canvas" Opacity="0" />
+                <SolidColorBrush x:Key="light-purple-10" Color="#6936aa" Opacity="0.1" />
+                <SolidColorBrush x:Key="light-purple" Color="#6936aa" Opacity="1" />
+                <system:Double x:Key="cls-1">0.75</system:Double>
+            </Rectangle.Resources>
+            <Rectangle.Fill>
+                <DrawingBrush Stretch="None">
+                    <DrawingBrush.Drawing>
+                        <DrawingGroup>
+                            <DrawingGroup>
+                                <GeometryDrawing Brush="{DynamicResource canvas}" Geometry="F1M16,16H0V0H16Z" />
+                            </DrawingGroup>
+                            <DrawingGroup>
+                                <DrawingGroup Opacity="{DynamicResource cls-1}">
+                                    <GeometryDrawing Brush="{DynamicResource light-purple-10}" Geometry="F1M2.5,9.5v5h12v-5Z" />
+                                    <GeometryDrawing Brush="{DynamicResource light-purple}" Geometry="F1M14.5,9H2.5L2,9.5v5l.5.5h12l.5-.5v-5ZM14,14H3V10H14Z" />
+                                </DrawingGroup>
+                                <GeometryDrawing Brush="{DynamicResource light-purple-10}" Geometry="F1M14.5,2.5v5h-5v-5Zm-12,5h5v-5h-5Z" />
+                                <GeometryDrawing Brush="{DynamicResource light-purple}" Geometry="F1M14.5,2h-5L9,2.5v5l.5.5h5l.5-.5v-5ZM14,7H10V3h4ZM2.5,2,2,2.5v5l.5.5h5L8,7.5v-5L7.5,2ZM7,7H3V3H7Z" />
+                            </DrawingGroup>
+                        </DrawingGroup>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+    </Viewbox>
+</UserControl>

@@ -1,15 +1,21 @@
+using Reemit.Decompiler.Clr.Metadata;
 using Reemit.Decompiler.Clr.Metadata.Tables;
 
 namespace Reemit.Decompiler;
 
-public class ClrType(string name, string @namespace)
+public class ClrType(bool isInterface, string name, string @namespace)
 {
-    public string Name { get; } = name;
-    public string Namespace { get; } = @namespace;
+    public bool IsInterface => isInterface;
+    public string Name => name;
+    public string Namespace => @namespace;
 
     public static ClrType FromTypeDefRow(TypeDefRow typeDefRow, ClrMetadataContext context)
     {
         var stringsHeap = context.StringsHeapStream;
-        return new ClrType(stringsHeap.Read(typeDefRow.TypeName), stringsHeap.Read(typeDefRow.TypeNamespace));
+        // TODO: Check if also derives ultimately from System.Object
+        var isInterface = typeDefRow.ClassSemantics == TypeClassSemanticsAttributes.Interface;
+        var type = new ClrType(isInterface,
+            stringsHeap.Read(typeDefRow.TypeName), stringsHeap.Read(typeDefRow.TypeNamespace));
+        return type;
     }
 }

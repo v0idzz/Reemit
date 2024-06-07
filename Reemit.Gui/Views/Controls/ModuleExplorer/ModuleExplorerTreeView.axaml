@@ -1,0 +1,27 @@
+<rxui:ReactiveUserControl x:TypeArguments="moduleExplorerVM:ModuleExplorerTreeViewModel"
+                          xmlns="https://github.com/avaloniaui"
+                          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                          xmlns:rxui="http://reactiveui.net"
+                          xmlns:moduleExplorer="clr-namespace:Reemit.Gui.Views.Controls.ModuleExplorer"
+                          xmlns:moduleExplorerVM="clr-namespace:Reemit.Gui.ViewModels.Controls.ModuleExplorer"
+                          mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+                          x:Class="Reemit.Gui.Views.Controls.ModuleExplorer.ModuleExplorerTreeView">
+    <TreeView Name="TreeView">
+        <TreeView.DataTemplates>
+            <TreeDataTemplate DataType="moduleExplorerVM:ModuleExplorerModuleNodeViewModel" ItemsSource="{Binding Children}">
+                <moduleExplorer:ModuleExplorerModuleNodeView DataContext="{Binding .}" />
+            </TreeDataTemplate>
+            <TreeDataTemplate DataType="moduleExplorerVM:ModuleExplorerNamespaceNodeViewModel" ItemsSource="{Binding Children}">
+                <moduleExplorer:ModuleExplorerNamespaceNodeView DataContext="{Binding .}" />
+            </TreeDataTemplate>
+            <DataTemplate DataType="moduleExplorerVM:ModuleExplorerClassNodeViewModel">
+                <moduleExplorer:ModuleExplorerClassNodeView DataContext="{Binding .}" />
+            </DataTemplate>
+            <DataTemplate DataType="moduleExplorerVM:ModuleExplorerInterfaceNodeViewModel">
+                <moduleExplorer:ModuleExplorerInterfaceNodeView DataContext="{Binding .}" />
+            </DataTemplate>
+        </TreeView.DataTemplates>
+    </TreeView>
+</rxui:ReactiveUserControl>

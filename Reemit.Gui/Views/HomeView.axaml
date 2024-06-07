@@ -4,7 +4,8 @@
                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                           xmlns:rxui="http://reactiveui.net"
                           xmlns:viewModels="clr-namespace:Reemit.Gui.ViewModels"
+                          xmlns:moduleExplorer="clr-namespace:Reemit.Gui.Views.Controls.ModuleExplorer"
                           mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
                           x:Class="Reemit.Gui.Views.HomeView">
-    <TextBox AcceptsReturn="True" Name="OpenAssembliesText" />
+    <moduleExplorer:ModuleExplorerTreeView Name="ModuleExplorerTreeView" />
 </rxui:ReactiveUserControl>
