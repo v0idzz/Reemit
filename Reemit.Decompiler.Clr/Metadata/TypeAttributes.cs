@@ -2,7 +2,7 @@ namespace Reemit.Decompiler.Clr.Metadata;
 
 public enum TypeAttributes : uint
 {
-    Abstract = 0x0,
+    Abstract = 0x80,
     Sealed = 0x100,
     SpecialName = 0x400,
     Import = 0x1000,
