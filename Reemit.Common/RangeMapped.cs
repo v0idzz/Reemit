@@ -16,7 +16,7 @@ public readonly struct RangeMapped<TValue>(int position, int length, TValue valu
     {
         var v = Value;
 
-        return With<TResult>(Unsafe.As<TValue, TResult>(ref v));
+        return With(Unsafe.As<TValue, TResult>(ref v));
     }
 
     public RangeMapped<TResult> Select<TResult>(Func<TValue, TResult> selector) => With(selector(Value));

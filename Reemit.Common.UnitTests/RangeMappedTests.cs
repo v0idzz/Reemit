@@ -9,11 +9,12 @@ public sealed class RangeMappedTests
         var rangeMapped = new RangeMapped<int>(0x52, 0x30, 0x1592);
 
         // Act
-        var actualRangeMapped = rangeMapped.With((uint)0xdeadbeef);
+        var actualRangeMapped = rangeMapped.With(0xdeadbeef);
 
         // Assert
         AssertLengthAndPosition(rangeMapped, actualRangeMapped);
-        Assert.Equal((uint)0xdeadbeef, actualRangeMapped.Value);
+        Assert.Equal(0xdeadbeef, actualRangeMapped.Value);
+        Assert.IsType<uint>(actualRangeMapped.Value);
         Assert.IsType<RangeMapped<uint>>(actualRangeMapped);
     }
 
@@ -43,6 +44,7 @@ public sealed class RangeMappedTests
         // Assert
         AssertLengthAndPosition(rangeMapped, actualRangeMapped);
         Assert.Equal((uint)0x1592, actualRangeMapped.Value);
+        Assert.IsType<uint>(actualRangeMapped.Value);
         Assert.IsType<RangeMapped<uint>>(actualRangeMapped);
     }
 

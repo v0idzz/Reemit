@@ -3,11 +3,11 @@ namespace Reemit.Common;
 // TODO: Consider allowing SharedReader to be used lock-free
 public class SharedReader(int startOffset, BinaryReader reader, object lockObj) : BinaryReader(reader.BaseStream)
 {
-    public class SharedReaderRangeScope(List<SharedReader.SharedReaderRangeScope> owner, int position) : IDisposable
+    public class SharedReaderRangeScope(List<SharedReaderRangeScope> owner, int position) : IDisposable
     {
         public int Position { get; } = position;
 
-        public int Length { get; internal set; } = 0;
+        public int Length { get; internal set; }
 
         public void Dispose() => owner.Remove(this);
 
