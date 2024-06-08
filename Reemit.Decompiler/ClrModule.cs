@@ -1,4 +1,4 @@
-﻿using Reemit.Decompiler.Clr.Metadata;
+﻿﻿using Reemit.Decompiler.Clr.Metadata;
 using Reemit.Decompiler.Clr.Metadata.Streams;
 using Reemit.Decompiler.PE;
 
@@ -46,7 +46,7 @@ public class ClrModule
 
         var types = metadataStream.TypeDef?.Rows.Select(x => ClrType.FromTypeDefRow(x, context)).ToArray().AsReadOnly();
 
-        var name = stringsStream.Read(metadataStream.Module.Rows[0].Value.Name);
+        var name = stringsStream.Read(metadataStream.Module.Rows[0].Name);
 
         return new ClrModule(name, types);
     }

@@ -25,8 +25,8 @@ public class TypeDefRowTests
         Assert.Equal(TypeAttributes.Public, row.Flags);
         Assert.Equal(1u, row.TypeName);
         Assert.Equal(491u, row.TypeNamespace);
-        Assert.Equal(MetadataTableName.TypeRef, row.Extends.Value.ReferencedTable);
-        Assert.Equal(13u, row.Extends.Value.Rid);
+        Assert.Equal(MetadataTableName.TypeRef, row.Extends.ReferencedTable);
+        Assert.Equal(13u, row.Extends.Rid);
         Assert.Equal(1u, row.FieldList);
         Assert.Equal(1u, row.MethodList);
     }

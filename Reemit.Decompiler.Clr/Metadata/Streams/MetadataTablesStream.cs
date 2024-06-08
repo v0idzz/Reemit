@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Immutable;
-using Reemit.Common;
 using Reemit.Decompiler.Clr.Metadata.Tables;
 
 namespace Reemit.Decompiler.Clr.Metadata.Streams;
@@ -9,52 +7,43 @@ public class MetadataTablesStream
 {
     public const string Name = "#~";
 
-    public RangeMapped<uint> Reserved { get; }
-    public RangeMapped<byte> MajorVersion { get; }
-    public RangeMapped<byte> MinorVersion { get; }
-    public RangeMapped<HeapSizes> HeapSizes { get; }
-    public RangeMapped<byte> Reserved1 { get; }
+    public uint Reserved { get; }
+    public byte MajorVersion { get; }
+    public byte MinorVersion { get; }
+    public HeapSizes HeapSizes { get; }
+    public byte Reserved1 { get; }
 
-    // Not sure how far we want to go with range mapping; these
-    // are comprised of mapped rows already.
     public MetadataTable<ModuleRow> Module { get; }
     public MetadataTable<TypeRefRow>? TypeRef { get; }
     public MetadataTable<TypeDefRow>? TypeDef { get; }
     public MetadataTable<FieldRow>? Field { get; }
 
-    private readonly Dictionary<MetadataTableName, RangeMapped<uint>> _rowsCounts;
+    private readonly Dictionary<MetadataTableName, uint> _rowsCounts;
     private readonly MetadataTableDataReader _metadataTableDataReader;
 
-    public MetadataTablesStream(SharedReader reader)
+    public MetadataTablesStream(BinaryReader reader)
     {
-        Reserved = reader.ReadMappedUInt32();
-        MajorVersion = reader.ReadMappedByte();
-        MinorVersion = reader.ReadMappedByte();
-        HeapSizes = reader.ReadMappedByte().Cast<HeapSizes>();
-        Reserved1 = reader.ReadMappedByte();
-
-        // Todo: track range of validBits?
+        Reserved = reader.ReadUInt32();
+        MajorVersion = reader.ReadByte();
+        MinorVersion = reader.ReadByte();
+        HeapSizes = (HeapSizes)reader.ReadByte();
+        Reserved1 = reader.ReadByte();
         var validBits = new BitArray(reader.ReadBytes(8)).OfType<bool>().ToArray();
-
+        
         // var sortedBits = new BitArray(
-        reader.ReadMappedBytes(8);
+        reader.ReadBytes(8);
 
-        _rowsCounts = new Dictionary<MetadataTableName, RangeMapped<uint>>(validBits.Count(x => x));
+        _rowsCounts = new Dictionary<MetadataTableName, uint>(validBits.Count(x => x));
 
         foreach (var name in validBits
             .Select((x, i) => (IsValid: x, TableName: (MetadataTableName)i))
             .Where(x => x.IsValid)
             .Select(X => X.TableName))
         {
-            // Even though this is not exposed, reading these as mapped in case
-            // this is a value we want to expose and make navigable in the future
-            _rowsCounts[name] = reader.ReadMappedUInt32();
+            _rowsCounts[name] = reader.ReadUInt32();
         }
 
-        _metadataTableDataReader = new MetadataTableDataReader(
-            reader,
-            HeapSizes,
-            _rowsCounts.ToImmutableDictionary(x => x.Key, x => x.Value.Value));
+        _metadataTableDataReader = new MetadataTableDataReader(reader, HeapSizes, _rowsCounts);
 
         var moduleTable = ReadTableIfExists<ModuleRow>();
         
