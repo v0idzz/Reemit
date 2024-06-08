@@ -22,6 +22,9 @@
             <DataTemplate DataType="moduleExplorerVM:ModuleExplorerInterfaceNodeViewModel">
                 <moduleExplorer:ModuleExplorerInterfaceNodeView DataContext="{Binding .}" />
             </DataTemplate>
+            <DataTemplate DataType="moduleExplorerVM:ModuleExplorerStructNodeViewModel">
+                <moduleExplorer:ModuleExplorerStructNodeView DataContext="{Binding .}" />
+            </DataTemplate>
         </TreeView.DataTemplates>
     </TreeView>
 </rxui:ReactiveUserControl>

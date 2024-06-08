@@ -1,17 +1,22 @@
 using Avalonia;
 using Avalonia.Controls;
+using Reemit.Gui.Models;
+using Reemit.Gui.Views.Controls.Icons;
 
 namespace Reemit.Gui.Views.Controls.ModuleExplorer;
 
 public partial class ModuleExplorerNodeView : UserControl
 {
-    public static readonly StyledProperty<object?> IconProperty =
-        AvaloniaProperty.Register<ModuleExplorerNodeView, object?>(nameof(Icon));
+    public static readonly DirectProperty<ModuleExplorerNodeView, IconKind> IconKindProperty =
+        Icon.KindProperty.AddOwner<ModuleExplorerNodeView>(o => o.IconKind,
+            (o, v) => o.IconKind = v);
+
+    private IconKind _iconKind = IconKind.Class;
     
-    public object? Icon
+    public IconKind IconKind
     {
-        get => GetValue(IconProperty);
-        set => SetValue(IconProperty, value);
+        get => _iconKind;
+        set => SetAndRaise(IconKindProperty, ref _iconKind, value);
     }
     
     public static readonly StyledProperty<string?> TextProperty =

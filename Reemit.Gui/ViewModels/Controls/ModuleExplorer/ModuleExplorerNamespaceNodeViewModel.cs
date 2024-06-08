@@ -9,7 +9,14 @@ public class ModuleExplorerNamespaceNodeViewModel(ClrNamespace clrNamespace) : I
     public string Name => clrNamespace.Name;
 
     public IReadOnlyList<IModuleExplorerNodeViewModel> Children => clrNamespace.Children
-        .Select(x => (IModuleExplorerNodeViewModel)(x.IsInterface ? new ModuleExplorerInterfaceNodeViewModel(x) : new ModuleExplorerClassNodeViewModel(x)))
+        .Select(x => (IModuleExplorerNodeViewModel)
+            (x switch
+            {
+                { IsInterface: true } => new ModuleExplorerInterfaceNodeViewModel(x),
+                { IsValueType: true } => new ModuleExplorerStructNodeViewModel(x),
+                _ => new ModuleExplorerClassNodeViewModel(x)
+            })
+        )
         .ToArray()
         .AsReadOnly();
 }

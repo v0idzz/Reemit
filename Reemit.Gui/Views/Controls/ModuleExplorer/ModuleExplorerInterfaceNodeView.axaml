@@ -2,15 +2,10 @@
                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                          xmlns:icons="clr-namespace:Reemit.Gui.Views.Controls.Icons"
                           xmlns:moduleExplorer="clr-namespace:Reemit.Gui.Views.Controls.ModuleExplorer"
                           xmlns:rxui="http://reactiveui.net"
                           xmlns:moduleExplorerVM="clr-namespace:Reemit.Gui.ViewModels.Controls.ModuleExplorer"
                           mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
                           x:Class="Reemit.Gui.Views.Controls.ModuleExplorer.ModuleExplorerInterfaceNodeView">
-    <moduleExplorer:ModuleExplorerNodeView Name="NodeView">
-        <moduleExplorer:ModuleExplorerNodeView.Icon>
-            <icons:InterfaceIcon />
-        </moduleExplorer:ModuleExplorerNodeView.Icon>
-    </moduleExplorer:ModuleExplorerNodeView>
+    <moduleExplorer:ModuleExplorerNodeView Name="NodeView" IconKind="Interface" />
 </rxui:ReactiveUserControl>

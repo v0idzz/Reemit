@@ -5,13 +5,8 @@
                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                           xmlns:moduleExplorer="clr-namespace:Reemit.Gui.Views.Controls.ModuleExplorer"
                           xmlns:rxui="http://reactiveui.net"
-                          xmlns:icons="clr-namespace:Reemit.Gui.Views.Controls.Icons"
                           xmlns:moduleExplorerVM="clr-namespace:Reemit.Gui.ViewModels.Controls.ModuleExplorer"
                           mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
                           x:Class="Reemit.Gui.Views.Controls.ModuleExplorer.ModuleExplorerNamespaceNodeView">
-    <moduleExplorer:ModuleExplorerNodeView Name="NodeView">
-        <moduleExplorer:ModuleExplorerNodeView.Icon>
-            <icons:NamespaceIcon />
-        </moduleExplorer:ModuleExplorerNodeView.Icon>
-    </moduleExplorer:ModuleExplorerNodeView>
+    <moduleExplorer:ModuleExplorerNodeView Name="NodeView" IconKind="Namespace" />
 </rxui:ReactiveUserControl>
