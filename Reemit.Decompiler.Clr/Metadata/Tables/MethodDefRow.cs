@@ -37,13 +37,15 @@ public class MethodDefRow(
     public MethodAttributes MethodFlags =>
         (MethodAttributes)(Flags & (ushort)MethodAttributes.Mask);
 
+    // Should these include checks to ensure MethodImpl is not MaxMethodImplVal?
+    // Need to study the spec further to ensure this is handled correctly.
     public bool IsForwardRef => MethodImpl.HasFlag(MethodImplAttributes.ForwardRef);
     public bool IsPreserveSig => MethodImpl.HasFlag(MethodImplAttributes.PreserveSig);
     public bool IsInternalCall => MethodImpl.HasFlag(MethodImplAttributes.InternalCall);
     public bool IsSynchronized => MethodImpl.HasFlag(MethodImplAttributes.Synchronized);
     public bool IsNoInlining => MethodImpl.HasFlag(MethodImplAttributes.NoInlining);
     public bool IsNoOptimization => MethodImpl.HasFlag(MethodImplAttributes.NoOptimization);
-    public bool IsMaxMethodImplVal => MethodImpl == MethodImplAttributes.MaxMethodImplVal;
+    public bool IsMaxMethodImplVal => (MethodImplAttributes)ImplFlags == MethodImplAttributes.MaxMethodImplVal;
 
     public bool IsStatic => MethodFlags.HasFlag(MethodAttributes.Static);
     public bool IsFinal => MethodFlags.HasFlag(MethodAttributes.Final);
@@ -76,7 +78,7 @@ public class MethodDefRow(
         // todo below).
         if (implFlags != (ushort)MethodImplAttributes.MaxMethodImplVal && invalidImplFlags != 0x0)
         {
-            ThrowWordFlagsImageException(nameof(MethodImplAttributes), (ushort)invalidImplFlags);
+            throw CreateWordFlagsImageException(nameof(MethodImplAttributes), (ushort)invalidImplFlags);
         }
 
         var flags = reader.ReadUInt16();
@@ -92,33 +94,33 @@ public class MethodDefRow(
         // From 22.26 MethodDef : 0x06, informative text entry 7.
         if (row.IsStatic && row.IsFinal)
         {
-            ThrowInvalidFlagsImageException(MethodAttributes.Static, MethodAttributes.Final);
+            throw CreateInvalidFlagsImageException(MethodAttributes.Static, MethodAttributes.Final);
         }
         else if (row.IsStatic && row.IsVirtual)
         {
-            ThrowInvalidFlagsImageException(MethodAttributes.Static, MethodAttributes.Virtual);
+            throw CreateInvalidFlagsImageException(MethodAttributes.Static, MethodAttributes.Virtual);
         }
         else if (row.IsStatic && row.MethodVtableLayout == MethodVtableLayoutAttributes.NewSlot)
         {
-            ThrowInvalidFlagsImageException(MethodAttributes.Static, MethodVtableLayoutAttributes.NewSlot);
+            throw CreateInvalidFlagsImageException(MethodAttributes.Static, MethodVtableLayoutAttributes.NewSlot);
         }
         else if (row.IsFinal && row.IsAbstract)
         {
-            ThrowInvalidFlagsImageException(MethodAttributes.Final, MethodAttributes.Abstract);
+            throw CreateInvalidFlagsImageException(MethodAttributes.Final, MethodAttributes.Abstract);
         }
         else if (row.IsAbstract && row.IsPInvokeImpl)
         {
-            ThrowInvalidFlagsImageException(MethodAttributes.Abstract, MethodAttributes.PInvokeImpl);
+            throw CreateInvalidFlagsImageException(MethodAttributes.Abstract, MethodAttributes.PInvokeImpl);
         }
         else if (row.MethodMemberAccess == MethodMemberAccessAttributes.CompilerControlled && row.IsSpecialName)
         {
-            ThrowInvalidFlagsImageException(
+            throw CreateInvalidFlagsImageException(
                 MethodMemberAccessAttributes.CompilerControlled,
                 MethodAttributes.SpecialName);
         }
         else if (row.MethodMemberAccess == MethodMemberAccessAttributes.CompilerControlled && row.IsRTSpecialName)
         {
-            ThrowInvalidFlagsImageException(
+            throw CreateInvalidFlagsImageException(
                 MethodMemberAccessAttributes.CompilerControlled,
                 MethodAttributes.RTSpecialName);
         }
@@ -141,13 +143,11 @@ public class MethodDefRow(
         return row;
     }
 
-    [DoesNotReturn]
-    private static void ThrowWordFlagsImageException(string flagsName, ushort flagsWord) =>
+    private static BadImageFormatException CreateWordFlagsImageException(string flagsName, ushort flagsWord) =>
         throw new BadImageFormatException(
             $"Invalid {flagsName}: {string.Format("{0:x4}", flagsWord)}.");
 
-    [DoesNotReturn]
-    private static void ThrowInvalidFlagsImageException(params Enum[] flags) =>
+    private static BadImageFormatException CreateInvalidFlagsImageException(params Enum[] flags) =>
         throw new BadImageFormatException(
             $"Invalid flags: {string.Join(", ", flags.Select(x => x.ToString()))}.");
 }
