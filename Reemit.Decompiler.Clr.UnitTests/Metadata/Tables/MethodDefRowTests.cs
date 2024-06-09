@@ -6,8 +6,106 @@ namespace Reemit.Decompiler.Clr.UnitTests.Metadata.Tables;
 public class MethodDefRowTests
 {
     [Theory]
+    // Invalid impl flags
+    [InlineData(
+        new byte[]
+        {
+            // RVA
+            0x50, 0x20, 0x00, 0x00,
+
+            // Impl Flags
+            0xfe, 0xff,
+
+            // Flags
+            0x96, 0x00,
+
+            // Other
+            0x6a, 0x03, 0x72, 0x00, 0x01, 0x00
+        })]
+
+    // Invalid flags
+    [InlineData(
+        new byte[]
+        {
+            // RVA
+            0x50, 0x20, 0x00, 0x00,
+
+            // Impl Flags
+            0x00, 0x00,
+
+            // Flags
+            0xff, 0xff,
+
+            // Other
+            0x6a, 0x03, 0x72, 0x00, 0x01, 0x00 })]
+
+    // Invalid flag combination (static | final)
+    [InlineData(
+        new byte[]
+        {
+            // RVA
+            0x00, 0x00, 0x00, 0x00,
+
+            // Impl Flags
+            0x80, 0x00,
+
+            // Flags
+            0xb1, 0x20,
+
+            // Other
+            0x0c, 0x00, 0x72, 0x00, 0x02, 0x00
+        })]
+
+    // Invalid flag combination (static | virtual)
+    [InlineData(
+        new byte[]
+        {
+            // RVA
+            0x00, 0x00, 0x00, 0x00,
+
+            // Impl Flags
+            0x80, 0x00,
+
+            // Flags
+            0xd1, 0x20,
+
+            // Other
+            0x0c, 0x00, 0x72, 0x00, 0x02, 0x00
+        })]
+
+    // Invalid flag combination (static | newslot)
+    [InlineData(
+        new byte[]
+        {
+            // RVA
+            0x00, 0x00, 0x00, 0x00,
+
+            // Impl Flags
+            0x80, 0x00,
+
+            // Flags
+            0x91, 0x21,
+
+            // Other
+            0x0c, 0x00, 0x72, 0x00, 0x02, 0x00
+        })]
+    public void Constructor_InvalidMethodDefRow_ThrowsBadImageFormatException(byte[] bytes)
+    {
+        // Arrange
+        using var memoryStream = new MemoryStream(bytes);
+        using var reader = new BinaryReader(memoryStream);
+        var tableReader = new MetadataTableDataReader(reader, 0, new Dictionary<MetadataTableName, uint>());
+
+        // Act
+        Action readRow = () => MethodDefRow.Read(tableReader);
+
+        // Assert
+        Assert.Throws<BadImageFormatException>(readRow);
+    }
+
+    [Theory]
     [MemberData(nameof(GetMethodDefData))]
-    public async Task Constructor_ValidMethodDefRow_ReadsMethodDefRow(
+    public void Constructor_ValidMethodDefRow_ReadsMethodDefRow(
         byte[] bytes,
         uint expectedRva,
         ushort expectedImplFlags,
@@ -42,7 +140,7 @@ public class MethodDefRowTests
         bool expectedRequireSecObject)
     {
         // Arrange
-        await using var memoryStream = new MemoryStream(bytes);
+        using var memoryStream = new MemoryStream(bytes);
         using var reader = new BinaryReader(memoryStream);
         var tableReader = new MetadataTableDataReader(reader, 0, new Dictionary<MetadataTableName, uint>());
 
