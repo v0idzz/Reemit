@@ -73,7 +73,7 @@ public class MethodDefRow(
         // logic and implement it in a way such that it does not interrupt further
         // parsing. Decoupling the validation would also let us perform further
         // checks on that require access to other metadata tables and similar (see
-        // tode below).
+        // todo below).
         if (implFlags != (ushort)MethodImplAttributes.MaxMethodImplVal && invalidImplFlags != 0x0)
         {
             ThrowWordFlagsImageException(nameof(MethodImplAttributes), (ushort)invalidImplFlags);
