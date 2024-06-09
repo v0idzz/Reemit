@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Reemit.Gui.Models;
@@ -44,7 +45,8 @@ public partial class Icon : Panel
             IconKind.Interface => new InterfaceIcon(),
             IconKind.Module => new ModuleIcon(),
             IconKind.Namespace => new NamespaceIcon(),
-            IconKind.Structure => new StructureIcon()
+            IconKind.Structure => new StructureIcon(),
+            _ => throw new ArgumentOutOfRangeException(nameof(Kind), Kind, "Unrecognized icon kind")
         });
             
         Children.Clear();
