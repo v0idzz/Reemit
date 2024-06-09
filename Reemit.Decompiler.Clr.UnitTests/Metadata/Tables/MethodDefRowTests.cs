@@ -89,6 +89,77 @@ public class MethodDefRowTests
             // Other
             0x0c, 0x00, 0x72, 0x00, 0x02, 0x00
         })]
+
+    // Invalid flag combination (final | abstract)
+    [InlineData(
+        new byte[]
+        {
+            // RVA
+            0x00, 0x00, 0x00, 0x00,
+
+            // Impl Flags
+            0x00, 0x00,
+
+            // Flags
+            0xe4, 0x05,
+
+            // other
+            0x8e, 0x03, 0x10, 0x00, 0x01, 0x00
+        })]
+
+    // Invalid flag combination (abstract | pinvoke)
+    [InlineData(
+        new byte[]
+        {
+            // RVA
+            0x00, 0x00, 0x00, 0x00,
+
+            // Impl Flags
+            0x00, 0x00,
+
+            // Flags
+            0xc4, 0x25,
+
+            // other
+            0x8e, 0x03, 0x10, 0x00, 0x01, 0x00
+        })]
+
+    // Invalid flag combination (abstract & ~virtual)
+    [InlineData(
+        new byte[]
+        {
+            // RVA
+            0x00, 0x00, 0x00, 0x00,
+
+            // Impl Flags
+            0x00, 0x00,
+
+            // Flags
+            0x84, 0x05,
+
+            // other
+            0x8e, 0x03, 0x10, 0x00, 0x01, 0x00
+        })]
+
+    // Invalid flag combination (static | newslot)
+    //[InlineData(
+    //    new byte[]
+    //    {
+    //        // RVA
+    //        0x00, 0x00, 0x00, 0x00,
+
+    //        // Impl Flags
+    //        0x00, 0x00,
+
+    //        // Flags
+    //        0xc4, 0x05,
+
+    //        // other
+    //        0x8e, 0x03, 0x10, 0x00, 0x01, 0x00
+    //    })]
+
+
+
     public void Constructor_InvalidMethodDefRow_ThrowsBadImageFormatException(byte[] bytes)
     {
         // Arrange
