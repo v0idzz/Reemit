@@ -1,4 +1,4 @@
-﻿using Reemit.Decompiler.Clr.Metadata;
+﻿﻿using Reemit.Decompiler.Clr.Metadata;
 using Reemit.Decompiler.Clr.Metadata.Streams;
 using Reemit.Decompiler.PE;
 
