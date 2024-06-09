@@ -31,7 +31,8 @@ public class ClrType(bool isInterface, bool isValueType, string name, string @na
         // TODO: This should be replaced with something better as soon as we have the aforementioned tables implemented. 
         if (typeDefRow.Extends.ReferencedTable == MetadataTableName.TypeRef)
         {
-            var extendsRow = context.MetadataTablesStream.TypeRef?.Rows[(int)typeDefRow.Extends.ZeroBasedIndex];
+            var extendsRow =
+                context.MetadataTablesStream.TypeRef?.Rows.ElementAtOrDefault((int)typeDefRow.Extends.ZeroBasedIndex);
 
             if (extendsRow is not null)
             {
