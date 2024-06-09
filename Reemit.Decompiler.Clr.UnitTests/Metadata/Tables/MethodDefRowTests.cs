@@ -271,7 +271,20 @@ public class MethodDefRowTests
         new[]
         {
             CreateMethodDefTestCase(
-                bytes: [0x50, 0x20, 0x00, 0x00, 0x00, 0x00, 0x96, 0x00, 0x6a, 0x03, 0x72, 0x00, 0x01, 0x00],
+                bytes:
+                [
+                    // RVA
+                    0x50, 0x20, 0x00, 0x00,
+
+                    // Impl Flags
+                    0x00, 0x00,
+                    
+                    // Flags
+                    0x96, 0x00,
+                    
+                    // Other
+                    0x6a, 0x03, 0x72, 0x00, 0x01, 0x00
+                ],
                 expectedRva: 0x2050u,
                 expectedImplFlags: 0x0,
                 expectedFlags: 0x96,
@@ -304,7 +317,20 @@ public class MethodDefRowTests
                 expectedHasSecurity: false,
                 expectedRequireSecObject: false),
             CreateMethodDefTestCase(
-                bytes: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc4, 0x05, 0x8e, 0x03, 0x10, 0x00, 0x01, 0x00],
+                bytes:
+                [
+                    // RVA
+                    0x00, 0x00, 0x00, 0x00,
+                    
+                    // Impl Flags
+                    0x00, 0x00,
+                    
+                    // Flags
+                    0xc4, 0x05,
+                    
+                    // Other
+                    0x8e, 0x03, 0x10, 0x00, 0x01, 0x00
+                ],
                 expectedRva: 0x0u,
                 expectedImplFlags: 0x0,
                 expectedFlags: 0x05c4,
@@ -337,7 +363,21 @@ public class MethodDefRowTests
                 expectedHasSecurity: false,
                 expectedRequireSecObject: false),
             CreateMethodDefTestCase(
-                bytes: [0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x91, 0x20, 0x0c, 0x00, 0x72, 0x00, 0x02, 0x00],
+                bytes:
+                [
+                    // RVA
+                    0x00, 0x00, 0x00, 0x00,
+                    
+                    // Impl Flags
+                    0x80, 0x00,
+                    
+
+                    // Flags
+                    0x91, 0x20,
+                    
+                    // Other
+                    0x0c, 0x00, 0x72, 0x00, 0x02, 0x00
+                ],
                 expectedRva: 0x0u,
                 expectedImplFlags: 0x80,
                 expectedFlags: 0x2091,
@@ -370,7 +410,20 @@ public class MethodDefRowTests
                 expectedHasSecurity: false,
                 expectedRequireSecObject: false),
             CreateMethodDefTestCase(
-                bytes: [0x50, 0x20, 0x00, 0x00, 0x08, 0x00, 0xc4, 0x01, 0x1a, 0x00, 0x79, 0x00, 0x05, 0x00],
+                bytes:
+                [
+                    // RVA
+                    0x50, 0x20, 0x00, 0x00,
+                    
+                    // Impl Flags
+                    0x08, 0x00,
+                    
+                    // Flags
+                    0xc4, 0x01,
+                    
+                    // Other
+                    0x1a, 0x00, 0x79, 0x00, 0x05, 0x00
+                ],
                 expectedRva: 0x2050u,
                 expectedImplFlags: 0x08,
                 expectedFlags: 0x01c4,
@@ -393,6 +446,52 @@ public class MethodDefRowTests
                 expectedIsStatic: false,
                 expectedIsFinal: false,
                 expectedIsVirtual: true,
+                expectedIsHideBySig: true,
+                expectedIsStrict: false,
+                expectedIsAbstract: false,
+                expectedIsSpecialName: false,
+                expectedIsPInvokeImpl: false,
+                expectedIsUnmanagedExport: false,
+                expectedIsRTSpecialName: false,
+                expectedHasSecurity: false,
+                expectedRequireSecObject: false),
+            CreateMethodDefTestCase(
+                bytes:
+                [
+                    // RVA
+                    0x50, 0x20, 0x00, 0x00,
+
+                    // Impl Flags
+                    0xff, 0xff,
+                    
+                    // Flags
+                    0x96, 0x00,
+                    
+                    // Other
+                    0x6a, 0x03, 0x72, 0x00, 0x01, 0x00
+                ],
+                expectedRva: 0x2050u,
+                expectedImplFlags: 0xffff,
+                expectedFlags: 0x96,
+                expectedName: 0x36au,
+                expectedSignature: 0x72u,
+                expectedParamList: 0x1u,
+                expectedCodeType: MethodImplCodeTypeAttributes.Runtime,
+                expectedManaged: MethodImplManagedAttributes.Unmanaged,
+                expectedMethodImpl: MethodImplAttributes.Mask,
+                expectedMethodMemberAccess: MethodMemberAccessAttributes.Public,
+                expectedMethodVtableLayout: MethodVtableLayoutAttributes.ReuseSlot,
+                expectedMethodFlags: MethodAttributes.Static | MethodAttributes.HideBySig,
+                expectedIsForwardRef: true,
+                expectedIsPreserveSig: true,
+                expectedIsInternalCall: true,
+                expectedIsSynchronized: true,
+                expectedIsNoInlining: true,
+                expectedIsNoOptimization: true,
+                expectedIsMaxMethodImplVal: true,
+                expectedIsStatic: true,
+                expectedIsFinal: false,
+                expectedIsVirtual: false,
                 expectedIsHideBySig: true,
                 expectedIsStrict: false,
                 expectedIsAbstract: false,
