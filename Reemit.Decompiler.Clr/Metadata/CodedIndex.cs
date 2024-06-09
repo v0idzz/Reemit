@@ -2,6 +2,7 @@ namespace Reemit.Decompiler.Clr.Metadata;
 
 public class CodedIndex
 {
+    public uint ZeroBasedIndex => Rid - 1;
     public uint Rid { get; }
     public MetadataTableName ReferencedTable { get; }
 

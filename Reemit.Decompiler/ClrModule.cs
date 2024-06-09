@@ -7,12 +7,18 @@ namespace Reemit.Decompiler;
 public class ClrModule
 {
     public string Name { get; }
-    public IReadOnlyList<ClrType>? Types { get; }
+    public IReadOnlyList<ClrType> Types { get; }
+    public IReadOnlyList<ClrNamespace> Namespaces { get; }
 
     private ClrModule(string name, IReadOnlyList<ClrType>? types)
     {
         Name = name;
-        Types = types;
+        Types = types ?? [];
+        Namespaces = Types
+            .GroupBy(t => t.Namespace)
+            .Select(g => new ClrNamespace(g.Key, g.ToArray().AsReadOnly()))
+            .ToArray()
+            .AsReadOnly();
     }
 
     public static ClrModule Open(string fileName)
@@ -50,7 +56,4 @@ public class ClrModule
 
         return new ClrModule(name, types);
     }
-
-    public string DebugDump() =>
-        $"Module: {Name}, Types: {string.Join(", ", Types?.Select(x => x.Name) ?? Array.Empty<string>())}";
 }

@@ -2,12 +2,24 @@ namespace Reemit.Decompiler.Clr.Metadata;
 
 public enum TypeAttributes : uint
 {
-    NotPublic = 0x0,
-    Public = 0x1,
-    NestedPublic = 0x2,
-    NestedPrivate = 0x3,
-    NestedFamily = 0x4,
-    NestedAssembly = 0x5,
-    NestedFamAndAssem = 0x6,
-    NestedFamOrAssem = 0x7
+    Abstract = 0x80,
+    Sealed = 0x100,
+    SpecialName = 0x400,
+    Import = 0x1000,
+    Serializable = 0x2000,
+    BeforeFieldInit = 0x100000,
+    RTSpecialName = 0x800,
+    HasSecurity = 0x40000,
+    IsTypeForwarder = 0x200000,
+    
+    Mask = 
+        Abstract |
+        Sealed |
+        SpecialName |
+        Import |
+        Serializable |
+        BeforeFieldInit |
+        RTSpecialName |
+        HasSecurity |
+        IsTypeForwarder
 }
