@@ -65,9 +65,18 @@ public class MethodDefRow(
         var implFlags = reader.ReadUInt16();
         var invalidImplFlags = implFlags & ~FlagMasks.MethodImplAttributesMask;
 
+        // Thinking about this further, we should not stop parsing when encountering
+        // issues like these. As a general principle, we should be at least as 
+        // permissive as the most permissive runtime. As seen by the violations in
+        // MS assemblies, this is probably quite permissive. Leaving this as is for
+        // now to avoid blocking work, but we should probably separate the validation
+        // logic and implement it in a way such that it does not interrupt further
+        // parsing. Decoupling the validation would also let us perform further
+        // checks on that require access to other metadata tables and similar (see
+        // tode below).
         if (implFlags != (ushort)MethodImplAttributes.MaxMethodImplVal && invalidImplFlags != 0x0)
         {
-            ThrowWordFlagsImageException("MethodImplAttributes", (ushort)invalidImplFlags);
+            ThrowWordFlagsImageException(nameof(MethodImplAttributes), (ushort)invalidImplFlags);
         }
 
         var flags = reader.ReadUInt16();
@@ -75,7 +84,7 @@ public class MethodDefRow(
 
         if (invalidFlags != 0x0)
         {
-            ThrowWordFlagsImageException("MethodAttributes", (ushort)invalidFlags);
+            ThrowWordFlagsImageException(nameof(MethodAttributes), (ushort)invalidFlags);
         }
 
         var row = new MethodDefRow(
@@ -130,16 +139,21 @@ public class MethodDefRow(
             throw new BadImageFormatException("SpecialName is required when RTSpecialName is set.");
         }
 
+        // Todo: 
+        // Further review 22.26 MethodDef informative text and implement other checks.
+        // Some may not be possible in this context as they require access to other
+        // metadata tables.
+
         return row;
     }
 
     [DoesNotReturn]
     private static void ThrowWordFlagsImageException(string flagsName, ushort flagsWord) =>
         throw new BadImageFormatException(
-                $"Invalid {flagsName}: {string.Format("{0:x4}", flagsWord)}.");
+            $"Invalid {flagsName}: {string.Format("{0:x4}", flagsWord)}.");
 
     [DoesNotReturn]
     private static void ThrowInvalidFlagsImageException(params Enum[] flags) =>
         throw new BadImageFormatException(
-                $"Invalid flags: {string.Join(", ", flags.Select(x => x.ToString()))}.");
+            $"Invalid flags: {string.Join(", ", flags.Select(x => x.ToString()))}.");
 }

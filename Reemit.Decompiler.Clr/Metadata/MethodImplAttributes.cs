@@ -6,6 +6,7 @@
 [Flags]
 public enum MethodImplAttributes : ushort
 {
+    None = 0x0000,
     ForwardRef = 0x0010,
     PreserveSig = 0x0080,
     InternalCall = 0x1000,
