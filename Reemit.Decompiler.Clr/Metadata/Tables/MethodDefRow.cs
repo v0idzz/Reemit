@@ -80,13 +80,7 @@ public class MethodDefRow(
         }
 
         var flags = reader.ReadUInt16();
-        var invalidFlags = flags & ~FlagMasks.MethodAttributesMask;
-
-        if (invalidFlags != 0x0)
-        {
-            ThrowWordFlagsImageException(nameof(MethodAttributes), (ushort)invalidFlags);
-        }
-
+        
         var row = new MethodDefRow(
             rva,
             implFlags,
