@@ -11,12 +11,12 @@ public enum MethodImplCodeTypeAttributes : ushort
 {
     IL = 0x0000,
     Native = 0x0001,
-    OPTIL = 0x0002,
+    OptIL = 0x0002,
     Runtime = 0x0003,
 
     Mask =
         IL |
         Native |
-        OPTIL |
+        OptIL |
         Runtime
 }
