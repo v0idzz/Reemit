@@ -17,6 +17,7 @@ public class MetadataTablesStream
     public MetadataTable<TypeRefRow>? TypeRef { get; }
     public MetadataTable<TypeDefRow>? TypeDef { get; }
     public MetadataTable<FieldRow>? Field { get; }
+    public MetadataTable<MethodDefRow>? MethodDef { get; }
 
     private readonly Dictionary<MetadataTableName, uint> _rowsCounts;
     private readonly MetadataTableDataReader _metadataTableDataReader;
@@ -58,6 +59,7 @@ public class MetadataTablesStream
         TypeRef = ReadTableIfExists<TypeRefRow>();
         TypeDef = ReadTableIfExists<TypeDefRow>();
         Field = ReadTableIfExists<FieldRow>();
+        MethodDef = ReadTableIfExists<MethodDefRow>();
     }
 
     private MetadataTable<T>? ReadTableIfExists<T>() where T : IMetadataTableRow<T> =>
