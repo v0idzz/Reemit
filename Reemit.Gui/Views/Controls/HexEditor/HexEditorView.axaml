@@ -1,0 +1,29 @@
+<rxui:ReactiveUserControl x:TypeArguments="reemitHexEditorVM:HexEditorViewModel"
+                          xmlns="https://github.com/avaloniaui"
+                          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                          xmlns:rxui="http://reactiveui.net"
+                          xmlns:reemitHexEditor="clr-namespace:Reemit.Gui.Views.Controls.HexEditor"
+                          xmlns:reemitHexEditorVM="clr-namespace:Reemit.Gui.ViewModels.Controls.HexEditor"
+						  xmlns:avaloniaHex="clr-namespace:AvaloniaHex;assembly=AvaloniaHex"
+		                  xmlns:rendering="clr-namespace:AvaloniaHex.Rendering;assembly=AvaloniaHex"
+						  x:Class="Reemit.Gui.Views.Controls.HexEditor.HexEditorView"
+                          mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450">
+	<Border BorderBrush="Orange" BorderThickness="4">
+		<avaloniaHex:HexEditor
+					x:Name="ReemitHexEditor"
+					BorderThickness="4"
+					BorderBrush="Yellow"
+					FontSize="14"
+					ColumnPadding="30"
+					FontFamily="Cascadia Code,JetBrains Mono,Monospace,monospace">
+			<avaloniaHex:HexEditor.Columns>
+				<rendering:OffsetColumn />
+				<rendering:HexColumn />
+				<rendering:BinaryColumn IsVisible="False" />
+				<rendering:AsciiColumn InvalidCellChar="?" />
+			</avaloniaHex:HexEditor.Columns>
+		</avaloniaHex:HexEditor>
+	</Border>
+</rxui:ReactiveUserControl>
