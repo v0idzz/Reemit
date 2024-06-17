@@ -1,6 +1,8 @@
 ﻿﻿using Reemit.Decompiler.Clr.Metadata;
 using Reemit.Decompiler.Clr.Metadata.Streams;
 using Reemit.Decompiler.PE;
+using System.Collections.Immutable;
+using System.Diagnostics;
 
 namespace Reemit.Decompiler;
 
@@ -9,8 +11,9 @@ public class ClrModule
     public string Name { get; }
     public IReadOnlyList<ClrType> Types { get; }
     public IReadOnlyList<ClrNamespace> Namespaces { get; }
+    public IReadOnlyCollection<byte> Bytes { get; }
 
-    private ClrModule(string name, IReadOnlyList<ClrType>? types)
+    private ClrModule(string name, IReadOnlyList<ClrType>? types, ImmutableArray<byte> bytes)
     {
         Name = name;
         Types = types ?? [];
@@ -19,11 +22,16 @@ public class ClrModule
             .Select(g => new ClrNamespace(g.Key, g.ToArray().AsReadOnly()))
             .ToArray()
             .AsReadOnly();
+        Bytes = bytes;
     }
 
     public static ClrModule Open(string fileName)
     {
         var fileStream = new FileStream(fileName, FileMode.Open);
+        var bytes = new byte[fileStream.Length];
+        var len = fileStream.Read(bytes, 0, bytes.Length);
+        Debug.Assert(len == bytes.Length);
+        fileStream.Seek(0, SeekOrigin.Begin);
         var peFile = new PEFile(new BinaryReader(fileStream));
 
         const int clrHeaderDirIndex = 14;
@@ -54,6 +62,6 @@ public class ClrModule
 
         var name = stringsStream.Read(metadataStream.Module.Rows[0].Name);
 
-        return new ClrModule(name, types);
+        return new ClrModule(name, types, bytes.ToImmutableArray());
     }
 }

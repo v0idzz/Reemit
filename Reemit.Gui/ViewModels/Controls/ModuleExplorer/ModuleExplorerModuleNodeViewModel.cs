@@ -8,6 +8,8 @@ public class ModuleExplorerModuleNodeViewModel(ClrModule clrModule) : IModuleExp
 {
     public string Name => clrModule.Name;
 
+    public IReadOnlyCollection<byte> Bytes => clrModule.Bytes;
+
     public IReadOnlyList<IModuleExplorerNodeViewModel> Children =>
         clrModule.Namespaces.Select(x => new ModuleExplorerNamespaceNodeViewModel(x)).ToArray().AsReadOnly();
 }
