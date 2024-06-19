@@ -4,6 +4,7 @@ using ReactiveUI.Fody.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 
@@ -17,15 +18,28 @@ public class HexEditorViewModel : ReactiveObject
     [ObservableAsProperty]
     public ByteArrayBinaryDocument? ModuleDocument { get; }
 
+    [Reactive]
+    public BitRange? SelectedRange { get; set; }
+
     public HexEditorViewModel()
     {
         this.WhenAnyValue(x => x.ModuleBytes)
             .Select(x => x != null ? new ByteArrayBinaryDocument(x.ToArray(), true) : null)
             .Do(x =>
             {
-                Console.WriteLine();
+                Debug.WriteLine("HexEditorViewModel.ModuleDocument changed.");
             })
             .ToPropertyEx(this, x => x.ModuleDocument);
+
+        this.WhenAnyValue(x => x.SelectedRange)
+            .Do(x =>
+            {
+                if (x != null)
+                {
+                    Debug.WriteLine($"HexEditorViewModel.SelectedRange changed: {x.Value.ToString()}");
+                }
+            })
+            .Subscribe();
 
         //ModuleBytes = new byte[] { 0xde, 0xad }.ToImmutableArray();
     }
