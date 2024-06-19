@@ -17,11 +17,18 @@ class Program
     {
         var vm = new HexEditorNavigationViewModel();
         Debug.Assert(vm.NavigationRangeTable.Count == 0);
-        
-        vm.NavigationRanges.Add(
+
+        vm.NavigationRanges =
+        [
             new HexNavigationRangeViewModel(
                 new RangeMapped<string>(0, 2, "foo"),
-                () => { }));
+                () => { })
+        ];
+
+        //vm.NavigationRanges.Add(
+        //    new HexNavigationRangeViewModel(
+        //        new RangeMapped<string>(0, 2, "foo"),
+        //        () => { }));
 
         Debug.Assert(vm.NavigationRangeTable.Count == 1);
 

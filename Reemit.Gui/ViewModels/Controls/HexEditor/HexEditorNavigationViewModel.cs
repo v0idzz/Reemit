@@ -7,6 +7,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Reemit.Common;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -30,27 +31,31 @@ public class HexEditorNavigationViewModel : ReactiveObject
     [ObservableAsProperty]
     public HexNavigationRangeViewModel? ResolvedNavigationRange { get; set; }
 
-    public ObservableCollection<HexNavigationRangeViewModel> NavigationRanges { get; } = new();
-
+    [Reactive]
+    public IReadOnlyCollection<HexNavigationRangeViewModel> NavigationRanges { get; set; }
+     
     [ObservableAsProperty]
     public ReadOnlyDictionary<int, HexNavigationRangeViewModel> NavigationRangeTable { get; }
 
     public HexEditorNavigationViewModel()
     {
-        this.NavigationRanges
-            .ToObservable()
-            .GroupBy(x => x.RangeMapped.Position)
-            .ToDictionary(
-                x => x.Key,
-                x => x
-                    .ToEnumerable()
-                    .OrderBy(x => x.RangeMapped.Length)
-                    .First())
+        this.WhenAnyValue(x => x.NavigationRanges)
+            .WhereNotNull()
+            .Select(x => x
+                .GroupBy(y => y.RangeMapped.Position)
+                .ToDictionary(
+                    y => y.Key,
+                    y => y
+                        .OrderBy(x => x.RangeMapped.Length)
+                        .First()))
             .Select(x => new ReadOnlyDictionary<int, HexNavigationRangeViewModel>(x))
             .Do(x =>
             {
                 Debug.WriteLine("test");
             })
-            .ToPropertyEx(this, x => x.NavigationRangeTable);
+            .ToPropertyEx(this, x => x.NavigationRangeTable)
+            ;
+
+        NavigationRanges = [];
     }
 }
