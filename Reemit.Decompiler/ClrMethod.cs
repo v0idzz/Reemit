@@ -21,9 +21,7 @@ public class ClrMethod(
 
         var methodHeader = MethodHeaderReader.ReadMethodHeader(corILMethodReader);
 
-        byte[] methodBody = [];//corILMethodReader.ReadBytes((int)methodHeader.CodeSize);
-        
-        corILMethodReader = corILMethodReader.CreateDerivedAtRelativeToCurrentOffset(methodHeader.CodeSize);
+        var methodBody = corILMethodReader.ReadBytes((int)methodHeader.CodeSize);
 
         if (methodHeader is FatMethodHeader fatMethodHeader)
         {
