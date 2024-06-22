@@ -1,13 +1,14 @@
 namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
 public class TypeDefRow(
+    uint rid,
     uint flags,
     uint typeName,
     uint typeNamespace,
     CodedIndex extends,
     uint fieldList,
     uint methodList)
-    : IMetadataTableRow<TypeDefRow>
+    : MetadataTableRow<TypeDefRow>(rid), IMetadataTableRow<TypeDefRow>
 {
     public static MetadataTableName TableName => MetadataTableName.TypeDef;
 
@@ -33,7 +34,7 @@ public class TypeDefRow(
     public TypeVisibilityAttributes Visibility =>
         (TypeVisibilityAttributes)(Flags & (uint)TypeVisibilityAttributes.Mask);
 
-    public static TypeDefRow Read(MetadataTableDataReader reader)
+    public static TypeDefRow Read(uint rid, MetadataTableDataReader reader)
     {
         var flags = reader.ReadUInt32();
         var invalidFlags = flags & ~FlagMasks.TypeAttributesMask;
@@ -44,6 +45,7 @@ public class TypeDefRow(
         }
 
         return new TypeDefRow(
+            rid,
             flags,
             reader.ReadStringRid(),
             reader.ReadStringRid(),

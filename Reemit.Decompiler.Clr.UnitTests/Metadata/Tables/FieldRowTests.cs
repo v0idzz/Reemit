@@ -6,7 +6,7 @@ namespace Reemit.Decompiler.Clr.UnitTests.Metadata.Tables;
 public class FieldRowTests
 {
     [Fact]
-    public async Task Constructor_ValidFieldRow_ReadsFieldRow()
+    public async Task Read_ValidFieldRow_ReadsFieldRow()
     {
         // Arrange
         byte[] bytes = [0x01, 0x00, 0x11, 0x00, 0x1E, 0x00];
@@ -14,7 +14,7 @@ public class FieldRowTests
         using var reader = new BinaryReader(memoryStream);
 
         // Act
-        var row = FieldRow.Read(new MetadataTableDataReader(reader, 0, new Dictionary<MetadataTableName, uint>()));
+        var row = FieldRow.Read(1, new MetadataTableDataReader(reader, 0, new Dictionary<MetadataTableName, uint>()));
         
         // Assert
         Assert.Equal(FieldAttributes.Private, row.Flags);

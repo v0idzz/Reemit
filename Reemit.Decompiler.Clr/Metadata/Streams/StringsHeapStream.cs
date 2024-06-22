@@ -18,7 +18,7 @@ public class StringsHeapStream
 
     public string Read(uint valueOffset)
     {
-        var reader = _reader.CreateDerivedAtRelativeOffset(valueOffset);
+        var reader = _reader.CreateDerivedAtRelativeToStartOffset(valueOffset);
 
         const int bufferSize = 16;
         var valBytes = new List<byte>(bufferSize);

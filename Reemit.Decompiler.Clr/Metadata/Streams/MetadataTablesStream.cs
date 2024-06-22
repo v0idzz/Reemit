@@ -19,7 +19,11 @@ public class MetadataTablesStream
     public MetadataTable<FieldRow>? Field { get; }
     public MetadataTable<MethodDefRow>? MethodDef { get; }
 
-    private readonly Dictionary<MetadataTableName, uint> _rowsCounts;
+    public IReadOnlyDictionary<MetadataTableName, IReadOnlyList<IMetadataTableRow>> Rows => _rows
+        .ToDictionary(x => x.Key, x => (IReadOnlyList<IMetadataTableRow>)x.Value.ToArray().AsReadOnly())
+        .AsReadOnly();
+
+    private readonly Dictionary<MetadataTableName, List<IMetadataTableRow>> _rows;
     private readonly MetadataTableDataReader _metadataTableDataReader;
 
     public MetadataTablesStream(BinaryReader reader)
@@ -30,24 +34,25 @@ public class MetadataTablesStream
         HeapSizes = (HeapSizes)reader.ReadByte();
         Reserved1 = reader.ReadByte();
         var validBits = new BitArray(reader.ReadBytes(8)).OfType<bool>().ToArray();
-        
+
         // var sortedBits = new BitArray(
         reader.ReadBytes(8);
 
-        _rowsCounts = new Dictionary<MetadataTableName, uint>(validBits.Count(x => x));
+        _rows = new Dictionary<MetadataTableName, List<IMetadataTableRow>>(validBits.Count(x => x));
 
         foreach (var name in validBits
-            .Select((x, i) => (IsValid: x, TableName: (MetadataTableName)i))
-            .Where(x => x.IsValid)
-            .Select(X => X.TableName))
+                     .Select((x, i) => (IsValid: x, TableName: (MetadataTableName)i))
+                     .Where(x => x.IsValid)
+                     .Select(x => x.TableName))
         {
-            _rowsCounts[name] = reader.ReadUInt32();
+            _rows[name] = new List<IMetadataTableRow>((int)reader.ReadUInt32());
         }
 
-        _metadataTableDataReader = new MetadataTableDataReader(reader, HeapSizes, _rowsCounts);
+        _metadataTableDataReader = new MetadataTableDataReader(reader, HeapSizes,
+            _rows.ToDictionary(x => x.Key, x => (uint)x.Value.Capacity));
 
         var moduleTable = ReadTableIfExists<ModuleRow>();
-        
+
         // From II.22.30, informative text entry 1: The Module table shall contain one and only one row [ERROR]
         if (moduleTable is not { Rows.Count: 1 })
         {
@@ -62,8 +67,16 @@ public class MetadataTablesStream
         MethodDef = ReadTableIfExists<MethodDefRow>();
     }
 
-    private MetadataTable<T>? ReadTableIfExists<T>() where T : IMetadataTableRow<T> =>
-        !_rowsCounts.TryGetValue(T.TableName, out var count)
-            ? null
-            : new MetadataTable<T>(count, _metadataTableDataReader);
+    private MetadataTable<T>? ReadTableIfExists<T>() where T : IMetadataTableRow<T>
+    {
+        if (!_rows.TryGetValue(T.TableName, out var list))
+        {
+            return null;
+        }
+
+        var table = new MetadataTable<T>((uint)list.Capacity, _metadataTableDataReader);
+        _rows[T.TableName].AddRange(table.Rows.Cast<IMetadataTableRow>());
+
+        return table;
+    }
 }

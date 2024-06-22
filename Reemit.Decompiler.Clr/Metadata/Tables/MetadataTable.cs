@@ -8,9 +8,9 @@ public class MetadataTable<TRow> where TRow : IMetadataTableRow<TRow>
     {
         var rows = new List<TRow>((int) rowCount);
 
-        for (var i = 0; i < rowCount; i++)
+        for (var i = 0u; i < rowCount; i++)
         {
-            rows.Add(TRow.Read(reader));
+            rows.Add(TRow.Read(i + 1, reader));
         }
 
         Rows = rows.AsReadOnly();

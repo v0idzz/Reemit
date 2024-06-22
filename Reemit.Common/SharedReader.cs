@@ -94,7 +94,9 @@ public class SharedReader(int startOffset, BinaryReader reader, object lockObj) 
 
     public RangeMapped<byte> ReadMappedByte() => ReadMapped(base.ReadByte);
 
-    public SharedReader CreateDerivedAtRelativeOffset(uint relativeOffset) => new((int)(_startOffset + relativeOffset), this, lockObj);
+    public SharedReader CreateDerivedAtRelativeToStartOffset(uint relativeOffset) => new((int)(_startOffset + relativeOffset), this, lockObj);
+    
+    public SharedReader CreateDerivedAtRelativeToCurrentOffset(uint relativeOffset) => new((int)(Offset + relativeOffset), this, lockObj);
 
     public override int Read(byte[] buffer, int index, int count) => throw new NotImplementedException();
 

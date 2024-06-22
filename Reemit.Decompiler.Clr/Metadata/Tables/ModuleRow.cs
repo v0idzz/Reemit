@@ -1,7 +1,7 @@
 namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
-public class ModuleRow(byte[] generation, uint name, uint mvid, uint encId, uint encBaseId)
-    : IMetadataTableRow<ModuleRow>
+public class ModuleRow(uint rid, byte[] generation, uint name, uint mvid, uint encId, uint encBaseId)
+    : MetadataTableRow<ModuleRow>(rid), IMetadataTableRow<ModuleRow>
 {
     public static MetadataTableName TableName => MetadataTableName.Module;
 
@@ -11,7 +11,7 @@ public class ModuleRow(byte[] generation, uint name, uint mvid, uint encId, uint
     public uint EncId { get; } = encId;
     public uint EncBaseId { get; } = encBaseId;
 
-    public static ModuleRow Read(MetadataTableDataReader reader)
+    public static ModuleRow Read(uint rid, MetadataTableDataReader reader)
     {
         var generation = reader.ReadBytes(2);
 
@@ -36,6 +36,6 @@ public class ModuleRow(byte[] generation, uint name, uint mvid, uint encId, uint
             throw new BadImageFormatException($"{nameof(encBaseId)} shall be zero.");
         }
 
-        return new(generation, name, mvid, encId, encBaseId);
+        return new(rid, generation, name, mvid, encId, encBaseId);
     }
 }
