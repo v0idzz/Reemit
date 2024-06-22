@@ -33,9 +33,9 @@ public class HexEditorNavigationViewModel : ReactiveObject
 
     [Reactive]
     public IReadOnlyCollection<HexNavigationRangeViewModel> NavigationRanges { get; set; }
-     
+
     [ObservableAsProperty]
-    public ReadOnlyDictionary<int, HexNavigationRangeViewModel> NavigationRangeTable { get; }
+    public ReadOnlyDictionary<int, HexNavigationRangeViewModel[]> NavigationRangeTable { get; } = default!;
 
     public HexEditorNavigationViewModel()
     {
@@ -45,16 +45,46 @@ public class HexEditorNavigationViewModel : ReactiveObject
                 .GroupBy(y => y.RangeMapped.Position)
                 .ToDictionary(
                     y => y.Key,
-                    y => y
-                        .OrderBy(x => x.RangeMapped.Length)
-                        .First()))
-            .Select(x => new ReadOnlyDictionary<int, HexNavigationRangeViewModel>(x))
+                    y => y.OrderBy(x => x.RangeMapped.Length).ToArray()))
+            .Select(x => new ReadOnlyDictionary<int, HexNavigationRangeViewModel[]>(x))
             .Do(x =>
             {
                 Debug.WriteLine("test");
             })
-            .ToPropertyEx(this, x => x.NavigationRangeTable)
-            ;
+            .ToPropertyEx(this, x => x.NavigationRangeTable);
+
+        this.WhenAnyValue(x => x.NavigationBitRange, x => x.NavigationRanges)
+            .Where(x => x.Item1 != null)
+            .Select(x =>
+            {
+                var (range, knownRanges) = x;
+
+                return knownRanges
+                    .Where(x =>
+                        x.RangeMapped.Position <= (int)range!.Value.Start.ByteIndex &&
+                        (int)range!.Value.End.ByteIndex <= x.RangeMapped.End)
+                    .OrderByDescending(x => x.RangeMapped.Position)
+                    .ThenBy(x => x.RangeMapped.Length)
+                    .FirstOrDefault();
+            })
+            .WhereNotNull()
+            .ToPropertyEx(this, x => x.ResolvedNavigationRange);
+
+        //this.WhenAnyValue(x => x.NavigationBitRange, x => x.NavigationRangeTable)
+        //    .Where(x => x.Item1 != null)
+        //    .Select(x =>
+        //    {
+        //        var (range, table) = x;
+
+        //        return table
+        //            .OrderBy(x => x.Key)
+        //            .TakeWhile(y => y.Key <= (int)range!.Value.Start.ByteIndex)
+        //            .Select(x => x.Value)
+        //            .LastOrDefault()
+        //            ?.FirstOrDefault(x => (int)range!.Value.End.ByteIndex <= x.RangeMapped.End);
+        //    })
+        //    .WhereNotNull()
+        //    .ToPropertyEx(this, x => x.ResolvedNavigationRange);
 
         NavigationRanges = [];
     }

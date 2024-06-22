@@ -21,9 +21,11 @@ class Program
         vm.NavigationRanges =
         [
             new HexNavigationRangeViewModel(
-                new RangeMapped<string>(0, 2, "foo"),
+                new RangeMapped<string>(1, 2, "foo"),
                 () => { })
         ];
+
+        vm.NavigationBitRange = new AvaloniaHex.Document.BitRange(0, 2);
 
         //vm.NavigationRanges.Add(
         //    new HexNavigationRangeViewModel(

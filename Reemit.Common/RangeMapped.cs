@@ -7,6 +7,8 @@ public readonly struct RangeMapped<TValue>(int position, int length, TValue valu
     public int Position { get; } = position;
     public int Length { get; } = length;
     public TValue Value { get; } = value;
+    
+    public int End => Position + Length;
 
     public static implicit operator TValue(RangeMapped<TValue> rangeMapped) => rangeMapped.Value;
 

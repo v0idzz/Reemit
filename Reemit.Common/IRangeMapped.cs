@@ -4,4 +4,5 @@ public interface IRangeMapped
 {
     int Length { get; }
     int Position { get; }
+    int End { get; }
 }
