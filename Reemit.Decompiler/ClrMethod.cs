@@ -15,7 +15,13 @@ public class ClrMethod(
     public static ClrMethod FromMethodDefRow(MethodDefRow methodDefRow, ModuleReaderContext context)
     {
         var name = context.StringsHeapStream.Read(methodDefRow.Name);
-        if (methodDefRow.Rva == 0) return new ClrMethod(name, 0, []);
+        
+        // TODO: Investigate what exactly it means when a MethodDef row has its RVA set to 0
+        if (methodDefRow.Rva == 0)
+        {
+            return new ClrMethod(name, 0, []);
+        }
+
         var corILMethodOffset = context.PEFile.GetFileOffset(methodDefRow.Rva);
         var corILMethodReader = context.PEFile.CreateReaderAt(corILMethodOffset);
 
