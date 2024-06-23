@@ -12,6 +12,8 @@ namespace Reemit.Gui.ViewModels.Controls.HexEditor;
 
 public class HexEditorViewModel : ReactiveObject
 {
+    public HexEditorNavigationViewModel Navigation { get; } = new();
+
     [Reactive]
     public IReadOnlyCollection<byte>? ModuleBytes { get; set; }
 
@@ -39,8 +41,6 @@ public class HexEditorViewModel : ReactiveObject
                     Debug.WriteLine($"HexEditorViewModel.SelectedRange changed: {x.Value.ToString()}");
                 }
             })
-            .Subscribe();
-
-        //ModuleBytes = new byte[] { 0xde, 0xad }.ToImmutableArray();
+            .BindTo(Navigation, x => x.NavigationBitRange);
     }
 }

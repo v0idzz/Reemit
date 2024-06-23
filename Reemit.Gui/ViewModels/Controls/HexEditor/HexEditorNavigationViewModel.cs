@@ -5,8 +5,6 @@ using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Reemit.Common;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -15,13 +13,6 @@ using System.Linq;
 using System.Reactive.Linq;
 
 namespace Reemit.Gui.ViewModels.Controls.HexEditor;
-
-public class HexNavigationRangeViewModel(IRangeMapped rangeMapped, Action navigate) : ReactiveObject
-{
-    public IRangeMapped RangeMapped { get; } = rangeMapped;
-
-    public Action Navigate { get; } = navigate;
-}
 
 public class HexEditorNavigationViewModel : ReactiveObject
 {
