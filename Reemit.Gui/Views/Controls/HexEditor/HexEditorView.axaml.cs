@@ -1,3 +1,4 @@
+using Avalonia.Controls;
 using Avalonia.ReactiveUI;
 using AvaloniaHex.Document;
 using ReactiveUI;
@@ -29,6 +30,23 @@ public partial class HexEditorView : ReactiveUserControl<HexEditorViewModel>
                 .Select(_ => selection.Range)
                 .BindTo(ViewModel, x => x.SelectedRange)
                 .DisposeWith(d);
+
+            Observable
+                .FromEvent<EventHandler, EventArgs>(
+                    h => (o, e) => h(e),
+                    h => selection.RangeChanged += h,
+                    h => selection.RangeChanged -= h)
+                .Subscribe(_ =>
+                {
+                    foreach (var bl in new[]
+                    {
+                        ReemitHexEditor.Selection.Range.End,
+                        ReemitHexEditor.Selection.Range.Start
+                    })
+                    {
+                        ReemitHexEditor.HexView.BringIntoView(bl);
+                    }
+                });
 
             ViewModel
                 .WhenAnyValue(x => x.SelectedRange)

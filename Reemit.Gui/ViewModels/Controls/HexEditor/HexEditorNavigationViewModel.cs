@@ -1,14 +1,7 @@
-﻿using Avalonia.Collections;
-using AvaloniaHex.Document;
-using AvaloniaHex.Editing;
-using DynamicData;
-using DynamicData.Binding;
+﻿using AvaloniaHex.Document;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 
@@ -23,7 +16,7 @@ public class HexEditorNavigationViewModel : ReactiveObject
     public HexNavigationRangeViewModel? ResolvedNavigationRange { get; set; }
 
     [Reactive]
-    public IReadOnlyCollection<HexNavigationRangeViewModel> NavigationRanges { get; set; }
+    public IReadOnlyCollection<HexNavigationRangeViewModel> NavigationRanges { get; set; } = [];
 
     public HexEditorNavigationViewModel()
     {
@@ -43,7 +36,5 @@ public class HexEditorNavigationViewModel : ReactiveObject
             })
             .WhereNotNull()
             .ToPropertyEx(this, x => x.ResolvedNavigationRange);
-
-        NavigationRanges = [];
     }
 }

@@ -1,13 +1,14 @@
+using Reemit.Common;
 using Reemit.Decompiler.Clr.Metadata;
 using Reemit.Decompiler.Clr.Metadata.Tables;
 
 namespace Reemit.Decompiler;
 
-public class ClrType(bool isInterface, bool isValueType, string name, string @namespace)
+public class ClrType(bool isInterface, bool isValueType, RangeMapped<string> name, string @namespace)
 {
     public bool IsValueType => isValueType;
     public bool IsInterface => isInterface;
-    public string Name => name;
+    public RangeMapped<string> Name => name;
     public string Namespace => @namespace;
 
     public static ClrType FromTypeDefRow(TypeDefRow typeDefRow, ClrMetadataContext context)
@@ -43,7 +44,7 @@ public class ClrType(bool isInterface, bool isValueType, string name, string @na
         }
 
         var type = new ClrType(isInterface, isValueType,
-            stringsHeap.Read(typeDefRow.TypeName), stringsHeap.Read(typeDefRow.TypeNamespace));
+            stringsHeap.ReadMapped(typeDefRow.TypeName), stringsHeap.Read(typeDefRow.TypeNamespace));
         return type;
     }
 }

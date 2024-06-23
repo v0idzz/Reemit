@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
+using AvaloniaHex.Document;
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -32,15 +33,16 @@ public class HomeViewModel : ReactiveObject, IRoutableViewModel
         ModuleExplorerTreeViewModel = new ModuleExplorerTreeViewModel(_modules);
         HexEditorViewModel = new HexEditorViewModel();
 
-
+        this.WhenAnyValue(x => x.ModuleExplorerTreeViewModel.SelectedNode)
+            .Select(x => x?.Module.Bytes)
+            .BindTo(HexEditorViewModel, x => x.ModuleBytes);
 
         this.WhenAnyValue(x => x.ModuleExplorerTreeViewModel.SelectedNode)
-            .Do(x =>
-            {
-                Console.WriteLine("Selected node changed");
-            })
-            .Select(x => (x as ModuleExplorerModuleNodeViewModel)?.Bytes)
-            .BindTo(HexEditorViewModel, x => x.ModuleBytes);
+            .Select(x => x as ModuleExplorerTypeNodeViewModel)
+            .WhereNotNull()
+            .Select(x => x.Name)
+            .Select(x => new BitRange((ulong)x.Position, (ulong)x.End))
+            .BindTo(HexEditorViewModel, x => x.SelectedRange);
     }
 
     public string UrlPathSegment => nameof(HomeViewModel);

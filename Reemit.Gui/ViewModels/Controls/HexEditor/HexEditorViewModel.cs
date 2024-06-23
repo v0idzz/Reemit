@@ -1,9 +1,7 @@
 ﻿using AvaloniaHex.Document;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;

@@ -16,12 +16,16 @@ public class StringsHeapStream
         _header = header;
     }
 
-    public string Read(uint valueOffset)
+    public string Read(uint valueOffset) => ReadMapped(valueOffset);
+
+    public RangeMapped<string> ReadMapped(uint valueOffset)
     {
         var reader = _reader.CreateDerivedAtRelativeOffset(valueOffset);
 
         const int bufferSize = 16;
         var valBytes = new List<byte>(bufferSize);
+        var rangePosition = reader.Offset;
+        var rangeLength = 0;
 
         while (true)
         {
@@ -38,13 +42,17 @@ public class StringsHeapStream
             
             var buffer = reader.ReadBytes((int) nextBufferSize);
             
+
             var indexOfNullChar = Array.IndexOf(buffer, (byte)'\0');
 
             if (indexOfNullChar == -1)
             {
+                rangeLength += buffer.Length;
                 valBytes.AddRange(buffer);
                 continue;
             }
+
+            rangeLength += indexOfNullChar;
 
             if (buffer.Length < nextBufferSize)
             {
@@ -56,6 +64,6 @@ public class StringsHeapStream
             break;
         }
 
-        return Encoding.UTF8.GetString(valBytes.ToArray());
+        return new RangeMapped<string>(rangePosition, rangeLength, Encoding.UTF8.GetString(valBytes.ToArray()));
     }
 }

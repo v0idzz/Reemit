@@ -1,4 +1,5 @@
-﻿﻿using Reemit.Decompiler.Clr.Metadata;
+﻿using Reemit.Common;
+using Reemit.Decompiler.Clr.Metadata;
 using Reemit.Decompiler.Clr.Metadata.Streams;
 using Reemit.Decompiler.PE;
 using System.Collections.Immutable;
@@ -8,12 +9,12 @@ namespace Reemit.Decompiler;
 
 public class ClrModule
 {
-    public string Name { get; }
+    public RangeMapped<string> Name { get; }
     public IReadOnlyList<ClrType> Types { get; }
     public IReadOnlyList<ClrNamespace> Namespaces { get; }
     public IReadOnlyCollection<byte> Bytes { get; }
 
-    private ClrModule(string name, IReadOnlyList<ClrType>? types, ImmutableArray<byte> bytes)
+    private ClrModule(RangeMapped<string> name, IReadOnlyList<ClrType>? types, ImmutableArray<byte> bytes)
     {
         Name = name;
         Types = types ?? [];
@@ -60,7 +61,7 @@ public class ClrModule
 
         var types = metadataStream.TypeDef?.Rows.Select(x => ClrType.FromTypeDefRow(x, context)).ToArray().AsReadOnly();
 
-        var name = stringsStream.Read(metadataStream.Module.Rows[0].Name);
+        var name = stringsStream.ReadMapped(metadataStream.Module.Rows[0].Name);
 
         return new ClrModule(name, types, bytes.ToImmutableArray());
     }
