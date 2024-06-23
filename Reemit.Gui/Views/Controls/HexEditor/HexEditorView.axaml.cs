@@ -4,6 +4,7 @@ using AvaloniaHex.Document;
 using ReactiveUI;
 using Reemit.Gui.ViewModels.Controls.HexEditor;
 using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
@@ -20,14 +21,25 @@ public partial class HexEditorView : ReactiveUserControl<HexEditorViewModel>
             this.OneWayBind(ViewModel, x => x.ModuleDocument, x => x.ReemitHexEditor.Document)
                 .DisposeWith(d);
 
-            //this.WhenAnyValue(x => x.HexWidthCombobox.SelectedItem)
-            //    .BindTo(ViewModel, x => x.CurrentByteWidth)
-            //    .DisposeWith(d);
-
-            this.Bind(ViewModel, x => x.CurrentByteWidth, x => x.HexWidthCombobox.SelectedItem)
+            this.OneWayBind(ViewModel, x => x.ByteWidths, x => x.HexWidthCombobox.ItemsSource)
                 .DisposeWith(d);
 
-            this.OneWayBind(ViewModel, x => x.ByteWidths, x => x.HexWidthCombobox.ItemsSource)
+            this.Bind(
+                ViewModel,
+                x => x.CurrentByteWidth,
+                x => x.HexWidthCombobox.SelectedItem,
+                x =>
+                {
+                    Console.WriteLine("Binding VM to view");
+
+                    return x;
+                },
+                x =>
+                {
+                    Console.WriteLine("Binding view to VM");
+
+                    return (ByteWidthViewModel)x!;
+                })
                 .DisposeWith(d);
 
             ViewModel
