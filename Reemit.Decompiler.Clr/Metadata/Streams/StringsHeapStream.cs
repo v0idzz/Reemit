@@ -52,7 +52,8 @@ public class StringsHeapStream
                 continue;
             }
 
-            rangeLength += indexOfNullChar;
+            // We want to include the null terminator in our range, so +1.
+            rangeLength += indexOfNullChar + 1;
 
             if (buffer.Length < nextBufferSize)
             {

@@ -20,6 +20,22 @@ public partial class HexEditorView : ReactiveUserControl<HexEditorViewModel>
             this.OneWayBind(ViewModel, x => x.ModuleDocument, x => x.ReemitHexEditor.Document)
                 .DisposeWith(d);
 
+            //this.WhenAnyValue(x => x.HexWidthCombobox.SelectedItem)
+            //    .BindTo(ViewModel, x => x.CurrentByteWidth)
+            //    .DisposeWith(d);
+
+            this.Bind(ViewModel, x => x.CurrentByteWidth, x => x.HexWidthCombobox.SelectedItem)
+                .DisposeWith(d);
+
+            this.OneWayBind(ViewModel, x => x.ByteWidths, x => x.HexWidthCombobox.ItemsSource)
+                .DisposeWith(d);
+
+            ViewModel
+                .WhenAnyValue(x => x.CurrentByteWidth)
+                .WhereNotNull()
+                .Select(x => x.Width)
+                .BindTo(ReemitHexEditor.HexView, x => x.BytesPerLine);
+
             var selection = ReemitHexEditor.Selection;
 
             Observable
