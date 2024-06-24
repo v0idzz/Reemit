@@ -50,31 +50,31 @@ public partial class HexEditorView : ReactiveUserControl<HexEditorViewModel>
 
             var selection = ReemitHexEditor.Selection;
 
-            Observable
+            var rangeChanged = Observable
                 .FromEvent<EventHandler, EventArgs>(
                     h => (o, e) => h(e),
                     h => selection.RangeChanged += h,
-                    h => selection.RangeChanged -= h)
+                    h => selection.RangeChanged -= h);
+
+            rangeChanged
                 .Select(_ => selection.Range)
                 .BindTo(ViewModel, x => x.SelectedRange)
                 .DisposeWith(d);
 
-            Observable
-                .FromEvent<EventHandler, EventArgs>(
-                    h => (o, e) => h(e),
-                    h => selection.RangeChanged += h,
-                    h => selection.RangeChanged -= h)
+            rangeChanged
                 .Subscribe(_ =>
                 {
-                    foreach (var bl in new[]
+                    var hv = ReemitHexEditor.HexView;
+                    var initialYOffset = hv.ScrollOffset.Y;
+                    var r = ReemitHexEditor.Selection.Range;
+                    hv.BringIntoView(r.Start);
+
+                    if (hv.ScrollOffset.Y >= initialYOffset)
                     {
-                        ReemitHexEditor.Selection.Range.End,
-                        ReemitHexEditor.Selection.Range.Start
-                    })
-                    {
-                        ReemitHexEditor.HexView.BringIntoView(bl);
+                        hv.BringIntoView(r.End);
                     }
-                });
+                })
+                .DisposeWith(d);
 
             ViewModel
                 .WhenAnyValue(x => x.SelectedRange)
