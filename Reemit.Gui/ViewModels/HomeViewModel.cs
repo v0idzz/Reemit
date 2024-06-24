@@ -6,9 +6,11 @@ using AvaloniaHex.Document;
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Reemit.Common;
 using Reemit.Decompiler;
 using Reemit.Gui.ViewModels.Controls.HexEditor;
 using Reemit.Gui.ViewModels.Controls.ModuleExplorer;
+using Reemit.Gui.ViewModels.Navigation;
 
 namespace Reemit.Gui.ViewModels;
 
@@ -37,12 +39,11 @@ public class HomeViewModel : ReactiveObject, IRoutableViewModel
             .Select(x => x?.Module.Bytes)
             .BindTo(HexEditorViewModel, x => x.ModuleBytes);
 
-        this.WhenAnyValue(x => x.ModuleExplorerTreeViewModel.SelectedNode)
-            .Select(x => x as ModuleExplorerTypeNodeViewModel)
-            .WhereNotNull()
-            .Select(x => x.Name)
-            .Select(x => new BitRange((ulong)x.Position, (ulong)x.End))
-            .BindTo(HexEditorViewModel, x => x.SelectedRange);
+        NavigationMessageBus.RegisterMessageSource(
+            this.WhenAnyValue(x => x.ModuleExplorerTreeViewModel.SelectedNode)
+                .Select(x => x as ModuleExplorerTypeNodeViewModel)
+                .WhereNotNull()
+                .Select(x => (IRangeMapped)x.Name));
     }
 
     public string UrlPathSegment => nameof(HomeViewModel);

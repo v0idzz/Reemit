@@ -4,8 +4,10 @@ using Reemit.Decompiler;
 
 namespace Reemit.Gui.ViewModels.Controls.ModuleExplorer;
 
-public class ModuleExplorerNamespaceNodeViewModel(ClrModule module, ClrNamespace clrNamespace) : IModuleExplorerNodeViewModel
+public class ModuleExplorerNamespaceNodeViewModel(ModuleExplorerTreeViewModel owner, ClrModule module, ClrNamespace clrNamespace) : IModuleExplorerNodeViewModel
 {
+    public ModuleExplorerTreeViewModel Owner => owner;
+
     public ClrModule Module => module;
 
     public string Name => clrNamespace.Name;
@@ -14,9 +16,9 @@ public class ModuleExplorerNamespaceNodeViewModel(ClrModule module, ClrNamespace
         .Select(x => (IModuleExplorerNodeViewModel)
             (x switch
             {
-                { IsInterface: true } => new ModuleExplorerInterfaceNodeViewModel(module, x),
-                { IsValueType: true } => new ModuleExplorerStructNodeViewModel(module, x),
-                _ => new ModuleExplorerClassNodeViewModel(module, x)
+                { IsInterface: true } => new ModuleExplorerInterfaceNodeViewModel(owner, module, x),
+                { IsValueType: true } => new ModuleExplorerStructNodeViewModel(owner, module, x),
+                _ => new ModuleExplorerClassNodeViewModel(owner, module, x)
             })
         )
         .ToArray()

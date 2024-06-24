@@ -1,19 +1,16 @@
-﻿using AvaloniaHex.Document;
+﻿using Avalonia;
+using AvaloniaHex.Document;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Reemit.Common;
+using Reemit.Gui.ViewModels.Navigation;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 
 namespace Reemit.Gui.ViewModels.Controls.HexEditor;
-
-public class ByteWidthViewModel(int? width)
-{
-    public int? Width { get; } = width;
-
-    public string WidthName => Width?.ToString() ?? "Auto";
-}
 
 public class HexEditorViewModel : ReactiveObject
 {
@@ -47,20 +44,13 @@ public class HexEditorViewModel : ReactiveObject
 
         this.WhenAnyValue(x => x.ModuleBytes)
             .Select(x => x != null ? new ByteArrayBinaryDocument(x.ToArray(), true) : null)
-            .Do(x =>
-            {
-                Debug.WriteLine("HexEditorViewModel.ModuleDocument changed.");
-            })
             .ToPropertyEx(this, x => x.ModuleDocument);
 
+        NavigationMessageBus
+            .ListenForNavigation()
+            .BindTo(this, x => x.SelectedRange);
+
         this.WhenAnyValue(x => x.SelectedRange)
-            .Do(x =>
-            {
-                if (x != null)
-                {
-                    Debug.WriteLine($"HexEditorViewModel.SelectedRange changed: {x.Value.ToString()}");
-                }
-            })
             .BindTo(Navigation, x => x.NavigationBitRange);
     }
 }

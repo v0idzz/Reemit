@@ -20,7 +20,7 @@ public class ModuleExplorerTreeViewModel : ReactiveObject
     public ModuleExplorerTreeViewModel(ReadOnlyObservableCollection<ClrModule> clrModules)
     {
         clrModules.ToObservableChangeSet()
-            .Select(x => new ModuleExplorerModuleNodeViewModel(x))
+            .Select(x => new ModuleExplorerModuleNodeViewModel(this, x))
             .Bind(out _rootNodes)
             .Subscribe();
     }
