@@ -69,7 +69,8 @@ public partial class HexEditorView : ReactiveUserControl<HexEditorViewModel>
                     var r = ReemitHexEditor.Selection.Range;
                     hv.BringIntoView(r.Start);
 
-                    if (hv.ScrollOffset.Y >= initialYOffset)
+                    if (r.End.ByteIndex - r.Start.ByteIndex > 1 &&
+                        hv.ScrollOffset.Y >= initialYOffset)
                     {
                         hv.BringIntoView(r.End);
                     }
@@ -79,6 +80,10 @@ public partial class HexEditorView : ReactiveUserControl<HexEditorViewModel>
             ViewModel
                 .WhenAnyValue(x => x.SelectedRange)
                 .WhereNotNull()
+                .Do(x =>
+                {
+                    Console.WriteLine("SelectedRange changed");
+                })
                 .BindTo(ReemitHexEditor, x => x.Selection.Range)
                 .DisposeWith(d);
         });
