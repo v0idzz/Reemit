@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using ReactiveUI;
 using Reemit.Common;
 using Reemit.Decompiler;
 using Reemit.Gui.ViewModels.Navigation;
@@ -22,8 +24,9 @@ public class ModuleExplorerTypeNodeViewModel : IModuleExplorerNodeViewModel
         Name = type.Name;
 
         NavigationMessageBus.SendMessage(
-            new HexEditor.HexNavigationRangeViewModel(
+            NavigationRangeSetterRegistrationMessage.Create(
+                this,
                 type.Name,
-                () => Owner.SelectedNode = this));
+                x => Owner.SelectedNode = x));
     }
 }

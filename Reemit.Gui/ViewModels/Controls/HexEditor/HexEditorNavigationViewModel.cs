@@ -36,15 +36,29 @@ public class HexEditorNavigationViewModel : ReactiveObject
                     .ThenBy(x => x.RangeMapped.Length)
                     .FirstOrDefault();
             })
-            .WhereNotNull()
             .ToPropertyEx(this, x => x.ResolvedNavigationRange);
 
         this.WhenAnyValue(x => x.ResolvedNavigationRange)
-            .WhereNotNull()
-            .Subscribe(x => x.Navigate());
+            .Buffer(2, 1)
+            .Subscribe(x =>
+            {
+                var prev = x.First();
+                var cur = x.Last();
+
+                if (prev != null)
+                {
+                    prev.Leave();
+                }
+
+                if (cur != null)
+                {
+                    cur.Navigate();
+                }
+            });
 
         NavigationMessageBus
             .ListenForRegistration()
+            .Select(x => new HexNavigationRangeViewModel(x.RangeMapped, x.Navigate, x.Leave))
             .Subscribe(NavigationRanges.Add);
     }
 }

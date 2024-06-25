@@ -37,13 +37,14 @@ public class HomeViewModel : ReactiveObject, IRoutableViewModel
 
         this.WhenAnyValue(x => x.ModuleExplorerTreeViewModel.SelectedNode)
             .Select(x => x?.Module.Bytes)
+            .WhereNotNull()
             .BindTo(HexEditorViewModel, x => x.ModuleBytes);
 
         NavigationMessageBus.RegisterMessageSource(
             this.WhenAnyValue(x => x.ModuleExplorerTreeViewModel.SelectedNode)
                 .Select(x => x as ModuleExplorerTypeNodeViewModel)
                 .WhereNotNull()
-                .Select(x => (IRangeMapped)x.Name));
+                .Select(x => new NavigationRangeRequestMessage(x.Name)));
     }
 
     public string UrlPathSegment => nameof(HomeViewModel);

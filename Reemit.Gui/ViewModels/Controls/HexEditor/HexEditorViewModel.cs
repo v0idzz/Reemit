@@ -48,6 +48,7 @@ public class HexEditorViewModel : ReactiveObject
 
         NavigationMessageBus
             .ListenForNavigation()
+            .Select(x => x.Range)
             .BindTo(this, x => x.SelectedRange);
 
         this.WhenAnyValue(x => x.SelectedRange)
