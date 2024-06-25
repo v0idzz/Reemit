@@ -8,7 +8,7 @@ public class TypeDefRow(
     CodedIndex extends,
     uint fieldList,
     uint methodList)
-    : MetadataTableRow<TypeDefRow>(rid), IMetadataTableRow<TypeDefRow>
+    : MetadataRecord(rid), IMetadataTableRow<TypeDefRow>
 {
     public static MetadataTableName TableName => MetadataTableName.TypeDef;
 

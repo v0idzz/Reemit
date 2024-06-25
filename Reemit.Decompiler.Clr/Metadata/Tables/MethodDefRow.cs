@@ -7,7 +7,7 @@ public class MethodDefRow(
     ushort flags,
     uint name,
     uint signature,
-    uint paramList) : MetadataTableRow<MethodDefRow>(rid), IMetadataTableRow<MethodDefRow>
+    uint paramList) : MetadataRecord(rid), IMetadataTableRow<MethodDefRow>
 {
     public static MetadataTableName TableName => MetadataTableName.MethodDef;
 

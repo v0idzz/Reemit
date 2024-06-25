@@ -1,7 +1,7 @@
 namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
 public class FieldRow(uint rid, FieldAttributes flags, uint name, uint signature)
-    : MetadataTableRow<FieldRow>(rid), IMetadataTableRow<FieldRow>
+    : MetadataRecord(rid), IMetadataTableRow<FieldRow>
 {
     public static MetadataTableName TableName => MetadataTableName.Field;
 

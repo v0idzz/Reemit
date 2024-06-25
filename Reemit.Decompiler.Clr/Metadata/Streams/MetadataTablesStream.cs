@@ -19,11 +19,11 @@ public class MetadataTablesStream
     public MetadataTable<FieldRow>? Field { get; }
     public MetadataTable<MethodDefRow>? MethodDef { get; }
 
-    public IReadOnlyDictionary<MetadataTableName, IReadOnlyList<IMetadataTableRow>> Rows => _rows
-        .ToDictionary(x => x.Key, x => (IReadOnlyList<IMetadataTableRow>)x.Value.ToArray().AsReadOnly())
+    public IReadOnlyDictionary<MetadataTableName, IReadOnlyList<IMetadataRecord>> Rows => _rows
+        .ToDictionary(x => x.Key, x => (IReadOnlyList<IMetadataRecord>)x.Value.ToArray().AsReadOnly())
         .AsReadOnly();
 
-    private readonly Dictionary<MetadataTableName, List<IMetadataTableRow>> _rows;
+    private readonly Dictionary<MetadataTableName, List<IMetadataRecord>> _rows;
     private readonly MetadataTableDataReader _metadataTableDataReader;
 
     public MetadataTablesStream(BinaryReader reader)
@@ -38,14 +38,14 @@ public class MetadataTablesStream
         // var sortedBits = new BitArray(
         reader.ReadBytes(8);
 
-        _rows = new Dictionary<MetadataTableName, List<IMetadataTableRow>>(validBits.Count(x => x));
+        _rows = new Dictionary<MetadataTableName, List<IMetadataRecord>>(validBits.Count(x => x));
 
         foreach (var name in validBits
                      .Select((x, i) => (IsValid: x, TableName: (MetadataTableName)i))
                      .Where(x => x.IsValid)
                      .Select(x => x.TableName))
         {
-            _rows[name] = new List<IMetadataTableRow>((int)reader.ReadUInt32());
+            _rows[name] = new List<IMetadataRecord>((int)reader.ReadUInt32());
         }
 
         _metadataTableDataReader = new MetadataTableDataReader(reader, HeapSizes,
@@ -75,7 +75,7 @@ public class MetadataTablesStream
         }
 
         var table = new MetadataTable<T>((uint)list.Capacity, _metadataTableDataReader);
-        _rows[T.TableName].AddRange(table.Rows.Cast<IMetadataTableRow>());
+        _rows[T.TableName].AddRange(table.Rows.Cast<IMetadataRecord>());
 
         return table;
     }

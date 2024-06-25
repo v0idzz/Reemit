@@ -2,10 +2,11 @@ using Reemit.Decompiler.Clr.Metadata.Tables;
 
 namespace Reemit.Decompiler.Clr.Metadata;
 
-public class TableReferenceResolver(IReadOnlyDictionary<MetadataTableName, IReadOnlyList<IMetadataTableRow>> allTables)
+public class TableReferenceResolver(IReadOnlyDictionary<MetadataTableName, IReadOnlyList<IMetadataRecord>> allTables)
 {
-    public IReadOnlyList<IMetadataTableRow>
-        GetReferencedRows(CodedIndex codedIndex, IMetadataTableRow referencingRow) =>
+    public IReadOnlyList<IMetadataRecord>
+        GetReferencedRows<TRef>(CodedIndex codedIndex, TRef referencingRow)
+        where TRef : IMetadataTableRow =>
         codedIndex.GetReferencedRows(referencingRow, allTables);
 
     public IReadOnlyList<TTarget> GetReferencedRows<TRef, TTarget>(TRef referencingRow)
@@ -20,17 +21,17 @@ public class TableReferenceResolver(IReadOnlyDictionary<MetadataTableName, IRead
 
 public static class CodedIndexExtensions
 {
-    public static IReadOnlyList<IMetadataTableRow> GetReferencedRows<TRef>(this CodedIndex codedIndex,
+    public static IReadOnlyList<IMetadataRecord> GetReferencedRows<TRef>(this CodedIndex codedIndex,
         TRef referencingRow,
-        IReadOnlyDictionary<MetadataTableName, IReadOnlyList<IMetadataTableRow>> allTables)
+        IReadOnlyDictionary<MetadataTableName, IReadOnlyList<IMetadataRecord>> allTables)
         where TRef : IMetadataTableRow =>
         GetReferencedRows(referencingRow, allTables[TRef.TableName], allTables[codedIndex.ReferencedTable]);
 
     public static IReadOnlyList<TTarget> GetReferencedRows<TRef, TTarget>(TRef referencingRow,
         IReadOnlyList<TRef> referencingTableRows,
         IReadOnlyList<TTarget> referencedTableRows)
-        where TRef : IMetadataTableRow
-        where TTarget : IMetadataTableRow
+        where TRef : IMetadataRecord
+        where TTarget : IMetadataRecord
     {
         var nextRowInReferencingTable = referencingTableRows.SingleOrDefault(x => x.Rid - referencingRow.Rid == 1);
 
