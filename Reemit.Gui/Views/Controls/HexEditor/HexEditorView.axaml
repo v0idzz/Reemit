@@ -17,13 +17,18 @@
 				<RowDefinition Height="30" />
 				<RowDefinition />
 			</Grid.RowDefinitions>
-			<ComboBox x:Name="HexWidthCombobox">
-				<ComboBox.ItemTemplate>
-					<DataTemplate x:DataType="vm:ByteWidthViewModel">
-						<TextBlock Text="{Binding WidthName}" />
-					</DataTemplate>
-				</ComboBox.ItemTemplate>
-			</ComboBox>
+
+			<StackPanel Orientation="Horizontal">
+				<ComboBox x:Name="HexWidthCombobox">
+					<ComboBox.ItemTemplate>
+						<DataTemplate x:DataType="vm:ByteWidthViewModel">
+							<TextBlock Text="{Binding WidthName}" />
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+				<Button x:Name="NavigatePreviousButton" Content="&lt;" />
+				<Button x:Name="NavigateNextButton" Content="&gt;" />
+			</StackPanel>
 			
 			<avaloniaHex:HexEditor
 						x:Name="ReemitHexEditor"

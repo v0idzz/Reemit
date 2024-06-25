@@ -86,6 +86,9 @@ public partial class HexEditorView : ReactiveUserControl<HexEditorViewModel>
                 })
                 .BindTo(ReemitHexEditor, x => x.Selection.Range)
                 .DisposeWith(d);
+
+            this.BindCommand(ViewModel, x => x.NavigateNextCommand, x => x.NavigateNextButton);
+            this.BindCommand(ViewModel, x => x.NavigatePreviousCommand, x => x.NavigatePreviousButton);
         });
     }
 }
