@@ -24,9 +24,9 @@ public class HexEditorNavigationViewModel : ReactiveObject
     [Reactive]
     public ObservableCollection<HexNavigationRangeViewModel> NavigationRanges { get; set; } = [];
 
-    public ReactiveCommand<Unit, Unit> NavigateNextCommand { get; }
+    public ReactiveCommand<Unit, Unit> NextCommand { get; }
 
-    public ReactiveCommand<Unit, Unit> NavigatePreviousCommand { get; }
+    public ReactiveCommand<Unit, Unit> PreviousCommand { get; }
 
     public HexEditorNavigationViewModel(HexEditorViewModel hexEditorViewModel)
     {
@@ -71,8 +71,8 @@ public class HexEditorNavigationViewModel : ReactiveObject
             .Select(x => new HexNavigationRangeViewModel(x.RangeMapped, x.Navigate, x.Leave))
             .Subscribe(NavigationRanges.Add);
 
-        NavigateNextCommand = ReactiveCommand.Create(NavigateNext);
-        NavigatePreviousCommand = ReactiveCommand.Create(NavigatePrevious);
+        NextCommand = ReactiveCommand.Create(NavigateNext);
+        PreviousCommand = ReactiveCommand.Create(NavigatePrevious);
     }
 
     private void Navigate(
