@@ -16,6 +16,7 @@
 			<Grid.RowDefinitions>
 				<RowDefinition Height="30" />
 				<RowDefinition />
+				<RowDefinition Height="30" />
 			</Grid.RowDefinitions>
 
 			<StackPanel Orientation="Horizontal">
@@ -45,6 +46,15 @@
 					<rendering:AsciiColumn InvalidCellChar="?" />
 				</avaloniaHex:HexEditor.Columns>
 			</avaloniaHex:HexEditor>
+
+			<StackPanel Grid.Row="2" Orientation="Horizontal">
+				<Label VerticalAlignment="Center">Offset</Label>
+				<TextBox x:Name="OffsetTextBox" IsReadOnly="True" Width="20" />
+				<Label VerticalAlignment="Center">End</Label>
+				<TextBox x:Name="EndTextBox" IsReadOnly="True" Width="20" />
+				<Label VerticalAlignment="Center">Length</Label>
+				<TextBox x:Name="LengthTextBox" IsReadOnly="True" Width="20" />
+			</StackPanel>
 		</Grid>
 	</Border>
 </rxui:ReactiveUserControl>
