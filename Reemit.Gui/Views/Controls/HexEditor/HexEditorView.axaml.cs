@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Metadata;
 using Avalonia.ReactiveUI;
+using AvaloniaHex.Editing;
 using ReactiveUI;
 using Reemit.Common;
 using Reemit.Gui.ViewModels.Controls.HexEditor;
@@ -72,6 +73,10 @@ public partial class HexEditorView : ReactiveUserControl<HexEditorViewModel>
 
             this.BindCommand(ViewModel, x => x.Navigation.PreviousCommand, x => x.NavigatePreviousButton)
                 .DisposeWith(d);
+
+            this.OneWayBind(ViewModel, x => x.SelectionOffset, x => x.OffsetTextBox.Text);
+            this.OneWayBind(ViewModel, x => x.SelectionEnd, x => x.EndTextBox.Text);
+            this.OneWayBind(ViewModel, x => x.SelectionLength, x => x.LengthTextBox.Text);
 
             Observable
                 .FromEvent<EventHandler, EventArgs>(

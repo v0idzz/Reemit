@@ -13,6 +13,7 @@ public class HexEditorViewModel : ReactiveObject
     public IReadOnlyCollection<ByteWidthViewModel> ByteWidths { get; } =
     [
         new ByteWidthViewModel(null),
+        new ByteWidthViewModel(4),
         new ByteWidthViewModel(8),
         new ByteWidthViewModel(16),
         new ByteWidthViewModel(32),
@@ -34,6 +35,15 @@ public class HexEditorViewModel : ReactiveObject
     [Reactive]
     public BitRange? SelectedRange { get; set; }
 
+    [ObservableAsProperty]
+    public int SelectionOffset { get; }
+
+    [ObservableAsProperty]
+    public int SelectionEnd { get; }
+
+    [ObservableAsProperty]
+    public int SelectionLength { get; }
+
     public HexEditorViewModel()
     {
         Navigation = new(this);
@@ -48,7 +58,22 @@ public class HexEditorViewModel : ReactiveObject
             .Select(x => x.Range)
             .BindTo(this, x => x.SelectedRange);
 
-        this.WhenAnyValue(x => x.SelectedRange)
-            .BindTo(Navigation, x => x.NavigationBitRange);
+        var observableSelectedRange = this.WhenAnyValue(x => x.SelectedRange);
+
+        observableSelectedRange.BindTo(Navigation, x => x.NavigationBitRange);
+
+        var observableSelectedBitRange = observableSelectedRange.WhereNotNull().Select(x => x!.Value);
+
+        observableSelectedBitRange
+            .Select(x => (int)x.Start.ByteIndex)
+            .ToPropertyEx(this, x => x.SelectionOffset);
+
+        observableSelectedBitRange
+            .Select(x => (int)x.End.ByteIndex)
+            .ToPropertyEx(this, x => x.SelectionEnd);
+
+        observableSelectedBitRange
+            .Select(x => (int)x.ByteLength)
+            .ToPropertyEx(this, x => x.SelectionLength);
     }
 }
