@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using ReactiveUI;
 using Reemit.Common;
 using Reemit.Decompiler;
 using Reemit.Gui.ViewModels.Navigation;

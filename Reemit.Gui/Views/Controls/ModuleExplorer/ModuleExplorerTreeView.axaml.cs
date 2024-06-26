@@ -1,6 +1,4 @@
-using System;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
 using Reemit.Gui.ViewModels.Controls.ModuleExplorer;

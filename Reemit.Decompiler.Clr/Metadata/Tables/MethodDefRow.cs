@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Reemit.Decompiler.Clr.Metadata.Tables;
+﻿namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
 public class MethodDefRow(
     uint rva,

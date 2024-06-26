@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using Avalonia.ReactiveUI;
-using AvaloniaHex.Document;
 using ReactiveUI;
 using Reemit.Gui.ViewModels.Controls.HexEditor;
 using System;
@@ -87,8 +86,8 @@ public partial class HexEditorView : ReactiveUserControl<HexEditorViewModel>
                 .BindTo(ReemitHexEditor, x => x.Selection.Range)
                 .DisposeWith(d);
 
-            this.BindCommand(ViewModel, x => x.NavigateNextCommand, x => x.NavigateNextButton);
-            this.BindCommand(ViewModel, x => x.NavigatePreviousCommand, x => x.NavigatePreviousButton);
+            this.BindCommand(ViewModel, x => x.Navigation.NavigateNextCommand, x => x.NavigateNextButton);
+            this.BindCommand(ViewModel, x => x.Navigation.NavigatePreviousCommand, x => x.NavigatePreviousButton);
         });
     }
 }

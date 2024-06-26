@@ -3,14 +3,18 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Reemit.Gui.ViewModels.Navigation;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 
 namespace Reemit.Gui.ViewModels.Controls.HexEditor;
 
 public class HexEditorNavigationViewModel : ReactiveObject
 {
+    private readonly HexEditorViewModel _hexEditorViewModel;
+
     [Reactive]
     public BitRange? NavigationBitRange { get; set; }
 
@@ -20,8 +24,14 @@ public class HexEditorNavigationViewModel : ReactiveObject
     [Reactive]
     public ObservableCollection<HexNavigationRangeViewModel> NavigationRanges { get; set; } = [];
 
-    public HexEditorNavigationViewModel()
+    public ReactiveCommand<Unit, Unit> NavigateNextCommand { get; }
+
+    public ReactiveCommand<Unit, Unit> NavigatePreviousCommand { get; }
+
+    public HexEditorNavigationViewModel(HexEditorViewModel hexEditorViewModel)
     {
+        _hexEditorViewModel = hexEditorViewModel;
+
         this.WhenAnyValue(x => x.NavigationBitRange, x => x.NavigationRanges)
             .Where(x => x.Item1 != null)
             .Select(x =>
@@ -60,5 +70,53 @@ public class HexEditorNavigationViewModel : ReactiveObject
             .ListenForRegistration()
             .Select(x => new HexNavigationRangeViewModel(x.RangeMapped, x.Navigate, x.Leave))
             .Subscribe(NavigationRanges.Add);
+
+        NavigateNextCommand = ReactiveCommand.Create(NavigateNext);
+        NavigatePreviousCommand = ReactiveCommand.Create(NavigatePrevious);
     }
+
+    private void Navigate(
+        Func<
+            IEnumerable<HexNavigationRangeViewModel>,
+            Func<HexNavigationRangeViewModel, int>,
+            IOrderedEnumerable<HexNavigationRangeViewModel>>
+                orderFunc,
+        Func<HexNavigationRangeViewModel, bool> predicate)
+    {
+        HexNavigationRangeViewModel nextRange;
+
+        if (!NavigationRanges.Any())
+        {
+            return;
+        }
+        else
+        {
+            var ordered = orderFunc(NavigationRanges, x => x.RangeMapped.Position);
+
+            if (_hexEditorViewModel.SelectedRange == null)
+            {
+                nextRange = ordered.First();
+            }
+            else
+            {
+                var nextOrDefault = ordered.FirstOrDefault(predicate);
+
+                nextRange = nextOrDefault ?? ordered.First();
+            }
+        }
+
+        _hexEditorViewModel.SelectedRange = new BitRange(
+            (ulong)nextRange.RangeMapped.Position,
+            (ulong)(nextRange.RangeMapped.End));
+    }
+
+    private void NavigateNext() =>
+        Navigate(
+            Enumerable.OrderBy,
+            x => x.RangeMapped.Position > (int)_hexEditorViewModel.SelectedRange!.Value.Start.ByteIndex);
+
+    private void NavigatePrevious() =>
+        Navigate(
+            Enumerable.OrderByDescending,
+            x => x.RangeMapped.Position < (int)_hexEditorViewModel.SelectedRange!.Value.Start.ByteIndex);
 }
