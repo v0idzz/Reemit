@@ -9,14 +9,14 @@ public static class MethodHeaderReader
         var tempReader = reader.CreateDerivedAtRelativeToCurrentOffset(0);
         var signatureByte = tempReader.ReadByte();
 
-        var twoLeastSignificantBits = (uint)(signatureByte & 0b11);
+        var format = (CorILMethodFormat)(signatureByte & (byte)CorILMethodFlags.FormatMask);
 
-        return twoLeastSignificantBits switch
+        return format switch
         {
-            (uint)CorILMethodFlags.TinyFormat => TinyMethodHeader.Read(reader),
-            (uint)CorILMethodFlags.FatFormat => FatMethodHeader.Read(reader),
+            CorILMethodFormat.Tiny => TinyMethodHeader.Read(reader),
+            CorILMethodFormat.Fat => FatMethodHeader.Read(reader),
             _ => throw new BadImageFormatException(
-                $"Unrecognized method header (signature: {twoLeastSignificantBits:X})")
+                $"Unrecognized method header (signature: 0x{format:X})")
         };
     }
 }

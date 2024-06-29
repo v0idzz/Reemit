@@ -31,8 +31,8 @@ public class FatMethodHeaderTests
             FatMethodHeader.Read(new SharedReader(0, reader, new object()));
 
         // Assert
-        Assert.Equal(CorILMethodFlags.FatFormat | CorILMethodFlags.TinyFormat | CorILMethodFlags.InitLocals,
-            header.Flags);
+        Assert.True(header.Flags.HasFlag(CorILMethodFlags.InitLocals));
+        Assert.Equal(CorILMethodFormat.Fat, (CorILMethodFormat)(header.Flags & CorILMethodFlags.FormatMask));
         Assert.Equal(3u, header.Size);
         Assert.Equal(2u, header.MaxStack);
         Assert.Equal(64u, header.CodeSize);

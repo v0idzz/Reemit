@@ -12,12 +12,12 @@ public class MethodHeaderReaderTests
         byte[] bytes = 
         [
             // Type of header
-            0b10
+            0b00000010
 
             |
 
             // CodeSize (see TinyMethodHeaderTests)
-            0b100000
+            0b00100000
         ];
         await using var memoryStream = new MemoryStream(bytes);
         using var reader = new BinaryReader(memoryStream);
@@ -36,12 +36,12 @@ public class MethodHeaderReaderTests
         byte[] bytes = 
         [
             // Type of header
-            0b11
+            0b00000011
 
             |
 
             // FatMethodHeader (see FatMethodHeaderTests)
-            0b1000, 0x30,
+            0b00001000, 0x30,
             0x02, 0x00,
             0x40, 0x00, 0x00, 0x00,
             0x14, 0x00, 0x00, 0x11

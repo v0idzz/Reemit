@@ -3,6 +3,7 @@ namespace Reemit.Decompiler.Clr.Methods;
 /// <summary>
 /// Based on II.25.4.6 Exception handling clauses
 /// </summary>
+[Flags]
 public enum CorILExceptionClauses : ushort
 {
     Exception = 0x0,

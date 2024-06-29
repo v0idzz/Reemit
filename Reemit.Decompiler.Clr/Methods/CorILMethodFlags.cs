@@ -6,8 +6,11 @@ namespace Reemit.Decompiler.Clr.Methods;
 [Flags]
 public enum CorILMethodFlags : byte
 {
-    FatFormat = 0x3,
-    TinyFormat = 0x2,
     MoreSects = 0x8,
     InitLocals = 0x10,
+    
+    /// <summary>
+    /// A mask to be used to extract <see cref="CorILMethodFormat"/> value.
+    /// </summary>
+    FormatMask = 0x3
 }

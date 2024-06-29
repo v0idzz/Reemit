@@ -12,12 +12,12 @@ public class TinyMethodHeaderTests
         byte[] bytes =
         [
             // CodeSize
-            0b100000
+            0b00100000
             
             |
             
             // Type of header
-            0b10
+            0b00000010
         ];
         await using var memoryStream = new MemoryStream(bytes);
         using var reader = new BinaryReader(memoryStream);
@@ -26,6 +26,6 @@ public class TinyMethodHeaderTests
         var header = TinyMethodHeader.Read(new SharedReader(0, reader, new object()));
         
         // Assert
-        Assert.Equal(32u, header.CodeSize);
+        Assert.Equal(8u, header.CodeSize);
     }
 }
