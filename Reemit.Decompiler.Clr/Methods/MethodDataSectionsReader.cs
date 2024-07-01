@@ -13,7 +13,7 @@ public static class MethodDataSectionsReader
 
             if (paddingBytes != 0)
             {
-                reader = reader.CreateDerivedAtRelativeToCurrentOffset((uint)(4 - reader.Offset % 4));
+                reader = reader.CreateDerivedAtRelativeToCurrentOffset((uint)(4 - paddingBytes));
             }
 
             // Create a temporary reader to peek first byte.
