@@ -1,4 +1,4 @@
-﻿﻿using Reemit.Decompiler.Clr.Metadata;
+﻿using Reemit.Decompiler.Clr.Metadata;
 using Reemit.Decompiler.Clr.Metadata.Streams;
 using Reemit.Decompiler.PE;
 
@@ -48,7 +48,8 @@ public class ClrModule
         var metadataStreamOffset = metadataOffset + metadataStreamHeader.Offset;
         var metadataStream = new MetadataTablesStream(peFile.CreateReaderAt(metadataStreamOffset));
 
-        var context = new ClrMetadataContext(metadataStream, stringsStream);
+        var context = new ModuleReaderContext(peFile, metadataStream, stringsStream,
+            new TableReferenceResolver(metadataStream.Rows));
 
         var types = metadataStream.TypeDef?.Rows.Select(x => ClrType.FromTypeDefRow(x, context)).ToArray().AsReadOnly();
 

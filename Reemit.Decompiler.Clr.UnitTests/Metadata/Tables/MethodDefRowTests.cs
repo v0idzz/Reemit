@@ -175,7 +175,7 @@ public class MethodDefRowTests
             // other
             0x8e, 0x03, 0x10, 0x00, 0x01, 0x00
         })]
-    public void Constructor_InvalidMethodDefRow_ThrowsBadImageFormatException(byte[] bytes)
+    public void Read_InvalidMethodDefRow_ThrowsBadImageFormatException(byte[] bytes)
     {
         // Arrange
         using var memoryStream = new MemoryStream(bytes);
@@ -183,7 +183,7 @@ public class MethodDefRowTests
         var tableReader = new MetadataTableDataReader(reader, 0, new Dictionary<MetadataTableName, uint>());
 
         // Act
-        Action readRow = () => MethodDefRow.Read(tableReader);
+        Action readRow = () => MethodDefRow.Read(1, tableReader);
 
         // Assert
         Assert.Throws<BadImageFormatException>(readRow);
@@ -191,7 +191,7 @@ public class MethodDefRowTests
 
     [Theory]
     [MemberData(nameof(GetMethodDefData))]
-    public void Constructor_ValidMethodDefRow_ReadsMethodDefRow(
+    public void Read_ValidMethodDefRow_ReadsMethodDefRow(
         byte[] bytes,
         uint expectedRva,
         ushort expectedImplFlags,
@@ -231,7 +231,7 @@ public class MethodDefRowTests
         var tableReader = new MetadataTableDataReader(reader, 0, new Dictionary<MetadataTableName, uint>());
 
         // Act
-        var row = MethodDefRow.Read(tableReader);
+        var row = MethodDefRow.Read(1, tableReader);
 
         // Assert
         Assert.Equal(expectedRva, row.Rva);

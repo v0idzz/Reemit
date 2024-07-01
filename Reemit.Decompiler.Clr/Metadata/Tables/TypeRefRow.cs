@@ -1,7 +1,7 @@
 namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
-public class TypeRefRow(CodedIndex resolutionScope, uint typeName, uint typeNamespace)
-    : IMetadataTableRow<TypeRefRow>
+public class TypeRefRow(uint rid, CodedIndex resolutionScope, uint typeName, uint typeNamespace)
+    : MetadataRecord(rid), IMetadataTableRow<TypeRefRow>
 {
     public static MetadataTableName TableName => MetadataTableName.TypeRef;
 
@@ -9,8 +9,9 @@ public class TypeRefRow(CodedIndex resolutionScope, uint typeName, uint typeName
     public uint TypeName { get; } = typeName;
     public uint TypeNamespace { get; } = typeNamespace;
 
-    public static TypeRefRow Read(MetadataTableDataReader reader) =>
+    public static TypeRefRow Read(uint rid, MetadataTableDataReader reader) =>
         new(
+            rid,
             reader.ReadCodedRid(CodedIndexTagFamily.ResolutionScope),
             reader.ReadStringRid(),
             reader.ReadStringRid());

@@ -228,7 +228,7 @@ public sealed class SharedReaderTests
     }
 
     [Fact]
-    public void CreateDerivedAtRelativeOffset_Called_RelativeOffsetSet()
+    public void CreateDerivedAtRelativeToStartOffset_Called_RelativeToStartOffsetSet()
     {
         // Arrange
         using var stream = new MemoryStream();
@@ -238,12 +238,35 @@ public sealed class SharedReaderTests
         const int derivedSharedReaderOffset = 2;
 
         // Act
-        var actualDerivedSharedReader = sharedReader.CreateDerivedAtRelativeOffset(derivedSharedReaderOffset);
+        var actualDerivedSharedReader = sharedReader.CreateDerivedAtRelativeToStartOffset(derivedSharedReaderOffset);
 
         // Assert
         Assert.Equal(sharedReaderOffset, sharedReader.Offset);
         Assert.Equal(0, sharedReader.RelativeOffset);
         Assert.Equal(sharedReaderOffset + derivedSharedReaderOffset, actualDerivedSharedReader.Offset);
+        Assert.Equal(0, actualDerivedSharedReader.RelativeOffset);
+    }
+    
+    [Fact]
+    public void CreateDerivedAtRelativeToCurrentOffset_Called_RelativeToCurrentOffsetSet()
+    {
+        // Arrange
+        byte[] bytes = [0x00, 0x01, 0x02, 0x03];
+        using var stream = new MemoryStream(bytes);
+        using var binaryReader = new BinaryReader(stream);
+        const int sharedReaderOffset = 1;
+        using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader, new object());
+        sharedReader.ReadByte();
+        const int readDataSize = sizeof(byte);
+        const int derivedSharedReaderOffset = 2;
+
+        // Act
+        var actualDerivedSharedReader = sharedReader.CreateDerivedAtRelativeToCurrentOffset(derivedSharedReaderOffset);
+
+        // Assert
+        Assert.Equal(sharedReaderOffset + readDataSize, sharedReader.Offset);
+        Assert.Equal(readDataSize, sharedReader.RelativeOffset);
+        Assert.Equal(sharedReaderOffset + derivedSharedReaderOffset + readDataSize, actualDerivedSharedReader.Offset);
         Assert.Equal(0, actualDerivedSharedReader.RelativeOffset);
     }
 }

@@ -6,7 +6,7 @@ namespace Reemit.Decompiler.Clr.UnitTests.Metadata.Tables;
 public class TypeDefRowTests
 {
     [Fact]
-    public async Task Constructor_ValidTypeDefRow_ReadsTypeDefRow()
+    public async Task Read_ValidTypeDefRow_ReadsTypeDefRow()
     {
         // Arrange
         byte[] bytes = [0x01, 0x00, 0x10, 0x00, 0x01, 0x00, 0xEB, 0x01, 0x35, 0x00, 0x01, 0x00, 0x01, 0x00];
@@ -14,7 +14,7 @@ public class TypeDefRowTests
         using var reader = new BinaryReader(memoryStream);
 
         // Act
-        var row = TypeDefRow.Read(new MetadataTableDataReader(reader, 0, new Dictionary<MetadataTableName, uint>
+        var row = TypeDefRow.Read(1, new MetadataTableDataReader(reader, 0, new Dictionary<MetadataTableName, uint>
         {
             { MetadataTableName.TypeRef, 1 },
             { MetadataTableName.Field, 1 },
