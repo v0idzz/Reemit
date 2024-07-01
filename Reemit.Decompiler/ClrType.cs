@@ -1,3 +1,4 @@
+using Reemit.Common;
 using Reemit.Decompiler.Clr.Metadata;
 using Reemit.Decompiler.Clr.Metadata.Tables;
 
@@ -7,7 +8,7 @@ public class ClrType
 {
     public bool IsValueType { get; }
     public bool IsInterface { get; }
-    public string Name { get; }
+    public RangeMapped<string> Name { get; }
     public string Namespace { get; }
     public IReadOnlyList<ClrMethod> Methods => _methodsLazy.Value;
 
@@ -15,7 +16,7 @@ public class ClrType
 
     private ClrType(bool isInterface,
         bool isValueType,
-        string name,
+        RangeMapped<string> name,
         string @namespace,
         IReadOnlyList<ClrMethod> methods) : this(isInterface, isValueType, name, @namespace,
         new Lazy<IReadOnlyList<ClrMethod>>(methods))
@@ -24,7 +25,7 @@ public class ClrType
 
     private ClrType(bool isInterface,
         bool isValueType,
-        string name,
+        RangeMapped<string> name,
         string @namespace,
         Lazy<IReadOnlyList<ClrMethod>> methodsLazy)
     { 
@@ -71,7 +72,7 @@ public class ClrType
         var type = new ClrType(
             isInterface,
             isValueType,
-            stringsHeap.Read(typeDefRow.TypeName),
+            stringsHeap.ReadMapped(typeDefRow.TypeName),
             stringsHeap.Read(typeDefRow.TypeNamespace),
             new Lazy<IReadOnlyList<ClrMethod>>(GetMethods)
         );

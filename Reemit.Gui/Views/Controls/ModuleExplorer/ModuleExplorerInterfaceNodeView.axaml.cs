@@ -12,7 +12,7 @@ public partial class ModuleExplorerInterfaceNodeView : ReactiveUserControl<Modul
         InitializeComponent();
         this.WhenActivated(disposable =>
         {
-            this.OneWayBind(ViewModel, vm => vm.Name, v => v.NodeView.Text)
+            this.OneWayBind(ViewModel, vm => vm.Name.Value, v => v.NodeView.Text)
                 .DisposeWith(disposable);
         });
     }

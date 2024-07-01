@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Decompiler.PE", "Reemit.Decompiler.PE\Reemit.Decompiler.PE.csproj", "{419A4727-CBCC-4696-A635-C6B619B1A3E0}"
 EndProject
@@ -15,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Decompiler", "Reemit.Decompiler\Reemit.Decompiler.csproj", "{43CB023B-A0BC-4A6C-B71B-681C3B8520C8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Common.UnitTests", "Reemit.Common.UnitTests\Reemit.Common.UnitTests.csproj", "{FF0F1985-EF42-40D6-A6AF-5985421022DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Gui.UnitTests", "Reemit.Gui.UnitTests\Reemit.Gui.UnitTests.csproj", "{5F69EB8B-ABEE-4A97-8A1A-BC2E8BAB901A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,5 +55,9 @@ Global
 		{FF0F1985-EF42-40D6-A6AF-5985421022DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF0F1985-EF42-40D6-A6AF-5985421022DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF0F1985-EF42-40D6-A6AF-5985421022DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F69EB8B-ABEE-4A97-8A1A-BC2E8BAB901A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F69EB8B-ABEE-4A97-8A1A-BC2E8BAB901A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F69EB8B-ABEE-4A97-8A1A-BC2E8BAB901A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F69EB8B-ABEE-4A97-8A1A-BC2E8BAB901A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

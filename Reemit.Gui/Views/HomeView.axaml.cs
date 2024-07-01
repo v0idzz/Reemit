@@ -15,6 +15,9 @@ public partial class HomeView : ReactiveUserControl<HomeViewModel>
         {
             this.OneWayBind(ViewModel, vm => vm.ModuleExplorerTreeViewModel, v => v.ModuleExplorerTreeView.ViewModel)
                 .DisposeWith(disposable);
+
+            this.OneWayBind(ViewModel, vm => vm.HexEditorViewModel, v => v.HexEditorView.ViewModel)
+                .DisposeWith(disposable);
         });
     }
 }

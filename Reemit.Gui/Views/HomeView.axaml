@@ -5,7 +5,16 @@
                           xmlns:rxui="http://reactiveui.net"
                           xmlns:viewModels="clr-namespace:Reemit.Gui.ViewModels"
                           xmlns:moduleExplorer="clr-namespace:Reemit.Gui.Views.Controls.ModuleExplorer"
+						  xmlns:hexEditor="clr-namespace:Reemit.Gui.Views.Controls.HexEditor"
                           mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
                           x:Class="Reemit.Gui.Views.HomeView">
-    <moduleExplorer:ModuleExplorerTreeView Name="ModuleExplorerTreeView" />
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="400" />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+		<moduleExplorer:ModuleExplorerTreeView Name="ModuleExplorerTreeView" />
+		<hexEditor:HexEditorView Grid.Column="1" Name="HexEditorView" />
+	</Grid>
+
 </rxui:ReactiveUserControl>
