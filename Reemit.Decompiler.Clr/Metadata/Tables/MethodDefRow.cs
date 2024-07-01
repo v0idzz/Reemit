@@ -1,12 +1,13 @@
 ﻿namespace Reemit.Decompiler.Clr.Metadata.Tables;
 
 public class MethodDefRow(
+    uint rid,
     uint rva,
     ushort implFlags,
     ushort flags,
     uint name,
     uint signature,
-    uint paramList) : IMetadataTableRow<MethodDefRow>
+    uint paramList) : MetadataRecord(rid), IMetadataTableRow<MethodDefRow>
 {
     public static MetadataTableName TableName => MetadataTableName.MethodDef;
 
@@ -58,7 +59,7 @@ public class MethodDefRow(
     public bool HasSecurity => MethodFlags.HasFlag(MethodAttributes.HasSecurity);
     public bool RequireSecObject => MethodFlags.HasFlag(MethodAttributes.RequireSecObject);
 
-    public static MethodDefRow Read(MetadataTableDataReader reader)
+    public static MethodDefRow Read(uint rid, MetadataTableDataReader reader)
     {
         var rva = reader.ReadUInt32();
 
@@ -82,6 +83,7 @@ public class MethodDefRow(
         var flags = reader.ReadUInt16();
         
         var row = new MethodDefRow(
+            rid,
             rva,
             implFlags,
             flags,

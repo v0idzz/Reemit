@@ -20,7 +20,7 @@ public class StringsHeapStream
 
     public RangeMapped<string> ReadMapped(uint valueOffset)
     {
-        var reader = _reader.CreateDerivedAtRelativeOffset(valueOffset);
+        var reader = _reader.CreateDerivedAtRelativeToStartOffset(valueOffset);
 
         const int bufferSize = 16;
         var valBytes = new List<byte>(bufferSize);

@@ -25,7 +25,7 @@ namespace Reemit.Gui.UnitTests.ViewModels.Controls.HexEditor
             // Arrange
             var expectedRangeVM = CreateRangeViewModel(1, 2);
 
-            var vm = new HexEditorNavigationViewModel();
+            var vm = new HexEditorNavigationViewModel(new());
 
             vm.NavigationRanges =
             [
@@ -61,7 +61,7 @@ namespace Reemit.Gui.UnitTests.ViewModels.Controls.HexEditor
         public void NavigationBitRange_Set_DoesNotResolveRangeMapped(ulong start, ulong end)
         {
             // Arrange
-            var vm = new HexEditorNavigationViewModel();
+            var vm = new HexEditorNavigationViewModel(new());
 
             vm.NavigationRanges =
             [
@@ -92,7 +92,7 @@ namespace Reemit.Gui.UnitTests.ViewModels.Controls.HexEditor
             // Arrange
             var expectedRangeVM = CreateRangeViewModel(1, 3);
 
-            var vm = new HexEditorNavigationViewModel();
+            var vm = new HexEditorNavigationViewModel(new());
 
             vm.NavigationRanges =
             [
@@ -124,7 +124,7 @@ namespace Reemit.Gui.UnitTests.ViewModels.Controls.HexEditor
             // Arrange
             var expectedRangeVM = CreateRangeViewModel(0, 5);
 
-            var vm = new HexEditorNavigationViewModel();
+            var vm = new HexEditorNavigationViewModel(new());
 
             vm.NavigationRanges =
             [
@@ -142,6 +142,7 @@ namespace Reemit.Gui.UnitTests.ViewModels.Controls.HexEditor
         private HexNavigationRangeViewModel CreateRangeViewModel(int position, int length) =>
             new HexNavigationRangeViewModel(
                 new RangeMapped<string>(position, length, "foo"),
+                () => { },
                 () => { });
     }
 }

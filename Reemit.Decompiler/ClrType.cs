@@ -4,14 +4,40 @@ using Reemit.Decompiler.Clr.Metadata.Tables;
 
 namespace Reemit.Decompiler;
 
-public class ClrType(bool isInterface, bool isValueType, RangeMapped<string> name, string @namespace)
+public class ClrType
 {
-    public bool IsValueType => isValueType;
-    public bool IsInterface => isInterface;
-    public RangeMapped<string> Name => name;
-    public string Namespace => @namespace;
+    public bool IsValueType { get; }
+    public bool IsInterface { get; }
+    public RangeMapped<string> Name { get; }
+    public string Namespace { get; }
+    public IReadOnlyList<ClrMethod> Methods => _methodsLazy.Value;
 
-    public static ClrType FromTypeDefRow(TypeDefRow typeDefRow, ClrMetadataContext context)
+    private readonly Lazy<IReadOnlyList<ClrMethod>> _methodsLazy;
+
+    private ClrType(bool isInterface,
+        bool isValueType,
+        RangeMapped<string> name,
+        string @namespace,
+        IReadOnlyList<ClrMethod> methods) : this(isInterface, isValueType, name, @namespace,
+        new Lazy<IReadOnlyList<ClrMethod>>(methods))
+    {
+    }
+
+    private ClrType(bool isInterface,
+        bool isValueType,
+        RangeMapped<string> name,
+        string @namespace,
+        Lazy<IReadOnlyList<ClrMethod>> methodsLazy)
+    { 
+        IsInterface = isInterface;
+        IsValueType = isValueType;
+        Name = name;
+        Namespace = @namespace;
+        _methodsLazy = methodsLazy;
+    }
+
+
+    public static ClrType FromTypeDefRow(TypeDefRow typeDefRow, ModuleReaderContext context)
     {
         var stringsHeap = context.StringsHeapStream;
         // TODO: Check if also derives ultimately from System.Object
@@ -43,8 +69,20 @@ public class ClrType(bool isInterface, bool isValueType, RangeMapped<string> nam
             }
         }
 
-        var type = new ClrType(isInterface, isValueType,
-            stringsHeap.ReadMapped(typeDefRow.TypeName), stringsHeap.Read(typeDefRow.TypeNamespace));
+        var type = new ClrType(
+            isInterface,
+            isValueType,
+            stringsHeap.ReadMapped(typeDefRow.TypeName),
+            stringsHeap.Read(typeDefRow.TypeNamespace),
+            new Lazy<IReadOnlyList<ClrMethod>>(GetMethods)
+        );
+
         return type;
+
+        IReadOnlyList<ClrMethod> GetMethods()
+        {
+            var methods = context.TableReferenceResolver.GetReferencedRows<TypeDefRow, MethodDefRow>(typeDefRow);
+            return methods.Select(m => ClrMethod.FromMethodDefRow(m, context)).ToArray().AsReadOnly();
+        }
     }
 }
