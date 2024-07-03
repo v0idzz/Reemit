@@ -99,9 +99,9 @@ public class HexEditorNavigationViewModel : ReactiveObject
             }
             else
             {
-                var nextOrDefault = ordered.FirstOrDefault(predicate);
+                var eagerOrdered = ordered.ToArray();
 
-                nextRange = nextOrDefault ?? ordered.First();
+                nextRange = eagerOrdered.FirstOrDefault(predicate) ?? eagerOrdered.First();
             }
         }
 
