@@ -107,7 +107,7 @@ public class HexEditorNavigationViewModel : ReactiveObject
 
         _hexEditorViewModel.SelectedRange = new BitRange(
             (ulong)nextRange.RangeMapped.Position,
-            (ulong)(nextRange.RangeMapped.End));
+            (ulong)nextRange.RangeMapped.End);
     }
 
     private void NavigateNext() =>
