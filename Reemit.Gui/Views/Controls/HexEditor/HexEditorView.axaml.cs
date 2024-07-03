@@ -88,7 +88,8 @@ public partial class HexEditorView : ReactiveUserControl<HexEditorViewModel>
                 {
                     _lastBytesPerLine = ReemitHexEditor.HexView.BytesPerLine;
                     BringSelectionIntoView();
-                });
+                })
+                .DisposeWith(d);
         });
     }
 
