@@ -19,7 +19,7 @@ public class HexEditorNavigationViewModel : ReactiveObject
     public BitRange? NavigationBitRange { get; set; }
 
     [ObservableAsProperty]
-    public HexNavigationRangeViewModel? ResolvedNavigationRange { get; set; }
+    public HexNavigationRangeViewModel? ResolvedNavigationRange { get; }
 
     [Reactive]
     public ObservableCollection<HexNavigationRangeViewModel> NavigationRanges { get; set; } = [];
