@@ -39,9 +39,9 @@ public class HexEditorNavigationViewModel : ReactiveObject
                 var (range, knownRanges) = x;
 
                 return knownRanges
-                    .Where(x =>
-                        x.RangeMapped.Position <= (int)range!.Value.Start.ByteIndex &&
-                        (int)range!.Value.End.ByteIndex <= x.RangeMapped.End)
+                    .Where(y =>
+                        y.RangeMapped.Position <= (int)range!.Value.Start.ByteIndex &&
+                        (int)range!.Value.End.ByteIndex <= y.RangeMapped.End)
                     .OrderByDescending(x => x.RangeMapped.Position)
                     .ThenBy(x => x.RangeMapped.Length)
                     .FirstOrDefault();
