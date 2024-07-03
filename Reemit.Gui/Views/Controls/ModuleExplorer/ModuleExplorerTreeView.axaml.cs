@@ -17,20 +17,6 @@ public partial class ModuleExplorerTreeView : ReactiveUserControl<ModuleExplorer
 
             this.Bind(ViewModel, x => x.SelectedNode, x => x.TreeView.SelectedItem)
                 .DisposeWith(disposable);
-
-            //this.WhenAnyValue(x => x.TreeView.SelectedItem)
-            //    .Do(x =>
-            //    {
-            //        Console.WriteLine("Selected item changed");
-            //    })
-            //    .BindTo(ViewModel, vm => vm.SelectedNode)                
-            //    .DisposeWith(disposable);
-                
-
-            //this.OneWayBind(ViewModel, vm => vm.SelectedNode, v => v.TreeView.SelectedItem)
-            //    .DisposeWith(disposable);
-
-            
         });
     }
 }
