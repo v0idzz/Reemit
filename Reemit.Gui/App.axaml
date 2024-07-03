@@ -13,12 +13,12 @@
                 <ResourceDictionary x:Key="Light">
                     <Color x:Key="HighlightColor">#FF086F9E</Color>
                 </ResourceDictionary>
-
                 <ResourceDictionary x:Key="Dark">
                     <Color x:Key="HighlightColor">#FF119EDA</Color>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>
+        <FontFamily x:Key="SourceCodeProFont">avares://Reemit.Gui/Assets#Source Code Pro</FontFamily>
     </Application.Resources>
     <Application.Styles>
         <FluentTheme />

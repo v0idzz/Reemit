@@ -38,7 +38,7 @@
 						BorderBrush="Yellow"
 						FontSize="14"
 						ColumnPadding="30"
-						FontFamily="Cascadia Code,JetBrains Mono,Monospace,monospace">
+						FontFamily="{StaticResource SourceCodeProFont}">
 				<avaloniaHex:HexEditor.Columns>
 					<rendering:OffsetColumn />
 					<rendering:HexColumn />
