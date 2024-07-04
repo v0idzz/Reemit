@@ -4,7 +4,7 @@ namespace Reemit.Common;
 
 public class RangeMappedComparer : IEqualityComparer<IRangeMapped>
 {
-    public static RangeMappedComparer Default { get; } = new RangeMappedComparer();    
+    public static RangeMappedComparer Default { get; } = new();    
 
     public bool Equals(IRangeMapped? x, IRangeMapped? y) =>
         x == null && y == null ?
@@ -13,7 +13,7 @@ public class RangeMappedComparer : IEqualityComparer<IRangeMapped>
             false :
             x.Position == y.Position && x.Length == y.Length;
 
-    public int GetHashCode([DisallowNull] IRangeMapped obj)
+    public int GetHashCode(IRangeMapped obj)
     {
         var hc = new HashCode();
         hc.Add(obj.Length);
