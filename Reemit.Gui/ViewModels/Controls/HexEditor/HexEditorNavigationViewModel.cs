@@ -52,18 +52,8 @@ public class HexEditorNavigationViewModel : ReactiveObject
             .Buffer(2, 1)
             .Subscribe(x =>
             {
-                var prev = x.First();
-                var cur = x.Last();
-
-                if (prev != null)
-                {
-                    prev.Leave();
-                }
-
-                if (cur != null)
-                {
-                    cur.Navigate();
-                }
+                x.First()?.Leave();
+                x.Last()?.Navigate();
             });
 
         NavigationMessageBus
