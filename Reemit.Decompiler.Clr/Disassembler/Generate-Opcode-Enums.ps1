@@ -22,7 +22,7 @@ function Create-Enum {
 	$CS += "{`r`n"
 
 	$OpcodeTable | %{
-		$CS += "    [CilMnemonic(`"$($_.Mnemonic)`")]`r`n"
+		$CS += "    [CilMnemonic(`"$($_.Mnemonic)`", $($IsExtended.ToString().ToLower()))]`r`n"
 		$CS += "    @$($_.Mnemonic.TrimEnd(".").Replace(".", "_")) = $($_.Opcode),`r`n"
 	}
 
