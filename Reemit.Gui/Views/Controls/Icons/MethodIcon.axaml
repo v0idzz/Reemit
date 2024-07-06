@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Reemit.Gui.Views.Controls.Icons.MethodIcon">
+    <Viewbox Width="16 " Height="16">
+        <Rectangle Width="16 " Height="16">
+            <Rectangle.Resources>
+                <SolidColorBrush x:Key="canvas" Opacity="0" />
+                <SolidColorBrush x:Key="light-purple-10" Color="#6936aa" Opacity="0.1" />
+                <SolidColorBrush x:Key="light-purple" Color="#6936aa" Opacity="1" />
+                <system:Double x:Key="cls-1">0.75</system:Double>
+            </Rectangle.Resources>
+            <Rectangle.Fill>
+                <DrawingBrush Stretch="None">
+                    <DrawingBrush.Drawing>
+                        <DrawingGroup>
+                            <DrawingGroup>
+                                <GeometryDrawing Brush="{DynamicResource canvas}" Geometry="F1M16,16H0V0H16Z" />
+                            </DrawingGroup>
+                            <DrawingGroup>
+                                <DrawingGroup Opacity="{DynamicResource cls-1}">
+                                    <GeometryDrawing Brush="{DynamicResource light-purple-10}" Geometry="F1M13.5,5.045v7L8,14.545l-5.5-2.5v-7l5.5-3Z" />
+                                    <GeometryDrawing Brush="{DynamicResource light-purple}" Geometry="F1M14,5.045v7l-.293.455L8.207,15H7.793l-5.5-2.5L2,12.045v-7l.261-.439.032.894L3,5.821v5.9l4.5,2.045,0-5.9.3.135h.414l.288-.131,0,5.9L13,11.723v-5.9l.707-.321.032-.894Z" />
+                                </DrawingGroup>
+                                <GeometryDrawing Brush="{DynamicResource light-purple-10}" Geometry="F1M13.5,5.045,8,7.545l-5.5-2.5,5.5-3Z" />
+                                <GeometryDrawing Brush="{DynamicResource light-purple}" Geometry="F1M8.239,1.606H7.761l-5.5,3,.032.894L7.793,8h.414l5.5-2.5.032-.894ZM8,7,3.619,5,8,2.614,12.381,5Z" />
+                            </DrawingGroup>
+                        </DrawingGroup>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+    </Viewbox>
+</UserControl>

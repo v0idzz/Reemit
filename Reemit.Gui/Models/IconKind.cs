@@ -6,5 +6,6 @@ public enum IconKind
     Interface,
     Module,
     Namespace,
-    Structure
+    Structure,
+    Method
 }

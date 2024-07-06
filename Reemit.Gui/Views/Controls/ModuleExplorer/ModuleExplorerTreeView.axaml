@@ -10,20 +10,28 @@
                           x:Class="Reemit.Gui.Views.Controls.ModuleExplorer.ModuleExplorerTreeView">
     <TreeView Name="TreeView">
         <TreeView.DataTemplates>
-            <TreeDataTemplate DataType="moduleExplorerVM:ModuleExplorerModuleNodeViewModel" ItemsSource="{Binding Children}">
+            <TreeDataTemplate DataType="moduleExplorerVM:ModuleExplorerModuleNodeViewModel"
+                              ItemsSource="{Binding Children}">
                 <moduleExplorer:ModuleExplorerModuleNodeView DataContext="{Binding .}" />
             </TreeDataTemplate>
-            <TreeDataTemplate DataType="moduleExplorerVM:ModuleExplorerNamespaceNodeViewModel" ItemsSource="{Binding Children}">
+            <TreeDataTemplate DataType="moduleExplorerVM:ModuleExplorerNamespaceNodeViewModel"
+                              ItemsSource="{Binding Children}">
                 <moduleExplorer:ModuleExplorerNamespaceNodeView DataContext="{Binding .}" />
             </TreeDataTemplate>
-            <DataTemplate DataType="moduleExplorerVM:ModuleExplorerClassNodeViewModel">
+            <TreeDataTemplate DataType="moduleExplorerVM:ModuleExplorerClassNodeViewModel"
+                              ItemsSource="{Binding Children}">
                 <moduleExplorer:ModuleExplorerClassNodeView DataContext="{Binding .}" />
-            </DataTemplate>
-            <DataTemplate DataType="moduleExplorerVM:ModuleExplorerInterfaceNodeViewModel">
+            </TreeDataTemplate>
+            <TreeDataTemplate DataType="moduleExplorerVM:ModuleExplorerInterfaceNodeViewModel"
+                              ItemsSource="{Binding Children}">
                 <moduleExplorer:ModuleExplorerInterfaceNodeView DataContext="{Binding .}" />
-            </DataTemplate>
-            <DataTemplate DataType="moduleExplorerVM:ModuleExplorerStructNodeViewModel">
+            </TreeDataTemplate>
+            <TreeDataTemplate DataType="moduleExplorerVM:ModuleExplorerStructNodeViewModel"
+                              ItemsSource="{Binding Children}">
                 <moduleExplorer:ModuleExplorerStructNodeView DataContext="{Binding .}" />
+            </TreeDataTemplate>
+            <DataTemplate DataType="moduleExplorerVM:ModuleExplorerMethodNodeViewModel">
+                <moduleExplorer:ModuleExplorerMethodNodeView DataContext="{Binding .}" />
             </DataTemplate>
         </TreeView.DataTemplates>
     </TreeView>
