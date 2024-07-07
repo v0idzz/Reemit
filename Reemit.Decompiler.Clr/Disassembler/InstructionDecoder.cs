@@ -16,29 +16,32 @@ public class InstructionDecoder(Stream stream) : IDecoder<Instruction>
         return new Instruction(opcode, operand);
     }
 
-    private byte[] DecodeOperand(OpcodeInfo opcodeInfo) =>
-        opcodeInfo.IsExtended ?
-            DecodeOperand(opcodeInfo.ExtendedOpcode) :
-            DecodeOperand(opcodeInfo.Opcode);
-
-    private byte[] DecodeOperand(Opcode opcode) =>
-        opcode switch
-        {
-            Opcode.beq_s => Read8(),
-            Opcode.call => Read32(),
-            _ => Array.Empty<byte>(),
-        };
-
-    private byte[] DecodeOperand(ExtendedOpcode extendedOpcode)
+    private Operand DecodeOperand(OpcodeInfo opcodeInfo)
     {
-        return [];
+        var operandType = OpcodeOperandTable.GetOperandType(opcodeInfo);
+        byte[] operandValue;
+
+        if (operandType != OperandType.JumpTable)
+        {
+            var operandSize = OperandSizeTable.SizeTable[operandType];
+            operandValue = _binaryReader.ReadBytes(operandSize);
+        }
+        else
+        {
+            operandValue = DecodeJumpTable();
+        }
+
+        return new(operandType, operandValue);
     }
 
-    private byte[] Read8() => _binaryReader.ReadBytes(1);
+    private byte[] DecodeJumpTable()
+    {
+        var jumpCount = _binaryReader.ReadUInt32();
 
-    private byte[] Read16() => _binaryReader.ReadBytes(2);
+        // Technically incorrect given jumpCount is an unsigned int32.
+        var jumps = _binaryReader.ReadBytes((int)(jumpCount * 4));
 
-    private byte[] Read32() => _binaryReader.ReadBytes(4);
-
-    private byte[] DecodeOperand64() => _binaryReader.ReadBytes(8);
+        // Somewhat inefficient, but doing it this way for now.
+        return BitConverter.GetBytes(jumpCount).Concat(jumps).ToArray();
+    }
 }

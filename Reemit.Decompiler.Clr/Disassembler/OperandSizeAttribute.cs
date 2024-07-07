@@ -5,7 +5,7 @@ public class OperandSizeAttribute : Attribute
 {
     public int SizeInBits { get; }
 
-    public int SizeInBytes => SizeInBits * 8;
+    public int SizeInBytes => SizeInBits / 8;
 
     public bool IsFixedLength { get; }
 

@@ -1,6 +1,6 @@
 ﻿namespace Reemit.Decompiler.Clr.Disassembler;
 
-public enum OperandTypeFlags
+public enum OperandType
 {
     [OperandSize(0)]
     None,

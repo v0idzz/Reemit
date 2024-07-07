@@ -4,17 +4,15 @@ public class Instruction
 {
     public OpcodeInfo OpcodeInfo { get; }
 
-    public IReadOnlyCollection<byte> Operand { get; }
+    public Operand Operand { get; }
 
     public Instruction(OpcodeInfo opcodeInfo)
-        : this(opcodeInfo, Array.Empty<byte>())
+        : this(opcodeInfo, Operand.None)
     {
 
     }
 
-    public Instruction(
-        OpcodeInfo opcodeInfo,
-        IReadOnlyCollection<byte> operand)
+    public Instruction(OpcodeInfo opcodeInfo, Operand operand)
     {
         OpcodeInfo = opcodeInfo;
         Operand = operand;
