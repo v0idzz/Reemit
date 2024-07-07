@@ -24,7 +24,8 @@ public class InstructionDecoder(Stream stream) : IDecoder<Instruction>
     private byte[] DecodeOperand(Opcode opcode) =>
         opcode switch
         {
-            Opcode.call => DecodeOperand32(),
+            Opcode.beq_s => Read8(),
+            Opcode.call => Read32(),
             _ => Array.Empty<byte>(),
         };
 
@@ -33,5 +34,11 @@ public class InstructionDecoder(Stream stream) : IDecoder<Instruction>
         return [];
     }
 
-    private byte[] DecodeOperand32() => _binaryReader.ReadBytes(4);
+    private byte[] Read8() => _binaryReader.ReadBytes(1);
+
+    private byte[] Read16() => _binaryReader.ReadBytes(2);
+
+    private byte[] Read32() => _binaryReader.ReadBytes(4);
+
+    private byte[] DecodeOperand64() => _binaryReader.ReadBytes(8);
 }
