@@ -215,7 +215,7 @@ public static class OpcodeOperandTable
                 { ExtendedOpcode.stloc, OperandType.UInt16 },
 
                 // Partition III 4.5
-                { ExtendedOpcode.Initobj, OperandType.MetadataToken },
+                { ExtendedOpcode.initobj, OperandType.MetadataToken },
 
                 // Partition III 4.18
                 { ExtendedOpcode.ldvirtftn, OperandType.MetadataToken },
