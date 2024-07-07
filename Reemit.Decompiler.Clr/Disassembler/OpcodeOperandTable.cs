@@ -2,7 +2,7 @@
 
 namespace Reemit.Decompiler.Clr.Disassembler;
 
-public static class OperandSizeTable
+public static class OpcodeOperandTable
 {
     public static ReadOnlyDictionary<Opcode, OperandTypeFlags> Standard { get; } =
         new ReadOnlyDictionary<Opcode, OperandTypeFlags>(
@@ -105,7 +105,78 @@ public static class OperandSizeTable
                 { Opcode.stloc_s, OperandTypeFlags.UInt8 },
 
                 // Partition III 3.63
-                // Todo: extended
                 { Opcode.@switch, OperandTypeFlags.JumpTable },
+
+                // Partition III 4.1
+                { Opcode.box, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.2
+                { Opcode.callvirt, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.3
+                { Opcode.castclass, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.4
+                { Opcode.cpobj, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.6
+                { Opcode.isinst, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.7
+                { Opcode.ldelem, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.9
+                { Opcode.ldelema, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.10
+                { Opcode.ldfld, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.11
+                { Opcode.ldflda, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.13
+                { Opcode.ldobj, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.14
+                { Opcode.ldsfld, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.15
+                { Opcode.ldsflda, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.16
+                { Opcode.ldstr, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.17
+                { Opcode.ldtoken, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.19
+                { Opcode.mkrefany, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.20
+                { Opcode.newarr, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.21
+                { Opcode.newobj, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.23
+                { Opcode.refanyval, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.26
+                { Opcode.stelem, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.28
+                { Opcode.stfld, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.29
+                { Opcode.stobj, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.30
+                { Opcode.stsfld, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.32
+                { Opcode.unbox, OperandTypeFlags.MetadataToken },
+
+                // Partition III 4.33
+                { Opcode.unbox_any, OperandTypeFlags.MetadataToken },
             });
 }
