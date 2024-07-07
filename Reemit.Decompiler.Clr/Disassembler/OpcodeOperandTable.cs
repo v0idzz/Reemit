@@ -70,11 +70,9 @@ public static class OpcodeOperandTable
                 { Opcode.jmp, OperandType.MetadataToken },
 
                 // Partition III 3.38
-                // Todo: extended
                 { Opcode.ldarg_s, OperandType.UInt8 },
 
                 // Partition III 3.39
-                // Todo: extended
                 { Opcode.ldarga_s, OperandType.UInt8 },
 
                 // Partition III 3.40
@@ -85,11 +83,9 @@ public static class OpcodeOperandTable
                 { Opcode.ldc_i4_s, OperandType.Int8 },
 
                 // Partition III 3.43
-                // Todo: extended
                 { Opcode.ldloc_s, OperandType.UInt8 },
 
                 // Partition III 3.44
-                // Todo: extended
                 { Opcode.ldloca_s, OperandType.UInt8 },
 
                 // Partition III 3.46
@@ -97,14 +93,12 @@ public static class OpcodeOperandTable
                 { Opcode.leave_s, OperandType.Int8 },
 
                 // Partition III 3.61
-                // Todo: extended
                 { Opcode.starg_s, OperandType.UInt8 },
 
                 // Partition III 3.63
-                // Todo: extended
                 { Opcode.stloc_s, OperandType.UInt8 },
 
-                // Partition III 3.63
+                // Partition III 3.66
                 { Opcode.@switch, OperandType.JumpTable },
 
                 // Partition III 4.1

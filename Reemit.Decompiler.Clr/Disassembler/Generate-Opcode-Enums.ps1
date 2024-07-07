@@ -15,15 +15,12 @@ Get-Content $OpcodeFile | %{
 
 function Create-Enum {
     param($EnumName, $OpcodeTable, $IsExtended)
+
     $CS = ""
     $CS += "namespace $Namespace;`r`n"
     $CS += "`r`n"
     $CS += "public enum " + $EnumName + " : byte`r`n"
     $CS += "{`r`n"
-
-    if ($IsExtended) {
-        $CS += "    None = 0x00,`r`n`r`n"
-    }
 
     $OpcodeTable | %{
         $CS += "    [Mnemonic(`"$($_.Mnemonic)`", $($IsExtended.ToString().ToLower()))]`r`n"
@@ -32,6 +29,8 @@ function Create-Enum {
 
     if ($IsExtended -eq $False) {
         $CS += "    Extended = 0xFE,`r`n"
+    } else {
+        $CS += "    None = 0xFF,`r`n"
     }
 
     $CS += "}`r`n"
