@@ -6,6 +6,8 @@ namespace Reemit.Decompiler.Clr.Disassembler;
 
 public static class OperandSizeTable
 {
+    // Todo:
+    // Get rid of duplicate enum field code
     public static IReadOnlyDictionary<OperandType, int> SizeTable { get; } =
         typeof(OperandType)
             .GetFields()
