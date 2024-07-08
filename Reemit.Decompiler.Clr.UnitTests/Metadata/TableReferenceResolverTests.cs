@@ -38,7 +38,7 @@ public class TableReferenceResolverTests
         // Act
         var result = tableReferenceResolver.GetReferencedRows<ReferencingRecord, ReferencedRecord>(
             referencingRecords[0],
-            x => x.ReferencedTableRid);
+            x => x.ReferencedRowRid);
 
         // Assert
         Assert.Equal(referencedRecords[..3], result);
@@ -78,13 +78,49 @@ public class TableReferenceResolverTests
         // Act
         var result = tableReferenceResolver.GetReferencedRows<ReferencingRecord, ReferencedRecord>(
             referencingRecords[1],
-            x => x.ReferencedTableRid);
+            x => x.ReferencedRowRid);
 
         // Assert
         Assert.Equal(referencedRecords[3..], result);
     }
+    
+    [Fact]
+    public void GetReferencedRows_RecordReferencingSameRowAsNextRow_ReturnsEmptyCollection()
+    {
+        // Arrange
+        ReferencingRecord[] referencingRecords =
+        [
+            new ReferencingRecord(1, 1),
+            new ReferencingRecord(2, 1)
+        ];
 
-    private record ReferencingRecord(uint Rid, uint ReferencedTableRid) : IMetadataTableRow<ReferencingRecord>
+        ReferencedRecord[] referencedRecords =
+        [
+            new ReferencedRecord(1),
+            new ReferencedRecord(2)
+        ];
+
+        IrrelevantRecord[] irrelevantRecords = [new IrrelevantRecord(1), new IrrelevantRecord(2)];
+
+        var allTables = new Dictionary<MetadataTableName, IReadOnlyList<IMetadataRecord>>
+        {
+            { ReferencingRecord.TableName, referencingRecords },
+            { ReferencedRecord.TableName, referencedRecords },
+            { IrrelevantRecord.TableName, irrelevantRecords }
+        };
+
+        var tableReferenceResolver = new TableReferenceResolver(allTables);
+
+        // Act
+        var result = tableReferenceResolver.GetReferencedRows<ReferencingRecord, ReferencedRecord>(
+            referencingRecords[0],
+            x => x.ReferencedRowRid);
+
+        // Assert
+        Assert.Empty(result);
+    }
+
+    private record ReferencingRecord(uint Rid, uint ReferencedRowRid) : IMetadataTableRow<ReferencingRecord>
     {
         public static ReferencingRecord Read(uint rid, MetadataTableDataReader reader) =>
             throw new NotImplementedException();
