@@ -74,14 +74,14 @@ public class ClrType
             isValueType,
             stringsHeap.ReadMapped(typeDefRow.TypeName),
             stringsHeap.Read(typeDefRow.TypeNamespace),
-            new Lazy<IReadOnlyList<ClrMethod>>(GetMethods)
+            GetMethods()
         );
 
         return type;
 
         IReadOnlyList<ClrMethod> GetMethods()
         {
-            var methods = context.TableReferenceResolver.GetReferencedRows<TypeDefRow, MethodDefRow>(typeDefRow);
+            var methods = context.TableReferenceResolver.GetReferencedRows<TypeDefRow, MethodDefRow>(typeDefRow, x => x.MethodList);
             return methods.Select(m => ClrMethod.FromMethodDefRow(m, context)).ToArray().AsReadOnly();
         }
     }
