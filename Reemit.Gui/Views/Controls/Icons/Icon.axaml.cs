@@ -46,6 +46,7 @@ public partial class Icon : Panel
             IconKind.Module => new ModuleIcon(),
             IconKind.Namespace => new NamespaceIcon(),
             IconKind.Structure => new StructureIcon(),
+            IconKind.Method => new MethodIcon(),
             _ => throw new ArgumentOutOfRangeException(nameof(Kind), Kind, "Unrecognized icon kind")
         });
             
