@@ -14,6 +14,8 @@ public readonly struct RangeMapped<TValue>(int position, int length, TValue valu
 
     public RangeMapped<TResult> With<TResult>(TResult otherValue) => new(Position, Length, otherValue);
 
+    public RangeMapped<TValue> At(int offset) => new(Position + offset, Length, Value);
+
     public RangeMapped<TResult> Cast<TResult>()
     {
         var v = Value;

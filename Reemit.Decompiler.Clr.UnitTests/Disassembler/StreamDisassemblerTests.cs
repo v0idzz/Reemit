@@ -15,7 +15,7 @@ public class StreamDisassemblerTests
         var disassembler = new StreamDisassembler(stream);
 
         // Act
-        var actualInstructions = disassembler.Disassemble();
+        var actualInstructions = disassembler.Disassemble().Select(x => x.Value);
 
         // Assert
         Assert.Equal(expectedInstructions, actualInstructions, InstructionComparer.Instance);
