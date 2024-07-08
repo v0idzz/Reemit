@@ -74,7 +74,7 @@ public class ClrType
             isValueType,
             stringsHeap.ReadMapped(typeDefRow.TypeName),
             stringsHeap.Read(typeDefRow.TypeNamespace),
-            GetMethods()
+            new Lazy<IReadOnlyList<ClrMethod>>(GetMethods)
         );
 
         return type;
