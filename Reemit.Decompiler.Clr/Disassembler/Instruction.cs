@@ -9,7 +9,6 @@ public class Instruction
     public Instruction(OpcodeInfo opcodeInfo)
         : this(opcodeInfo, Operand.None)
     {
-
     }
 
     public Instruction(OpcodeInfo opcodeInfo, Operand operand)
