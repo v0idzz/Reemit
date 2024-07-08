@@ -29,7 +29,7 @@ public static class CodedIndexExtensions
 
         var firstRowReferencedRid = ridSelector(referencingRow);
 
-        int lastReferencedRowIndex;
+        int lastReferencedRowNo;
 
         if (nextRowInReferencingTable is not null)
         {
@@ -39,18 +39,18 @@ public static class CodedIndexExtensions
                 return Array.Empty<TTarget>();
             }
 
-            lastReferencedRowIndex = (int)ridSelector(nextRowInReferencingTable) - 1;
+            lastReferencedRowNo = (int)ridSelector(nextRowInReferencingTable) - 1;
         }
         else
         {
-            lastReferencedRowIndex = referencedTableRows.Count;
+            lastReferencedRowNo = referencedTableRows.Count;
         }
         
         var firstReferencedRowIndex = (int)firstRowReferencedRid - 1;
 
         return referencedTableRows
             .Skip(firstReferencedRowIndex)
-            .Take(lastReferencedRowIndex - firstReferencedRowIndex)
+            .Take(lastReferencedRowNo - firstReferencedRowIndex)
             .ToArray()
             .AsReadOnly();
     }
