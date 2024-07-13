@@ -81,7 +81,7 @@ public class ClrType
 
         IReadOnlyList<ClrMethod> GetMethods()
         {
-            var methods = context.TableReferenceResolver.GetReferencedRows<TypeDefRow, MethodDefRow>(typeDefRow);
+            var methods = context.TableReferenceResolver.GetReferencedRows<TypeDefRow, MethodDefRow>(typeDefRow, x => x.MethodList);
             return methods.Select(m => ClrMethod.FromMethodDefRow(m, context)).ToArray().AsReadOnly();
         }
     }
