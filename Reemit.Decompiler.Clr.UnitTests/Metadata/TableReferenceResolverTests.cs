@@ -9,31 +9,9 @@ public class TableReferenceResolverTests
     public void GetReferencedRows_RecordReferencingContiguousRunOfRecordsUntilNextRowRun_ReturnsRunOfRecords()
     {
         // Arrange
-        ReferencingRecord[] referencingRecords =
-        [
-            new ReferencingRecord(1, 1),
-            new ReferencingRecord(2, 4)
-        ];
-
-        ReferencedRecord[] referencedRecords =
-        [
-            new ReferencedRecord(1),
-            new ReferencedRecord(2),
-            new ReferencedRecord(3),
-            new ReferencedRecord(4),
-            new ReferencedRecord(5),
-        ];
-
-        IrrelevantRecord[] irrelevantRecords = [new IrrelevantRecord(1), new IrrelevantRecord(2)];
-
-        var allTables = new Dictionary<MetadataTableName, IReadOnlyList<IMetadataRecord>>
-        {
-            { ReferencingRecord.TableName, referencingRecords },
-            { ReferencedRecord.TableName, referencedRecords },
-            { IrrelevantRecord.TableName, irrelevantRecords }
-        };
-
-        var tableReferenceResolver = new TableReferenceResolver(allTables);
+        var (referencingRecords, referencedRecords, tableReferenceResolver) = SetupTestData(
+            new (uint, uint)[] { (1, 1), (2, 4) },
+            [1, 2, 3, 4, 5]);
 
         // Act
         var result = tableReferenceResolver.GetReferencedRows<ReferencingRecord, ReferencedRecord>(
@@ -49,31 +27,9 @@ public class TableReferenceResolverTests
         GetReferencedRows_RecordReferencingContiguousRunOfRecordsUntilEndOfTable_ReturnsRunOfRecordsUntilEndOfTable()
     {
         // Arrange
-        ReferencingRecord[] referencingRecords =
-        [
-            new ReferencingRecord(1, 1),
-            new ReferencingRecord(2, 4)
-        ];
-
-        ReferencedRecord[] referencedRecords =
-        [
-            new ReferencedRecord(1),
-            new ReferencedRecord(2),
-            new ReferencedRecord(3),
-            new ReferencedRecord(4),
-            new ReferencedRecord(5),
-        ];
-
-        IrrelevantRecord[] irrelevantRecords = [new IrrelevantRecord(1), new IrrelevantRecord(2)];
-
-        var allTables = new Dictionary<MetadataTableName, IReadOnlyList<IMetadataRecord>>
-        {
-            { ReferencingRecord.TableName, referencingRecords },
-            { ReferencedRecord.TableName, referencedRecords },
-            { IrrelevantRecord.TableName, irrelevantRecords }
-        };
-
-        var tableReferenceResolver = new TableReferenceResolver(allTables);
+        var (referencingRecords, referencedRecords, tableReferenceResolver) = SetupTestData(
+            new (uint, uint)[] { (1, 1), (2, 4) },
+            [1, 2, 3, 4, 5]);
 
         // Act
         var result = tableReferenceResolver.GetReferencedRows<ReferencingRecord, ReferencedRecord>(
@@ -83,24 +39,37 @@ public class TableReferenceResolverTests
         // Assert
         Assert.Equal(referencedRecords[3..], result);
     }
-    
+
     [Fact]
     public void GetReferencedRows_RecordReferencingSameRowAsNextRow_ReturnsEmptyCollection()
     {
         // Arrange
-        ReferencingRecord[] referencingRecords =
-        [
-            new ReferencingRecord(1, 1),
-            new ReferencingRecord(2, 1)
-        ];
+        var (referencingRecords, _, tableReferenceResolver) = SetupTestData(
+            new (uint, uint)[] { (1, 1), (2, 1) },
+            [1, 2]);
 
-        ReferencedRecord[] referencedRecords =
-        [
-            new ReferencedRecord(1),
-            new ReferencedRecord(2)
-        ];
+        // Act
+        var result = tableReferenceResolver.GetReferencedRows<ReferencingRecord, ReferencedRecord>(
+            referencingRecords[0],
+            x => x.ReferencedRowRid);
 
-        IrrelevantRecord[] irrelevantRecords = [new IrrelevantRecord(1), new IrrelevantRecord(2)];
+        // Assert
+        Assert.Empty(result);
+    }
+
+    private static (ReferencingRecord[], ReferencedRecord[], TableReferenceResolver) SetupTestData(
+        (uint Rid, uint ReferencedRowRid)[] referencingRowsData,
+        uint[] referencedRecordRids)
+    {
+        var referencingRecords = referencingRowsData
+            .Select(data => new ReferencingRecord(data.Rid, data.ReferencedRowRid))
+            .ToArray();
+
+        var referencedRecords = referencedRecordRids
+            .Select(rid => new ReferencedRecord(rid))
+            .ToArray();
+
+        var irrelevantRecords = new[] { new IrrelevantRecord(1), new IrrelevantRecord(2) };
 
         var allTables = new Dictionary<MetadataTableName, IReadOnlyList<IMetadataRecord>>
         {
@@ -111,13 +80,7 @@ public class TableReferenceResolverTests
 
         var tableReferenceResolver = new TableReferenceResolver(allTables);
 
-        // Act
-        var result = tableReferenceResolver.GetReferencedRows<ReferencingRecord, ReferencedRecord>(
-            referencingRecords[0],
-            x => x.ReferencedRowRid);
-
-        // Assert
-        Assert.Empty(result);
+        return (referencingRecords, referencedRecords, tableReferenceResolver);
     }
 
     private record ReferencingRecord(uint Rid, uint ReferencedRowRid) : IMetadataTableRow<ReferencingRecord>
