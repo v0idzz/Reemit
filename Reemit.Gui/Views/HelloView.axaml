@@ -19,13 +19,13 @@
                     <Setter Property="HorizontalAlignment" Value="Center" />
                 </Style>
             </StackPanel.Styles>
-            <TextBlock FontSize="32" FontWeight="Heavy" Foreground="White">Reemit</TextBlock>
-            <TextBlock Foreground="White">Drop a .NET assembly here</TextBlock>
-            <TextBlock Foreground="White" Opacity=".5">or</TextBlock>
-            <Button Foreground="White" HorizontalAlignment="Center" Name="PickFileButton">Pick a file</Button>
+            <TextBlock FontSize="32" FontWeight="Heavy">Reemit</TextBlock>
+            <TextBlock>Drop a .NET assembly here</TextBlock>
+            <TextBlock Opacity=".5">or</TextBlock>
+            <Button Classes="Flat" HorizontalAlignment="Center" Name="PickFileButton">Pick a file</Button>
         </StackPanel>
 
-        <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Name="DropHintText">
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Name="DropHintText">
             Drop the assembly to open it
         </TextBlock>
     </Grid>

@@ -4,57 +4,65 @@
                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                           xmlns:rxui="http://reactiveui.net"
-                          xmlns:reemitHexEditor="clr-namespace:Reemit.Gui.Views.Controls.HexEditor"
                           xmlns:reemitHexEditorVM="clr-namespace:Reemit.Gui.ViewModels.Controls.HexEditor"
-						  xmlns:avaloniaHex="clr-namespace:AvaloniaHex;assembly=AvaloniaHex"
-		                  xmlns:rendering="clr-namespace:AvaloniaHex.Rendering;assembly=AvaloniaHex"
-						  xmlns:vm="using:Reemit.Gui.ViewModels.Controls.HexEditor"
-						  x:Class="Reemit.Gui.Views.Controls.HexEditor.HexEditorView"
+                          xmlns:avaloniaHex="clr-namespace:AvaloniaHex;assembly=AvaloniaHex"
+                          xmlns:rendering="clr-namespace:AvaloniaHex.Rendering;assembly=AvaloniaHex"
+                          xmlns:vm="using:Reemit.Gui.ViewModels.Controls.HexEditor"
+                          x:Class="Reemit.Gui.Views.Controls.HexEditor.HexEditorView"
+                          Margin="0, 2"
                           mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450">
-	<Border BorderBrush="Orange" BorderThickness="4">
-		<Grid>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="30" />
-				<RowDefinition />
-				<RowDefinition Height="30" />
-			</Grid.RowDefinitions>
+    <Grid>
+        <Grid.Styles>
+            <Style Selector="Grid > :is(Control):not(Separator)">
+                <Setter Property="Margin" Value="2, 2" />
+            </Style>
+            <Style Selector="Grid > Separator">
+                <Setter Property="Margin" Value="0, 2" />
+            </Style>
+        </Grid.Styles>
 
-			<StackPanel Orientation="Horizontal">
-				<ComboBox x:Name="HexWidthCombobox">
-					<ComboBox.ItemTemplate>
-						<DataTemplate x:DataType="vm:ByteWidthViewModel">
-							<TextBlock Text="{Binding WidthName}" />
-						</DataTemplate>
-					</ComboBox.ItemTemplate>
-				</ComboBox>
-				<Button x:Name="NavigatePreviousButton" Content="&lt;" />
-				<Button x:Name="NavigateNextButton" Content="&gt;" />
-			</StackPanel>
-			
-			<avaloniaHex:HexEditor
-						x:Name="ReemitHexEditor"
-						Grid.Row="1"
-						BorderThickness="4"
-						BorderBrush="Yellow"
-						FontSize="14"
-						ColumnPadding="30"
-						FontFamily="{StaticResource SourceCodeProFont}">
-				<avaloniaHex:HexEditor.Columns>
-					<rendering:OffsetColumn />
-					<rendering:HexColumn />
-					<rendering:BinaryColumn IsVisible="False" />
-					<rendering:AsciiColumn InvalidCellChar="?" />
-				</avaloniaHex:HexEditor.Columns>
-			</avaloniaHex:HexEditor>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-			<StackPanel Grid.Row="2" Orientation="Horizontal">
-				<Label VerticalAlignment="Center">Offset</Label>
-				<TextBox x:Name="OffsetTextBox" IsReadOnly="True" Width="20" />
-				<Label VerticalAlignment="Center">End</Label>
-				<TextBox x:Name="EndTextBox" IsReadOnly="True" Width="20" />
-				<Label VerticalAlignment="Center">Length</Label>
-				<TextBox x:Name="LengthTextBox" IsReadOnly="True" Width="20" />
-			</StackPanel>
-		</Grid>
-	</Border>
+        <StackPanel Orientation="Horizontal">
+            <ComboBox x:Name="HexWidthCombobox">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ByteWidthViewModel">
+                        <TextBlock Text="{Binding WidthName}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button x:Name="NavigatePreviousButton" Content="&lt;" />
+            <Button x:Name="NavigateNextButton" Content="&gt;" />
+        </StackPanel>
+
+        <avaloniaHex:HexEditor
+            x:Name="ReemitHexEditor"
+            Grid.Row="1"
+            FontSize="14"
+            ColumnPadding="30"
+            FontFamily="{StaticResource SourceCodeProFont}">
+            <avaloniaHex:HexEditor.Columns>
+                <rendering:OffsetColumn />
+                <rendering:HexColumn />
+                <rendering:BinaryColumn IsVisible="False" />
+                <rendering:AsciiColumn InvalidCellChar="?" />
+            </avaloniaHex:HexEditor.Columns>
+        </avaloniaHex:HexEditor>
+
+        <Separator Grid.Row="2" />
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal">
+            <Label VerticalAlignment="Center">Offset</Label>
+            <TextBox x:Name="OffsetTextBox" IsReadOnly="True" MinWidth="20" MaxWidth="100" />
+            <Label VerticalAlignment="Center">End</Label>
+            <TextBox x:Name="EndTextBox" IsReadOnly="True" MinWidth="20" MaxWidth="100" />
+            <Label VerticalAlignment="Center">Length</Label>
+            <TextBox x:Name="LengthTextBox" IsReadOnly="True" MinWidth="20" MaxWidth="100" />
+        </StackPanel>
+    </Grid>
 </rxui:ReactiveUserControl>

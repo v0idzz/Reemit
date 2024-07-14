@@ -2,18 +2,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Reemit.Gui.App"
              xmlns:local="using:Reemit.Gui"
-             RequestedThemeVariant="Dark">
+             xmlns:dockables="clr-namespace:Reemit.Gui.ViewModels.Dockables"
+             RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
     <Application.DataTemplates>
+        <dockables:DockableViewLocator/>
         <local:ViewLocator/>
     </Application.DataTemplates>
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
+                    <Color x:Key="RegionColor">#eeeef2</Color>
                     <Color x:Key="HighlightColor">#FF086F9E</Color>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
+                    <Color x:Key="RegionColor">#2d2d30</Color>
                     <Color x:Key="HighlightColor">#FF119EDA</Color>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
@@ -21,7 +25,13 @@
         <FontFamily x:Key="SourceCodeProFont">avares://Reemit.Gui/Assets#Source Code Pro</FontFamily>
     </Application.Resources>
     <Application.Styles>
-        <FluentTheme />
-        <StyleInclude Source="avares://AvaloniaHex/Themes/Simple/AvaloniaHex.axaml"/>
+        <FluentTheme DensityStyle="Compact">
+            <FluentTheme.Palettes>
+                <ColorPaletteResources x:Key="Dark" RegionColor="#2d2d30" />
+                <ColorPaletteResources x:Key="Light" RegionColor="#eeeef2" />
+            </FluentTheme.Palettes>
+        </FluentTheme>
+        <DockFluentTheme />
+        <StyleInclude Source="avares://AvaloniaHex/Themes/Simple/AvaloniaHex.axaml" />
     </Application.Styles>
 </Application>
