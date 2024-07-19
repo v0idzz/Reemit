@@ -234,7 +234,5 @@ public static class OpcodeOperandTable
         TOpcode opcode) =>
         // Assuming no entry means no operand for now. However, this behavior
         // may need to be changed to ensure we reject invalid opcodes.
-        table.TryGetValue(opcode, out var value) ?
-            value :
-            OperandType.None;
+        table.GetValueOrDefault(opcode);
 }
