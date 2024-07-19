@@ -48,6 +48,22 @@ public sealed class RangeMappedTests
         Assert.IsType<RangeMapped<uint>>(actualRangeMapped);
     }
 
+    [Fact]
+    public void At_Called_ConstructsWithNewPosition()
+    {
+        // Arrange
+        var rangeMapped = new RangeMapped<int>(0x52, 0x30, 0x1592);
+
+        // Act
+        var actualRangeMapped = rangeMapped.At(0x4);
+
+        // Assert
+        Assert.Equal(0x1592, actualRangeMapped.Value);
+        Assert.IsType<int>(actualRangeMapped.Value);
+        Assert.IsType<RangeMapped<int>>(actualRangeMapped);
+        Assert.Equal(0x56, actualRangeMapped.Position);
+    }
+
     private void AssertLengthAndPosition(IRangeMapped expected, IRangeMapped actual)
     {
         Assert.Equal(expected.Length, actual.Length);

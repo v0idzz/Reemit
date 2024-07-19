@@ -2,17 +2,15 @@
 
 namespace Reemit.Common;
 
-public readonly struct RangeMapped<TValue>(int position, int length, TValue value) : IRangeMapped
+public readonly record struct RangeMapped<TValue>(int Position, int Length, TValue Value) : IRangeMapped
 {
-    public int Position { get; } = position;
-    public int Length { get; } = length;
-    public TValue Value { get; } = value;
-    
     public int End => Position + Length;
 
     public static implicit operator TValue(RangeMapped<TValue> rangeMapped) => rangeMapped.Value;
 
     public RangeMapped<TResult> With<TResult>(TResult otherValue) => new(Position, Length, otherValue);
+
+    public RangeMapped<TValue> At(int offset) => this with { Position = Position + offset };
 
     public RangeMapped<TResult> Cast<TResult>()
     {
