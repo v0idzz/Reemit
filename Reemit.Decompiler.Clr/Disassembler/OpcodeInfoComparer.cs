@@ -4,7 +4,7 @@ namespace Reemit.Decompiler.Clr.Disassembler;
 
 public class OpcodeInfoComparer : IEqualityComparer<OpcodeInfo>
 {
-    public static OpcodeInfoComparer Instance = new OpcodeInfoComparer();
+    public static readonly OpcodeInfoComparer Instance = new OpcodeInfoComparer();
 
     public bool Equals(OpcodeInfo? x, OpcodeInfo? y) =>
         x?.Opcode == y?.Opcode && x?.ExtendedOpcode == y?.ExtendedOpcode;

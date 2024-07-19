@@ -4,7 +4,7 @@ namespace Reemit.Decompiler.Clr.Disassembler;
 
 public class InstructionComparer : IEqualityComparer<Instruction>
 {
-    public static InstructionComparer Instance = new InstructionComparer();
+    public static readonly InstructionComparer Instance = new InstructionComparer();
 
     public bool Equals(Instruction? x, Instruction? y) =>
         OpcodeInfoComparer.Instance.Equals(x?.OpcodeInfo, y?.OpcodeInfo) &&

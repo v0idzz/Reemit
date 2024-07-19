@@ -4,7 +4,7 @@ namespace Reemit.Decompiler.Clr.Disassembler;
 
 public class OperandComparer : IEqualityComparer<Operand>
 {
-    public static OperandComparer Instance = new OperandComparer();
+    public static readonly OperandComparer Instance = new OperandComparer();
 
     public bool Equals(Operand? x, Operand? y) =>
         x == null && y == null ?
