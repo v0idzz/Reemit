@@ -9,7 +9,7 @@ public class OpcodeInfoComparer : IEqualityComparer<OpcodeInfo>
     public bool Equals(OpcodeInfo? x, OpcodeInfo? y) =>
         x?.Opcode == y?.Opcode && x?.ExtendedOpcode == y?.ExtendedOpcode;
 
-    public int GetHashCode([DisallowNull] OpcodeInfo obj)
+    public int GetHashCode(OpcodeInfo obj)
     {
         var hc = new HashCode();
         hc.Add(obj.Opcode);

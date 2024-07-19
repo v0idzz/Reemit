@@ -10,7 +10,7 @@ public class InstructionComparer : IEqualityComparer<Instruction>
         OpcodeInfoComparer.Instance.Equals(x?.OpcodeInfo, y?.OpcodeInfo) &&
         OperandComparer.Instance.Equals(x?.Operand, y?.Operand);
 
-    public int GetHashCode([DisallowNull] Instruction obj)
+    public int GetHashCode(Instruction obj)
     {
         var hc = new HashCode();
         hc.Add(obj.Operand);

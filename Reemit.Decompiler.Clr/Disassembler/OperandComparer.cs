@@ -13,7 +13,7 @@ public class OperandComparer : IEqualityComparer<Operand>
             false :
             x.OperandValue.SequenceEqual(y.OperandValue);
 
-    public int GetHashCode([DisallowNull] Operand obj)
+    public int GetHashCode(Operand obj)
     {
         var hc = new HashCode();
         hc.Add(obj.OperandType);
