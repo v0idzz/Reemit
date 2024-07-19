@@ -1,8 +1,6 @@
 ﻿namespace Reemit.Decompiler.Clr.Disassembler;
 
-// Todo:
-// User struct instead?
-public class OpcodeInfo
+public readonly struct OpcodeInfo
 {
     public Opcode Opcode { get; }
 

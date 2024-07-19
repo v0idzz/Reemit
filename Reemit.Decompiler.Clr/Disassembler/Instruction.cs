@@ -1,6 +1,6 @@
 ﻿namespace Reemit.Decompiler.Clr.Disassembler;
 
-public class Instruction
+public readonly struct Instruction
 {
     public OpcodeInfo OpcodeInfo { get; }
 
