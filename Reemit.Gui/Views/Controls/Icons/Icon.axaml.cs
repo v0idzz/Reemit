@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Reemit.Gui.Common;
@@ -79,21 +78,22 @@ public partial class Icon : Panel
             _ => throw new ArgumentOutOfRangeException(nameof(Kind), Kind, "Unrecognized icon kind")
         });
 
-        AdjustIconLuminosity(icon);
+        AdjustControlBrushesLuminosity(icon);
 
         Children.Clear();
         Children.Add(icon);
     }
 
-    private void AdjustIconLuminosity(Control icon)
+    private void AdjustControlBrushesLuminosity(Control control)
     {
-        // This looks hack-ish, but works for all the VS icons we currently have.
-        if (icon.GetLogicalChildren().FirstOrDefault()?.GetLogicalChildren().FirstOrDefault() is Rectangle iconRectangle)
+        foreach (var brush in control.Resources.Values.OfType<SolidColorBrush>())
         {
-            foreach (var brush in iconRectangle.Resources.Values.OfType<SolidColorBrush>())
-            {
-                brush.Color = brush.Color.TransformLuminosity(_themeLuminosity);
-            }
+            brush.Color = brush.Color.TransformLuminosity(_themeLuminosity);
+        }
+
+        foreach (var x in control.GetLogicalChildren().OfType<Control>())
+        {
+            AdjustControlBrushesLuminosity(x);
         }
     }
 }

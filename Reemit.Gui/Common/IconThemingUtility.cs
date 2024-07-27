@@ -15,12 +15,9 @@ public static class IconThemingUtility
             luminosity = 1.0 - luminosity;
         }
 
-        if (luminosity < haloLuminosity)
-        {
-            return backgroundLuminosity * luminosity / haloLuminosity;
-        }
-
-        return (1.0 - backgroundLuminosity) * (luminosity - 1.0) / (1.0 - haloLuminosity) + 1.0;
+        return luminosity < haloLuminosity
+            ? backgroundLuminosity * luminosity / haloLuminosity
+            : (1.0 - backgroundLuminosity) * (luminosity - 1.0) / (1.0 - haloLuminosity) + 1.0;
     }
 
     public static Color TransformLuminosity(this Color color, double backgroundLuminosity)
