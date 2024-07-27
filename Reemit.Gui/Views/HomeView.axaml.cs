@@ -13,10 +13,7 @@ public partial class HomeView : ReactiveUserControl<HomeViewModel>
 
         this.WhenActivated(disposable =>
         {
-            this.OneWayBind(ViewModel, vm => vm.ModuleExplorerTreeViewModel, v => v.ModuleExplorerTreeView.ViewModel)
-                .DisposeWith(disposable);
-
-            this.OneWayBind(ViewModel, vm => vm.HexEditorViewModel, v => v.HexEditorView.ViewModel)
+            this.OneWayBind(ViewModel, vm => vm.Layout, v => v.RootDock.Layout)
                 .DisposeWith(disposable);
         });
     }

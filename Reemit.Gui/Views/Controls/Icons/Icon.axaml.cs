@@ -1,6 +1,10 @@
 using System;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.LogicalTree;
+using Avalonia.Media;
+using Reemit.Gui.Common;
 using Reemit.Gui.Models;
 
 namespace Reemit.Gui.Views.Controls.Icons;
@@ -15,6 +19,8 @@ public partial class Icon : Panel
 
     private IconKind _kind = IconKind.Class;
 
+    private double _themeLuminosity;
+
     public IconKind Kind
     {
         get => _kind;
@@ -24,6 +30,14 @@ public partial class Icon : Panel
     public Icon()
     {
         InitializeComponent();
+
+        Update();
+        ActualThemeVariantChanged += (_, _) => Update();
+    }
+
+    private void Update()
+    {
+        UpdateThemeLuminosity();
         UpdateIcon();
     }
 
@@ -35,6 +49,20 @@ public partial class Icon : Panel
         }
 
         base.OnPropertyChanged(change);
+    }
+    
+    private void UpdateThemeLuminosity()
+    {
+        const string bgColorResourceKey = "SystemRegionColor";
+        Application.Current!.TryGetResource(bgColorResourceKey, Application.Current.ActualThemeVariant,
+            out var resource);
+
+        if (resource is not Color bgColor)
+        {
+            throw new ApplicationException("Couldn't get theme background color required to theme the icon");
+        }
+
+        _themeLuminosity = bgColor.ToHsl().L;
     }
 
     private void UpdateIcon()
@@ -49,8 +77,23 @@ public partial class Icon : Panel
             IconKind.Method => new MethodIcon(),
             _ => throw new ArgumentOutOfRangeException(nameof(Kind), Kind, "Unrecognized icon kind")
         });
-            
+
+        AdjustControlBrushesLuminosity(icon);
+
         Children.Clear();
         Children.Add(icon);
+    }
+
+    private void AdjustControlBrushesLuminosity(Control control)
+    {
+        foreach (var brush in control.Resources.Values.OfType<SolidColorBrush>())
+        {
+            brush.Color = brush.Color.TransformLuminosity(_themeLuminosity);
+        }
+
+        foreach (var x in control.GetLogicalChildren().OfType<Control>())
+        {
+            AdjustControlBrushesLuminosity(x);
+        }
     }
 }

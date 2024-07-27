@@ -8,6 +8,6 @@
              x:Class="Reemit.Gui.Views.Controls.ModuleExplorer.ModuleExplorerNodeView">
     <StackPanel Orientation="Horizontal" Spacing="8">
         <icons:Icon Kind="{Binding IconKind}" />
-        <TextBlock Name="ModuleNameTextBlock" Foreground="White" Text="{Binding Text}" />
+        <TextBlock Name="ModuleNameTextBlock" Text="{Binding Text}" />
     </StackPanel>
 </UserControl>

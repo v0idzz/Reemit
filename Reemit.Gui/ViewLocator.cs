@@ -1,16 +1,15 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using Reemit.Gui.ViewModels;
 
 namespace Reemit.Gui;
 
 public class ViewLocator : IDataTemplate
 {
-    public Control Build(object data)
+    public Control Build(object? data)
     {
-        var name = data.GetType().FullName!.Replace("ViewModel", "View");
-        var type = Type.GetType(name);
+        var name = data?.GetType().FullName?.Replace("ViewModel", "View");
+        var type = Type.GetType(name ?? throw new InvalidOperationException());
 
         if (type != null)
         {
@@ -20,8 +19,5 @@ public class ViewLocator : IDataTemplate
         return new TextBlock { Text = "Not Found: " + name };
     }
 
-    public bool Match(object data)
-    {
-        return data is ViewModelBase;
-    }
+    public bool Match(object? data) => data?.GetType().FullName?.EndsWith("ViewModel") == true;
 }
