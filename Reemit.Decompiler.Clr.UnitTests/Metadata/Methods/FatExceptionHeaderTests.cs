@@ -25,7 +25,7 @@ public class FatExceptionHeaderTests
         using var reader = new BinaryReader(memoryStream);
         
         // Act
-        var header = FatExceptionHeader.Read(new SharedReader(0, reader, new object()));
+        var header = FatExceptionHeader.Read(new SharedReader(0, reader));
         
         // Assert
         Assert.Equal(CorILMethodSectionFlags.EHTable | CorILMethodSectionFlags.FatFormat, header.Kind);

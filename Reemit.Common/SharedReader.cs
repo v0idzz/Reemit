@@ -1,7 +1,6 @@
 namespace Reemit.Common;
 
-// TODO: Consider allowing SharedReader to be used lock-free
-public class SharedReader(int startOffset, BinaryReader reader, object lockObj) : BinaryReader(reader.BaseStream)
+public class SharedReader(int startOffset, BinaryReader reader) : BinaryReader(reader.BaseStream)
 {
     public class SharedReaderRangeScope(List<SharedReaderRangeScope> owner, int position) : IDisposable
     {
@@ -16,11 +15,9 @@ public class SharedReader(int startOffset, BinaryReader reader, object lockObj) 
 
     private readonly int _startOffset = startOffset;
 
-    private readonly ThreadLocal<List<SharedReaderRangeScope>> _rangeScopes = new(() => new());
+    private readonly List<SharedReaderRangeScope> _rangeScopes = new();
 
     public int Offset { get; private set; } = startOffset;
-
-    public object SynchronizationObject => lockObj;
 
     public int RelativeOffset => Offset - _startOffset;
 
@@ -30,30 +27,26 @@ public class SharedReader(int startOffset, BinaryReader reader, object lockObj) 
 
     private RangeMapped<T> ReadMapped<T>(Func<T> readFunc)
     {
-        lock (lockObj)
+        var offsetCopy = BaseStream.Position;
+        var startOffset = Offset;
+        BaseStream.Seek(Offset, SeekOrigin.Begin);
+        var value = readFunc();
+        var size = (int)(BaseStream.Position - Offset);
+        BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
+        Offset += size;
+
+        foreach (var scope in _rangeScopes)
         {
-            var offsetCopy = BaseStream.Position;
-            var startOffset = Offset;
-            BaseStream.Seek(Offset, SeekOrigin.Begin);
-            var value = readFunc();
-            var size = (int)(BaseStream.Position - Offset);
-            BaseStream.Seek(offsetCopy, SeekOrigin.Begin);
-            Offset += size;
-
-            foreach (var scope in _rangeScopes.Value!)
-            {
-                scope.Length += size;
-            }
-
-            return new RangeMapped<T>(startOffset, size, value);
+            scope.Length += size;
         }
+
+        return new RangeMapped<T>(startOffset, size, value);
     }
 
     public SharedReaderRangeScope CreateRangeScope()
     {
-        var owner = _rangeScopes.Value!;
-        var scope = new SharedReaderRangeScope(owner, Offset);
-        owner.Add(scope);
+        var scope = new SharedReaderRangeScope(_rangeScopes, Offset);
+        _rangeScopes.Add(scope);
 
         return scope;
     }
@@ -94,9 +87,9 @@ public class SharedReader(int startOffset, BinaryReader reader, object lockObj) 
 
     public RangeMapped<byte> ReadMappedByte() => ReadMapped(base.ReadByte);
 
-    public SharedReader CreateDerivedAtRelativeToStartOffset(uint relativeOffset) => new((int)(_startOffset + relativeOffset), this, lockObj);
+    public SharedReader CreateDerivedAtRelativeToStartOffset(uint relativeOffset) => new((int)(_startOffset + relativeOffset), this);
     
-    public SharedReader CreateDerivedAtRelativeToCurrentOffset(uint relativeOffset) => new((int)(Offset + relativeOffset), this, lockObj);
+    public SharedReader CreateDerivedAtRelativeToCurrentOffset(uint relativeOffset) => new((int)(Offset + relativeOffset), this);
 
     public override int Read(byte[] buffer, int index, int count) => throw new NotImplementedException();
 

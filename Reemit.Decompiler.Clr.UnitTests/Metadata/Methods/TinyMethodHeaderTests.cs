@@ -23,7 +23,7 @@ public class TinyMethodHeaderTests
         using var reader = new BinaryReader(memoryStream);
 
         // Act
-        var header = TinyMethodHeader.Read(new SharedReader(0, reader, new object()));
+        var header = TinyMethodHeader.Read(new SharedReader(0, reader));
         
         // Assert
         Assert.Equal(8u, header.CodeSize);

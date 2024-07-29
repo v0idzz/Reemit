@@ -14,7 +14,7 @@ public sealed class SharedReaderTests
         using var stream = new MemoryStream(bytes);
         using var binaryReader = new BinaryReader(stream);
         const int sharedReaderOffset = 1;
-        using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader, new object());
+        using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader);
         const int readBytesCount = 2;
         
         // Act
@@ -35,7 +35,7 @@ public sealed class SharedReaderTests
         using var stream = new MemoryStream(bytes);
         using var binaryReader = new BinaryReader(stream);
         const int sharedReaderOffset = 1;
-        using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader, new object());
+        using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader);
         const int readBytesCount = 0x100;
 
         // Act
@@ -80,7 +80,7 @@ public sealed class SharedReaderTests
 
         using var stream = new MemoryStream(bytes);
         using var binaryReader = new BinaryReader(stream);
-        using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader, new object());
+        using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader);
         var actualUnmanagedValues = new T[expectedUnmanagedValues.Length];
         var isRangeMapped = false;
         var expectedPositions = new int[expectedUnmanagedValues.Length];
@@ -184,7 +184,7 @@ public sealed class SharedReaderTests
         // Arrange
         using var stream = new MemoryStream();
         using var binaryReader = new BinaryReader(stream);
-        using var sharedReader = new SharedReader(0, binaryReader, new object());
+        using var sharedReader = new SharedReader(0, binaryReader);
 
         // Act
         var act = () => readAction(sharedReader);
@@ -212,29 +212,13 @@ public sealed class SharedReaderTests
     private static object[] CreateNotImplementedTestCase(Action<SharedReader> readAction) => [readAction];
 
     [Fact]
-    public void SynchronizationObject_Get_EqualsConstructorArgument()
-    {
-        // Arrange
-        using var stream = new MemoryStream();
-        using var binaryReader = new BinaryReader(stream);
-        var syncObject = new object();
-        using var sharedReader = new SharedReader(1, binaryReader, syncObject);
-
-        // Act
-        var actualSyncObject = sharedReader.SynchronizationObject;
-
-        // Assert
-        Assert.Equal(syncObject, actualSyncObject);
-    }
-
-    [Fact]
     public void CreateDerivedAtRelativeToStartOffset_Called_RelativeToStartOffsetSet()
     {
         // Arrange
         using var stream = new MemoryStream();
         using var binaryReader = new BinaryReader(stream);
         const int sharedReaderOffset = 1;
-        using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader, new object());
+        using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader);
         const int derivedSharedReaderOffset = 2;
 
         // Act
@@ -255,7 +239,7 @@ public sealed class SharedReaderTests
         using var stream = new MemoryStream(bytes);
         using var binaryReader = new BinaryReader(stream);
         const int sharedReaderOffset = 1;
-        using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader, new object());
+        using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader);
         sharedReader.ReadByte();
         const int readDataSize = sizeof(byte);
         const int derivedSharedReaderOffset = 2;
