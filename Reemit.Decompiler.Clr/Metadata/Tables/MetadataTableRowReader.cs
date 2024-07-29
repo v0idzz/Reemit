@@ -6,8 +6,7 @@ public class MetadataTableDataReader(
     BinaryReader reader,
     HeapSizes heapSizes,
     IReadOnlyDictionary<MetadataTableName, uint> rowsCounts) : SharedReader(
-    (reader as SharedReader)?.Offset ?? (int)reader.BaseStream.Position, reader,
-    (reader as SharedReader)?.SynchronizationObject ?? new object())
+    (reader as SharedReader)?.Offset ?? (int)reader.BaseStream.Position, reader)
 {
     public uint ReadStringRid() => ReadRid(HeapSizes.StringStream);
 

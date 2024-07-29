@@ -10,7 +10,7 @@ public sealed class SharedReaderScopeTests
         using var stream = new MemoryStream(bytes);
         using var binaryReader = new BinaryReader(stream);
         const int sharedReaderOffset = 1;
-        using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader, new object());
+        using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader);
         const int readBytesCount = 2;
         byte[] actualBytes;
         RangeMapped<byte[]> actualRangeMappedBytes;
@@ -41,7 +41,7 @@ public sealed class SharedReaderScopeTests
         using var stream = new MemoryStream(bytes);
         using var binaryReader = new BinaryReader(stream);
         const int sharedReaderOffset = 1;
-        using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader, new object());
+        using var sharedReader = new SharedReader(sharedReaderOffset, binaryReader);
         const int readBytesCount = 2;
         byte[] actualOuterBytes = new byte[readBytesCount];
         RangeMapped<byte[]> actualInnerBytes, actualRangeMappedOuterBytes, actualRangeMappedInnerBytes;

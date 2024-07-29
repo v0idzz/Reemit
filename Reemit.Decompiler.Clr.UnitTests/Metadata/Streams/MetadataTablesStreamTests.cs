@@ -12,7 +12,7 @@ public class MetadataTablesStreamTests
         // Arrange
         await using var fileStream = File.OpenRead("Resources/metadatatablesstream.bin");
         using var reader = new BinaryReader(fileStream);
-        using var sharedReader = new SharedReader(0, reader, new());
+        using var sharedReader = new SharedReader(0, reader);
 
         // Act
         var header = new MetadataTablesStream(sharedReader);

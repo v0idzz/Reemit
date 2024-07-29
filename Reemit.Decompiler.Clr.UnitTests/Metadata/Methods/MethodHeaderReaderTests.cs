@@ -23,7 +23,7 @@ public class MethodHeaderReaderTests
         using var reader = new BinaryReader(memoryStream);
 
         // Act
-        var header = MethodHeaderReader.ReadMethodHeader(new SharedReader(0, reader, new object()));
+        var header = MethodHeaderReader.ReadMethodHeader(new SharedReader(0, reader));
 
         // Assert
         Assert.IsType<TinyMethodHeader>(header);
@@ -50,7 +50,7 @@ public class MethodHeaderReaderTests
         using var reader = new BinaryReader(memoryStream);
 
         // Act
-        var header = MethodHeaderReader.ReadMethodHeader(new SharedReader(0, reader, new object()));
+        var header = MethodHeaderReader.ReadMethodHeader(new SharedReader(0, reader));
 
         // Assert
         Assert.IsType<FatMethodHeader>(header);

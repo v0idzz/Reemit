@@ -28,7 +28,7 @@ public class FatMethodHeaderTests
 
         // Act
         var header =
-            FatMethodHeader.Read(new SharedReader(0, reader, new object()));
+            FatMethodHeader.Read(new SharedReader(0, reader));
 
         // Assert
         Assert.True(header.Flags.HasFlag(CorILMethodFlags.InitLocals));

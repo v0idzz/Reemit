@@ -33,7 +33,7 @@ public class FatExceptionClauseTests
         using var reader = new BinaryReader(memoryStream);
 
         // Act
-        var clause = FatExceptionClause.Read(new SharedReader(0, reader, new object()));
+        var clause = FatExceptionClause.Read(new SharedReader(0, reader));
         
         // Assert
         Assert.Equal(CorILExceptionClauses.Exception, clause.Flags);

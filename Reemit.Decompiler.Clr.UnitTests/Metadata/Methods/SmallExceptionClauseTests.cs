@@ -33,7 +33,7 @@ public class SmallExceptionClauseTests
         using var reader = new BinaryReader(memoryStream);
 
         // Act
-        var clause = SmallExceptionClause.Read(new SharedReader(0, reader, new object()));
+        var clause = SmallExceptionClause.Read(new SharedReader(0, reader));
         
         // Assert
         Assert.Equal(CorILExceptionClauses.Exception, clause.Flags);

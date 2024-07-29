@@ -32,7 +32,7 @@ public class MethodDataSectionsReaderTests
         using var reader = new BinaryReader(memoryStream);
 
         // Act
-        var sections = MethodDataSectionsReader.ReadMethodDataSections(new SharedReader(2, reader, new object()))
+        var sections = MethodDataSectionsReader.ReadMethodDataSections(new SharedReader(2, reader))
             .ToArray();
 
         // Assert

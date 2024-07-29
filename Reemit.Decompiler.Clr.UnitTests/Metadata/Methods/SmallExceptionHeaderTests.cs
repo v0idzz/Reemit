@@ -29,7 +29,7 @@ public class SmallExceptionHeaderTests
         using var reader = new BinaryReader(memoryStream);
 
         // Act
-        var header = SmallExceptionHeader.Read(new SharedReader(0, reader, new object()));
+        var header = SmallExceptionHeader.Read(new SharedReader(0, reader));
 
         // Assert
         Assert.Equal(CorILMethodSectionFlags.EHTable, header.Kind);

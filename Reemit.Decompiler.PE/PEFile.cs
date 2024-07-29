@@ -13,52 +13,46 @@ public class PEFile : IDisposable
 
     private readonly BinaryReader _binaryReader;
 
-    private readonly object _readLock = new();
-    
     public PEFile(BinaryReader binaryReader)
     {
         _binaryReader = binaryReader;
+        MSDosHeader = new MSDosHeader(binaryReader);
+        CoffHeader = new CoffHeader(binaryReader);
 
-        lock (_readLock)
+        var optionalHeaderMagic = (OptionalHeaderMagic)binaryReader.ReadUInt16();
+        binaryReader.BaseStream.Seek(-sizeof(OptionalHeaderMagic), SeekOrigin.Current);
+
+        if (CoffHeader.SizeOfOptionalHeader == 0)
         {
-            MSDosHeader = new MSDosHeader(binaryReader);
-            CoffHeader = new CoffHeader(binaryReader);
-
-            var optionalHeaderMagic = (OptionalHeaderMagic)binaryReader.ReadUInt16();
-            binaryReader.BaseStream.Seek(-sizeof(OptionalHeaderMagic), SeekOrigin.Current);
-
-            if (CoffHeader.SizeOfOptionalHeader == 0)
+            OptionalHeader = null;
+        }
+        else
+        {
+            OptionalHeaderBase optionalHeader = optionalHeaderMagic switch
             {
-                OptionalHeader = null;
-            }
-            else
-            {
-                OptionalHeaderBase optionalHeader = optionalHeaderMagic switch
-                {
-                    OptionalHeaderMagic.PE32 => new PE32OptionalHeader(binaryReader),
-                    OptionalHeaderMagic.PE32Plus => new PE32PlusOptionalHeader(binaryReader),
-                    _ => throw new BadImageFormatException("Unrecognized Optional Header Magic value in PE header.")
-                };
-
-                OptionalHeader = optionalHeader;
-            }
-
-            var sectionHeaders = new SectionHeader[CoffHeader.NumberOfSections];
-
-            for (var i = 0; i < CoffHeader.NumberOfSections; i++)
-            {
-                sectionHeaders[i] = new SectionHeader(binaryReader);
-            }
-
-            SectionHeaders = sectionHeaders.AsReadOnly();
-
-            DataDirectories = OptionalHeader switch
-            {
-                PE32OptionalHeader h => h.WindowsSpecificFields.DataDirectories,
-                PE32PlusOptionalHeader h => h.WindowsSpecificFields.DataDirectories,
+                OptionalHeaderMagic.PE32 => new PE32OptionalHeader(binaryReader),
+                OptionalHeaderMagic.PE32Plus => new PE32PlusOptionalHeader(binaryReader),
                 _ => throw new BadImageFormatException("Unrecognized Optional Header Magic value in PE header.")
             };
+
+            OptionalHeader = optionalHeader;
         }
+
+        var sectionHeaders = new SectionHeader[CoffHeader.NumberOfSections];
+
+        for (var i = 0; i < CoffHeader.NumberOfSections; i++)
+        {
+            sectionHeaders[i] = new SectionHeader(binaryReader);
+        }
+
+        SectionHeaders = sectionHeaders.AsReadOnly();
+
+        DataDirectories = OptionalHeader switch
+        {
+            PE32OptionalHeader h => h.WindowsSpecificFields.DataDirectories,
+            PE32PlusOptionalHeader h => h.WindowsSpecificFields.DataDirectories,
+            _ => throw new BadImageFormatException("Unrecognized Optional Header Magic value in PE header.")
+        };
     }
 
     public uint GetFileOffset(uint rva)
@@ -77,17 +71,13 @@ public class PEFile : IDisposable
     {
         var fileOffset = GetFileOffset(directory.VirtualAddress);
         var structure = new T();
-
-        lock (_readLock)
-        {
-            _binaryReader.BaseStream.Seek(fileOffset, SeekOrigin.Begin);
-            structure.Read(_binaryReader);
-        }
+        _binaryReader.BaseStream.Seek(fileOffset, SeekOrigin.Begin);
+        structure.Read(_binaryReader);
 
         return structure;
     }
 
-    public SharedReader CreateReaderAt(uint offset) => new((int)offset, _binaryReader, _readLock);
+    public SharedReader CreateReaderAt(uint offset) => new((int)offset, _binaryReader);
 
     public void Dispose()
     {
