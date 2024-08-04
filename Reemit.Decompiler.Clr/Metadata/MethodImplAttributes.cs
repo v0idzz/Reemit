@@ -16,6 +16,7 @@ public enum MethodImplAttributes : ushort
     // it marked as such anyway.
     MaxMethodImplVal = 0xffff,
     NoOptimization = 0x0040,
+    AggressiveInlining = 0x0100,
 
     // Omitting MaxMethodImplVal from mask
     Mask =
@@ -24,5 +25,6 @@ public enum MethodImplAttributes : ushort
         InternalCall |
         Synchronized |
         NoInlining |
-        NoOptimization
+        NoOptimization |
+        AggressiveInlining
 }

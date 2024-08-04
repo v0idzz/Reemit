@@ -45,6 +45,7 @@ public class MethodDefRow(
     public bool IsNoInlining => MethodImpl.HasFlag(MethodImplAttributes.NoInlining);
     public bool IsNoOptimization => MethodImpl.HasFlag(MethodImplAttributes.NoOptimization);
     public bool IsMaxMethodImplVal => (MethodImplAttributes)ImplFlags == MethodImplAttributes.MaxMethodImplVal;
+    public bool IsAggressiveInlining => MethodImpl.HasFlag(MethodImplAttributes.AggressiveInlining);
 
     public bool IsStatic => MethodFlags.HasFlag(MethodAttributes.Static);
     public bool IsFinal => MethodFlags.HasFlag(MethodAttributes.Final);
@@ -144,10 +145,10 @@ public class MethodDefRow(
     }
 
     private static BadImageFormatException CreateWordFlagsImageException(string flagsName, ushort flagsWord) =>
-        throw new BadImageFormatException(
+        new BadImageFormatException(
             $"Invalid {flagsName}: {string.Format("{0:x4}", flagsWord)}.");
 
     private static BadImageFormatException CreateInvalidFlagsImageException(params Enum[] flags) =>
-        throw new BadImageFormatException(
+        new BadImageFormatException(
             $"Invalid flags: {string.Join(", ", flags.Select(x => x.ToString()))}.");
 }
