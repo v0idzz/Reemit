@@ -212,6 +212,7 @@ public class MethodDefRowTests
         bool expectedIsNoInlining,
         bool expectedIsNoOptimization,
         bool expectedIsMaxMethodImplVal,
+        bool expectedIsAggressiveInlining,
         bool expectedIsStatic,
         bool expectedIsFinal,
         bool expectedIsVirtual,
@@ -253,6 +254,7 @@ public class MethodDefRowTests
         Assert.Equal(expectedIsNoInlining, row.IsNoInlining);
         Assert.Equal(expectedIsNoOptimization, row.IsNoOptimization);
         Assert.Equal(expectedIsMaxMethodImplVal, row.IsMaxMethodImplVal);
+        Assert.Equal(expectedIsAggressiveInlining, row.IsAggressiveInlining);
         Assert.Equal(expectedIsStatic, row.IsStatic);
         Assert.Equal(expectedIsFinal, row.IsFinal);
         Assert.Equal(expectedIsVirtual, row.IsVirtual);
@@ -304,6 +306,7 @@ public class MethodDefRowTests
                 expectedIsNoInlining: false,
                 expectedIsNoOptimization: false,
                 expectedIsMaxMethodImplVal: false,
+                expectedIsAggressiveInlining: false,
                 expectedIsStatic: true,
                 expectedIsFinal: false,
                 expectedIsVirtual: false,
@@ -350,6 +353,54 @@ public class MethodDefRowTests
                 expectedIsNoInlining: false,
                 expectedIsNoOptimization: false,
                 expectedIsMaxMethodImplVal: false,
+                expectedIsAggressiveInlining: false,
+                expectedIsStatic: false,
+                expectedIsFinal: false,
+                expectedIsVirtual: true,
+                expectedIsHideBySig: true,
+                expectedIsStrict: false,
+                expectedIsAbstract: true,
+                expectedIsSpecialName: false,
+                expectedIsPInvokeImpl: false,
+                expectedIsUnmanagedExport: false,
+                expectedIsRTSpecialName: false,
+                expectedHasSecurity: false,
+                expectedRequireSecObject: false),
+            CreateMethodDefTestCase(
+                bytes:
+                [
+                    // RVA
+                    0x00, 0x00, 0x00, 0x00,
+                    
+                    // Impl Flags
+                    0x00, 0x01,
+                    
+                    // Flags
+                    0xc4, 0x05,
+                    
+                    // Other
+                    0x8e, 0x03, 0x10, 0x00, 0x01, 0x00
+                ],
+                expectedRva: 0x0u,
+                expectedImplFlags: 0x100,
+                expectedFlags: 0x05c4,
+                expectedName: 0x38eu,
+                expectedSignature: 0x10u,
+                expectedParamList: 0x1u,
+                expectedCodeType: MethodImplCodeTypeAttributes.IL,
+                expectedManaged: MethodImplManagedAttributes.Managed,
+                expectedMethodImpl: MethodImplAttributes.AggressiveInlining,
+                expectedMethodMemberAccess: MethodMemberAccessAttributes.Family,
+                expectedMethodVtableLayout: MethodVtableLayoutAttributes.NewSlot,
+                expectedMethodFlags: MethodAttributes.Virtual | MethodAttributes.HideBySig | MethodAttributes.Abstract,
+                expectedIsForwardRef: false,
+                expectedIsPreserveSig: false,
+                expectedIsInternalCall: false,
+                expectedIsSynchronized: false,
+                expectedIsNoInlining: false,
+                expectedIsNoOptimization: false,
+                expectedIsMaxMethodImplVal: false,
+                expectedIsAggressiveInlining: true,
                 expectedIsStatic: false,
                 expectedIsFinal: false,
                 expectedIsVirtual: true,
@@ -397,6 +448,7 @@ public class MethodDefRowTests
                 expectedIsNoInlining: false,
                 expectedIsNoOptimization: false,
                 expectedIsMaxMethodImplVal: false,
+                expectedIsAggressiveInlining: false,
                 expectedIsStatic: true,
                 expectedIsFinal: false,
                 expectedIsVirtual: false,
@@ -443,6 +495,7 @@ public class MethodDefRowTests
                 expectedIsNoInlining: true,
                 expectedIsNoOptimization: false,
                 expectedIsMaxMethodImplVal: false,
+                expectedIsAggressiveInlining: false,
                 expectedIsStatic: false,
                 expectedIsFinal: false,
                 expectedIsVirtual: true,
@@ -489,6 +542,7 @@ public class MethodDefRowTests
                 expectedIsNoInlining: true,
                 expectedIsNoOptimization: true,
                 expectedIsMaxMethodImplVal: true,
+                expectedIsAggressiveInlining: true,
                 expectedIsStatic: true,
                 expectedIsFinal: false,
                 expectedIsVirtual: false,
@@ -524,6 +578,7 @@ public class MethodDefRowTests
         bool expectedIsNoInlining,
         bool expectedIsNoOptimization,
         bool expectedIsMaxMethodImplVal,
+        bool expectedIsAggressiveInlining,
         bool expectedIsStatic,
         bool expectedIsFinal,
         bool expectedIsVirtual,
@@ -557,6 +612,7 @@ public class MethodDefRowTests
             expectedIsNoInlining,
             expectedIsNoOptimization,
             expectedIsMaxMethodImplVal,
+            expectedIsAggressiveInlining,
             expectedIsStatic,
             expectedIsFinal,
             expectedIsVirtual,

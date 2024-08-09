@@ -7,6 +7,7 @@ public enum TypeAttributes : uint
     SpecialName = 0x400,
     Import = 0x1000,
     Serializable = 0x2000,
+    WindowsRuntime = 0x4000,
     BeforeFieldInit = 0x100000,
     RTSpecialName = 0x800,
     HasSecurity = 0x40000,
@@ -18,6 +19,7 @@ public enum TypeAttributes : uint
         SpecialName |
         Import |
         Serializable |
+        WindowsRuntime |
         BeforeFieldInit |
         RTSpecialName |
         HasSecurity |
