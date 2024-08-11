@@ -1,14 +1,17 @@
 using Reemit.Decompiler.Clr.Metadata.Tables;
 using Reemit.Decompiler.Clr.Methods;
+using Reemit.Decompiler.Clr.Signatures;
 
 namespace Reemit.Decompiler;
 
 public class ClrMethod(
     string name,
+    MethodSig signature,
     int maxStack,
     byte[] methodBody)
 {
     public string Name { get; } = name;
+    public MethodSig Signature { get; } = signature;
     public int MaxStack { get; } = maxStack;
     public byte[] MethodBody { get; } = methodBody;
 
@@ -16,10 +19,13 @@ public class ClrMethod(
     {
         var name = context.StringsHeapStream.Read(methodDefRow.Name);
         
+        var signatureReader = context.BlobHeapStream.CreateBlobReader(methodDefRow.Signature);
+        var signature = MethodSig.Read(signatureReader);
+        
         // TODO: Investigate what exactly it means when a MethodDef row has its RVA set to 0
         if (methodDefRow.Rva == 0)
         {
-            return new ClrMethod(name, 0, []);
+            return new ClrMethod(name, signature, 0, []);
         }
 
         var corILMethodOffset = context.PEFile.GetFileOffset(methodDefRow.Rva);
@@ -43,6 +49,6 @@ public class ClrMethod(
             ? (ushort)8
             : ((FatMethodHeader)methodHeader).MaxStack;
 
-        return new ClrMethod(name, maxStack, methodBody);
+        return new ClrMethod(name, signature, maxStack, methodBody);
     }
 }

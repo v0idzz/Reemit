@@ -38,7 +38,7 @@ public class MetadataRoot
         var streamHeaders = new List<StreamHeader>(streams);
         for (var i = 0; i < streams; i++)
         {
-            streamHeaders.Add(new StreamHeader(reader));
+            streamHeaders.Add(StreamHeader.Read(reader));
         }
 
         StreamHeaders = streamHeaders.AsReadOnly();
