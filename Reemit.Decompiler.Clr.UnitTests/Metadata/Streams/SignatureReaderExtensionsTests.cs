@@ -13,7 +13,7 @@ public class SignatureReaderExtensionsTests
     [InlineData([0x3FFF, new byte[] { 0xBF, 0xFF }])]
     [InlineData([0x4000, new byte[] { 0xC0, 0x00, 0x40, 0x00 }])]
     [InlineData([0x1FFFFFFF, new byte[] { 0xDF, 0xFF, 0xFF, 0xFF }])]
-    public void ReadUInt_CompressedUIntRepresentation_ReadsAndDecompressesUInt(uint originalValue,
+    public void ReadSignatureUInt_CompressedUIntRepresentation_ReadsAndDecompressesUInt(uint originalValue,
         byte[] compressedRepresentation)
     {
         // Arrange
@@ -37,7 +37,7 @@ public class SignatureReaderExtensionsTests
     [InlineData([-8192, new byte[] { 0x80, 0x01 }])]
     [InlineData([268435455, new byte[] { 0xDF, 0xFF, 0xFF, 0xFE }])]
     [InlineData([-268435456, new byte[] { 0xC0, 0x00, 0x00, 0x01 }])]
-    public void ReadInt_CompressedIntRepresentation_ReadsAndDecompressesInt(int originalValue,
+    public void ReadSignatureInt_CompressedIntRepresentation_ReadsAndDecompressesInt(int originalValue,
         byte[] compressedRepresentation)
     {
         // Arrange
