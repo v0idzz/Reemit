@@ -2,19 +2,15 @@ using System.Text;
 
 namespace Reemit.Decompiler.Clr.Metadata;
 
-public class StreamHeader
+public record StreamHeader(uint Offset, uint Size, string Name)
 {
-    public uint Offset { get; }
-    public uint Size { get; }
-    public string Name { get; }
-
-    public StreamHeader(BinaryReader reader)
+    public static StreamHeader Read(BinaryReader reader)
     {
-        Offset = reader.ReadUInt32();
-        Size = reader.ReadUInt32();
+        var offset = reader.ReadUInt32();
+        var size = reader.ReadUInt32();
         
         // ECMA-335 §II.24.2.2 
-        if (Size % 4 != 0)
+        if (size % 4 != 0)
         {
             throw new BadImageFormatException("Size of stream shall be a multiple of 4.");
         }
@@ -39,6 +35,7 @@ public class StreamHeader
             break;
         }
 
-        Name = Encoding.ASCII.GetString(nameBytes.ToArray());
+        var name = Encoding.ASCII.GetString(nameBytes.ToArray());
+        return new StreamHeader(offset, size, name);
     }
 }
