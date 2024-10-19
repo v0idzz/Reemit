@@ -8,4 +8,5 @@ public record ModuleReaderContext(
     PEFile PEFile,
     MetadataTablesStream MetadataTablesStream,
     StringsHeapStream StringsHeapStream,
+    BlobHeapStream BlobHeapStream,
     TableReferenceResolver TableReferenceResolver);

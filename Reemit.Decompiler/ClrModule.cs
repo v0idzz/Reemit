@@ -57,7 +57,11 @@ public class ClrModule
         var metadataStreamOffset = metadataOffset + metadataStreamHeader.Offset;
         var metadataStream = new MetadataTablesStream(peFile.CreateReaderAt(metadataStreamOffset));
 
-        var context = new ModuleReaderContext(peFile, metadataStream, stringsStream,
+        var blobStreamHeader = metadata.StreamHeaders.Single(x => x.Name == BlobHeapStream.Name);
+        var blobStreamOffset = metadataOffset + blobStreamHeader.Offset;
+        var blobStream = new BlobHeapStream(peFile.CreateReaderAt(blobStreamOffset), blobStreamHeader);
+
+        var context = new ModuleReaderContext(peFile, metadataStream, stringsStream, blobStream,
             new TableReferenceResolver(metadataStream.Rows));
 
         var types = metadataStream.TypeDef?.Rows.Select(x => ClrType.FromTypeDefRow(x, context)).ToArray().AsReadOnly();
