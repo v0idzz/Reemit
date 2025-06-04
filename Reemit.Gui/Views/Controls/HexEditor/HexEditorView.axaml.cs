@@ -1,12 +1,7 @@
-using Avalonia.Controls;
-using Avalonia.Metadata;
 using Avalonia.ReactiveUI;
-using AvaloniaHex.Editing;
 using ReactiveUI;
-using Reemit.Common;
 using Reemit.Gui.ViewModels.Controls.HexEditor;
 using System;
-using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
