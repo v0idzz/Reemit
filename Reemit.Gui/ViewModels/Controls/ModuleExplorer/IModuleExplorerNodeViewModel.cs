@@ -1,4 +1,4 @@
-using Reemit.Decompiler;
+using Reemit.Disassembler;
 using System.Collections.Generic;
 
 namespace Reemit.Gui.ViewModels.Controls.ModuleExplorer;

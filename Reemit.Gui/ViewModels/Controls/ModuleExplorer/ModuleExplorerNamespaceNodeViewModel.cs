@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Reemit.Decompiler;
+using Reemit.Disassembler;
 
 namespace Reemit.Gui.ViewModels.Controls.ModuleExplorer;
 

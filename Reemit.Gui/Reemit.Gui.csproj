@@ -29,6 +29,6 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\Reemit.Decompiler\Reemit.Decompiler.csproj" />
+      <ProjectReference Include="..\Reemit.Disassembler\Reemit.Disassembler.csproj" />
     </ItemGroup>
 </Project>

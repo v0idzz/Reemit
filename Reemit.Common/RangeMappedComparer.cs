@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Reemit.Common;
+﻿namespace Reemit.Common;
 
 public class RangeMappedComparer : IEqualityComparer<IRangeMapped>
 {

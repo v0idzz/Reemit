@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using Dock.Model.Controls;
 using DynamicData;
 using ReactiveUI;
-using Reemit.Decompiler;
+using Reemit.Disassembler;
 using Reemit.Gui.ViewModels.Controls.HexEditor;
 using Reemit.Gui.ViewModels.Controls.ModuleExplorer;
 using Reemit.Gui.ViewModels.Dockables;

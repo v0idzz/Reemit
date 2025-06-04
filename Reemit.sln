@@ -1,17 +1,17 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Decompiler.PE", "Reemit.Decompiler.PE\Reemit.Decompiler.PE.csproj", "{419A4727-CBCC-4696-A635-C6B619B1A3E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Disassembler.PE", "Reemit.Disassembler.PE\Reemit.Disassembler.PE.csproj", "{419A4727-CBCC-4696-A635-C6B619B1A3E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Decompiler.PE.UnitTests", "Reemit.Decompiler.PE.UnitTests\Reemit.Decompiler.PE.UnitTests.csproj", "{1957AD7F-B08D-49C5-B28D-41CDCC1D803B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Disassembler.PE.UnitTests", "Reemit.Disassembler.PE.UnitTests\Reemit.Disassembler.PE.UnitTests.csproj", "{1957AD7F-B08D-49C5-B28D-41CDCC1D803B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Common", "Reemit.Common\Reemit.Common.csproj", "{8242D0FA-6E29-4872-AAFD-4A340F28491B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Decompiler.Clr", "Reemit.Decompiler.Clr\Reemit.Decompiler.Clr.csproj", "{7F5BEF62-1C4B-4654-ADBB-6A247BA027D6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Disassembler.Clr", "Reemit.Disassembler.Clr\Reemit.Disassembler.Clr.csproj", "{7F5BEF62-1C4B-4654-ADBB-6A247BA027D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Decompiler.Clr.UnitTests", "Reemit.Decompiler.Clr.UnitTests\Reemit.Decompiler.Clr.UnitTests.csproj", "{7333055B-3E37-4C17-9D47-CB4E26596939}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Disassembler.Clr.UnitTests", "Reemit.Disassembler.Clr.UnitTests\Reemit.Disassembler.Clr.UnitTests.csproj", "{7333055B-3E37-4C17-9D47-CB4E26596939}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Gui", "Reemit.Gui\Reemit.Gui.csproj", "{CD883634-DC81-4B78-9E67-38DDC80BC1DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Decompiler", "Reemit.Decompiler\Reemit.Decompiler.csproj", "{43CB023B-A0BC-4A6C-B71B-681C3B8520C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Disassembler", "Reemit.Disassembler\Reemit.Disassembler.csproj", "{43CB023B-A0BC-4A6C-B71B-681C3B8520C8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reemit.Common.UnitTests", "Reemit.Common.UnitTests\Reemit.Common.UnitTests.csproj", "{FF0F1985-EF42-40D6-A6AF-5985421022DC}"
 EndProject

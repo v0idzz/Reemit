@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Reemit.Common;
 using System.Linq;
-using Reemit.Decompiler;
+using Reemit.Disassembler;
 using Reemit.Gui.ViewModels.Navigation;
 
 namespace Reemit.Gui.ViewModels.Controls.ModuleExplorer;

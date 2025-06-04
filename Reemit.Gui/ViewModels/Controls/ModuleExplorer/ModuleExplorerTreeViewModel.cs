@@ -5,7 +5,7 @@ using DynamicData.Alias;
 using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Reemit.Decompiler;
+using Reemit.Disassembler;
 
 namespace Reemit.Gui.ViewModels.Controls.ModuleExplorer;
 
