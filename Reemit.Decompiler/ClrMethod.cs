@@ -1,6 +1,8 @@
+using Reemit.Decompiler.Clr;
 using Reemit.Decompiler.Clr.Metadata.Tables;
 using Reemit.Decompiler.Clr.Methods;
 using Reemit.Decompiler.Clr.Signatures;
+using Reemit.Decompiler.Clr.Signatures.Types;
 
 namespace Reemit.Decompiler;
 
@@ -8,24 +10,43 @@ public class ClrMethod(
     string name,
     MethodSig signature,
     int maxStack,
-    byte[] methodBody)
+    IReadOnlyList<ClrMethodParam> @params,
+    byte[] methodBody,
+    ClrTypeInfo retType)
 {
     public string Name { get; } = name;
     public MethodSig Signature { get; } = signature;
     public int MaxStack { get; } = maxStack;
+    public IReadOnlyList<ClrMethodParam> Params { get; } = @params;
+    public ClrTypeInfo RetType { get; } = retType;
     public byte[] MethodBody { get; } = methodBody;
+
+    public int GenericParamCount { get; } =
+        (int)(signature is GenericMethodSig genericMethodSig ? genericMethodSig.GenParamCount : 0);
 
     public static ClrMethod FromMethodDefRow(MethodDefRow methodDefRow, ModuleReaderContext context)
     {
         var name = context.StringsHeapStream.Read(methodDefRow.Name);
-        
+
         var signatureReader = context.BlobHeapStream.CreateBlobReader(methodDefRow.Signature);
         var signature = MethodSig.Read(signatureReader);
         
+        var typeSigMapper = new TypeSigToClrTypeInfoMapper(context);
+
+        var @params =
+            context.TableReferenceResolver.GetReferencedRows<MethodDefRow, ParamRow>(methodDefRow, r => r.ParamList);
+
         // TODO: Investigate what exactly it means when a MethodDef row has its RVA set to 0
         if (methodDefRow.Rva == 0)
         {
-            return new ClrMethod(name, signature, 0, []);
+            return new ClrMethod(name, signature, 0, @params
+                // From ECMA-335 "II.22.33 Param : 0x08":
+                // A Sequence value of 0 refers to the owner method’s return type
+                .Where(x => x.Sequence != 0)
+                .OrderBy(x => x.Sequence)
+                .Select((x, i) => new ClrMethodParam(context.StringsHeapStream.Read(x.Name),
+                    typeSigMapper.Map(signature.Params[i].Type)))
+                .ToArray(), [], typeSigMapper.Map(signature.RetType.Type));
         }
 
         var corILMethodOffset = context.PEFile.GetFileOffset(methodDefRow.Rva);
@@ -49,6 +70,13 @@ public class ClrMethod(
             ? (ushort)8
             : ((FatMethodHeader)methodHeader).MaxStack;
 
-        return new ClrMethod(name, signature, maxStack, methodBody);
+        return new ClrMethod(name, signature, maxStack, @params
+            // From ECMA-335 "II.22.33 Param : 0x08":
+            // A Sequence value of 0 refers to the owner method’s return type
+            .Where(x => x.Sequence != 0)
+            .OrderBy(x => x.Sequence)
+            .Select((x, i) => new ClrMethodParam(context.StringsHeapStream.Read(x.Name),
+                typeSigMapper.Map(signature.Params[i].Type)))
+            .ToArray(), methodBody, typeSigMapper.Map(signature.RetType.Type));
     }
 }

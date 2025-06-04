@@ -10,30 +10,19 @@ public class ClrType
     public bool IsInterface { get; }
     public RangeMapped<string> Name { get; }
     public string Namespace { get; }
-    public IReadOnlyList<ClrMethod> Methods => _methodsLazy.Value;
-
-    private readonly Lazy<IReadOnlyList<ClrMethod>> _methodsLazy;
+    public IReadOnlyList<ClrMethod> Methods { get; }
 
     private ClrType(bool isInterface,
         bool isValueType,
         RangeMapped<string> name,
         string @namespace,
-        IReadOnlyList<ClrMethod> methods) : this(isInterface, isValueType, name, @namespace,
-        new Lazy<IReadOnlyList<ClrMethod>>(methods))
-    {
-    }
-
-    private ClrType(bool isInterface,
-        bool isValueType,
-        RangeMapped<string> name,
-        string @namespace,
-        Lazy<IReadOnlyList<ClrMethod>> methodsLazy)
+        IReadOnlyList<ClrMethod> methods)
     { 
         IsInterface = isInterface;
         IsValueType = isValueType;
         Name = name;
         Namespace = @namespace;
-        _methodsLazy = methodsLazy;
+        Methods = methods;
     }
 
 
@@ -74,7 +63,7 @@ public class ClrType
             isValueType,
             stringsHeap.ReadMapped(typeDefRow.TypeName),
             stringsHeap.Read(typeDefRow.TypeNamespace),
-            new Lazy<IReadOnlyList<ClrMethod>>(GetMethods)
+            GetMethods()
         );
 
         return type;

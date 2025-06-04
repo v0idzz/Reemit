@@ -6,13 +6,24 @@ public class TableReferenceResolver(IReadOnlyDictionary<MetadataTableName, IRead
 {
     public IReadOnlyList<TTarget> GetReferencedRows<TRef, TTarget>(TRef referencingRow, Func<TRef, uint> ridSelector)
         where TRef : IMetadataTableRow
-        where TTarget : IMetadataTableRow =>
-        CodedIndexExtensions.GetReferencedRows(referencingRow, ridSelector,
+        where TTarget : IMetadataTableRow
+    {
+        if (!allTables.ContainsKey(TTarget.TableName))
+        {
+            return Array.Empty<TTarget>();
+        }
+
+        return CodedIndexExtensions.GetReferencedRows(referencingRow, ridSelector,
                 allTables[TRef.TableName].OfType<TRef>().ToArray(),
                 allTables[TTarget.TableName])
             .Cast<TTarget>()
             .ToArray()
             .AsReadOnly();
+    }
+
+    public T GetReferencedRow<T>(uint rid)
+        where T : IMetadataTableRow =>
+        (T)allTables[T.TableName].Single(x => x.Rid == rid);
 }
 
 public static class CodedIndexExtensions
@@ -45,7 +56,7 @@ public static class CodedIndexExtensions
         {
             lastReferencedRowNo = referencedTableRows.Count;
         }
-        
+
         var firstReferencedRowIndex = (int)firstRowReferencedRid - 1;
 
         return referencedTableRows

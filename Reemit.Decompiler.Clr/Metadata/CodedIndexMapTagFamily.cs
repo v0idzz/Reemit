@@ -8,7 +8,7 @@ public enum CodedIndexTagFamily
     HasFieldMarshall,
     HasDeclSecurity,
     MemberRefParent,
-    HasSemantic,
+    HasSemantics,
     MethodDefOrRef,
     MemberForwarded,
     Implementation,
