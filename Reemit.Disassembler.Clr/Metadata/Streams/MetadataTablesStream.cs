@@ -19,6 +19,7 @@ public class MetadataTablesStream
     public MetadataTable<FieldRow>? Field { get; }
     public MetadataTable<MethodDefRow>? MethodDef { get; }
     public MetadataTable<ParamRow>? ParamRow { get; }
+    public MetadataTable<InterfaceImplRow>? InterfaceImpl { get; }
 
     public IReadOnlyDictionary<MetadataTableName, IReadOnlyList<IMetadataRecord>> Rows => _rows
         .ToDictionary(x => x.Key, x => (IReadOnlyList<IMetadataRecord>)x.Value.ToArray().AsReadOnly())
@@ -67,6 +68,7 @@ public class MetadataTablesStream
         Field = ReadTableIfExists<FieldRow>();
         MethodDef = ReadTableIfExists<MethodDefRow>();
         ParamRow = ReadTableIfExists<ParamRow>();
+        InterfaceImpl = ReadTableIfExists<InterfaceImplRow>();
     }
 
     private MetadataTable<T>? ReadTableIfExists<T>() where T : IMetadataTableRow<T>

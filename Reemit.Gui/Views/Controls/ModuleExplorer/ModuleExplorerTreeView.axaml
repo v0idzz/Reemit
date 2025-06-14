@@ -30,6 +30,13 @@
                               ItemsSource="{Binding Children}">
                 <moduleExplorer:ModuleExplorerStructNodeView DataContext="{Binding .}" />
             </TreeDataTemplate>
+            <TreeDataTemplate DataType="moduleExplorerVM:ModuleExplorerListNodeViewModel"
+                              ItemsSource="{Binding Children}">
+                <moduleExplorer:ModuleExplorerListNodeView DataContext="{Binding .}" />
+            </TreeDataTemplate>
+            <TreeDataTemplate DataType="moduleExplorerVM:ModuleExplorerImplementsInterfaceNodeViewModel">
+                <moduleExplorer:ModuleExplorerImplementsInterfaceNodeView DataContext="{Binding .}" />
+            </TreeDataTemplate>
             <DataTemplate DataType="moduleExplorerVM:ModuleExplorerMethodNodeViewModel">
                 <moduleExplorer:ModuleExplorerMethodNodeView DataContext="{Binding .}" />
             </DataTemplate>

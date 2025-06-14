@@ -21,10 +21,29 @@ public class ModuleExplorerTypeNodeViewModel : IModuleExplorerNodeViewModel
         Owner = owner;
         Module = module;
         Name = type.Name;
-        Children = type.Methods
-            .Select(m => new ModuleExplorerMethodNodeViewModel(owner, module, m))
+
+        var children = new List<IModuleExplorerNodeViewModel>();
+
+        var implementsInterfacesChildren = type.ImplementsInterfaces
+            .Select(i => new ModuleExplorerImplementsInterfaceNodeViewModel(owner, module, i))
             .ToArray()
             .AsReadOnly();
+
+        if (implementsInterfacesChildren.Count != 0)
+        {
+            var interfacesListNode =
+                new ModuleExplorerListNodeViewModel(owner, module,
+                    "Implements", implementsInterfacesChildren);
+
+            children.Add(interfacesListNode);
+        }
+
+        var typeChildren = type.Methods
+            .Select(m => new ModuleExplorerMethodNodeViewModel(owner, module, m));
+
+        children.AddRange(typeChildren);
+
+        Children = children.AsReadOnly();
 
         NavigationMessageBus.SendMessage(
             NavigationRangeSetterRegistrationMessage.Create(

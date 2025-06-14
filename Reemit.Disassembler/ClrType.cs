@@ -10,18 +10,21 @@ public class ClrType
     public bool IsInterface { get; }
     public RangeMapped<string> Name { get; }
     public string Namespace { get; }
+    public IReadOnlyList<ClrTypeInfo> ImplementsInterfaces { get; }
     public IReadOnlyList<ClrMethod> Methods { get; }
 
     private ClrType(bool isInterface,
         bool isValueType,
         RangeMapped<string> name,
         string @namespace,
+        IReadOnlyList<ClrTypeInfo> implementsInterfaces,
         IReadOnlyList<ClrMethod> methods)
     { 
         IsInterface = isInterface;
         IsValueType = isValueType;
         Name = name;
         Namespace = @namespace;
+        ImplementsInterfaces = implementsInterfaces;
         Methods = methods;
     }
 
@@ -32,6 +35,14 @@ public class ClrType
         // TODO: Check if also derives ultimately from System.Object
         var isInterface = typeDefRow.ClassSemantics == TypeClassSemanticsAttributes.Interface;
         var isValueType = false;
+
+        var typeDefOrRefMapper = new TypeDefOrRefToClrTypeInfoMapper(context);
+        var interfaceRows = context.MetadataTablesStream.InterfaceImpl?.Rows ?? [];
+
+        var interfaces = interfaceRows
+            .Where(i => i.Class == typeDefRow.Rid)
+            .Select(i => typeDefOrRefMapper.ResolveDefOrRefCodedIndex(i.Interface))
+            .ToArray();
 
         /*
          * From ECMA-335 II.22.37:
@@ -63,6 +74,7 @@ public class ClrType
             isValueType,
             stringsHeap.ReadMapped(typeDefRow.TypeName),
             stringsHeap.Read(typeDefRow.TypeNamespace),
+            interfaces,
             GetMethods()
         );
 

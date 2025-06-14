@@ -28,6 +28,15 @@ public partial class ModuleExplorerNodeView : UserControl
         set => SetValue(TextProperty, value);
     }
 
+    public static readonly StyledProperty<bool> IsIconVisibleProperty =
+        AvaloniaProperty.Register<ModuleExplorerNodeView, bool>(nameof(IsIconVisible), true);
+
+    public bool IsIconVisible
+    {
+        get => GetValue(IsIconVisibleProperty);
+        set => SetValue(IsIconVisibleProperty, value);
+    }
+
     public ModuleExplorerNodeView()
     {
         InitializeComponent();
