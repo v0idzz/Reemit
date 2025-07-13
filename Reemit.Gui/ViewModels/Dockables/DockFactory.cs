@@ -6,11 +6,15 @@ using Dock.Model.Core;
 using Dock.Model.ReactiveUI;
 using Dock.Model.ReactiveUI.Controls;
 using Reemit.Gui.ViewModels.Controls.HexEditor;
+using Reemit.Gui.ViewModels.Controls.ILView;
 using Reemit.Gui.ViewModels.Controls.ModuleExplorer;
 
 namespace Reemit.Gui.ViewModels.Dockables;
 
-public class DockFactory(ModuleExplorerTreeViewModel moduleExplorerViewModel, HexEditorViewModel hexEditorViewModel)
+public class DockFactory(
+    ModuleExplorerTreeViewModel moduleExplorerViewModel,
+    HexEditorViewModel hexEditorViewModel,
+    ILViewModel ilViewModel)
     : Factory
 {
     public override IRootDock CreateLayout()
@@ -27,6 +31,12 @@ public class DockFactory(ModuleExplorerTreeViewModel moduleExplorerViewModel, He
             CanClose = false,
         };
 
+        var ilView = new DockableToolViewModel(ilViewModel)
+        {
+            Title = "IL",
+            CanClose = true
+        };
+
         var tools = new ProportionalDock
         {
             Proportion = 0.3,
@@ -41,6 +51,25 @@ public class DockFactory(ModuleExplorerTreeViewModel moduleExplorerViewModel, He
                         moduleExplorer
                     ),
                     Alignment = Alignment.Left,
+                    GripMode = GripMode.Visible
+                }
+            )
+        };
+
+        var additionalTools = new ProportionalDock
+        {
+            Proportion = 0.3,
+            Orientation = Orientation.Vertical,
+            VisibleDockables = CreateList<IDockable>
+            (
+                new ToolDock
+                {
+                    ActiveDockable = ilView,
+                    VisibleDockables = CreateList<IDockable>
+                    (
+                        ilView
+                    ),
+                    Alignment = Alignment.Right,
                     GripMode = GripMode.Visible
                 }
             )
@@ -68,7 +97,9 @@ public class DockFactory(ModuleExplorerTreeViewModel moduleExplorerViewModel, He
             (
                 tools,
                 new ProportionalDockSplitter(),
-                documentDock
+                documentDock,
+                new ProportionalDockSplitter(),
+                additionalTools
             )
         };
 

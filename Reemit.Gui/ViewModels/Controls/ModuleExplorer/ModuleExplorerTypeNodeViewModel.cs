@@ -1,13 +1,17 @@
 using System.Collections.Generic;
 using Reemit.Common;
 using System.Linq;
+using AvaloniaHex.Document;
 using Reemit.Disassembler;
+using Reemit.Gui.Common;
 using Reemit.Gui.ViewModels.Navigation;
 
 namespace Reemit.Gui.ViewModels.Controls.ModuleExplorer;
 
-public class ModuleExplorerTypeNodeViewModel : IModuleExplorerNodeViewModel
+public class ModuleExplorerTypeNodeViewModel : IRangeMappedNode
 {
+    public BitRange Range => Name.ToBitRange();
+
     public ModuleExplorerTreeViewModel Owner { get; }
 
     public ClrModule Module { get; }

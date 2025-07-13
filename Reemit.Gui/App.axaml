@@ -33,5 +33,6 @@
         </FluentTheme>
         <DockFluentTheme />
         <StyleInclude Source="avares://AvaloniaHex/Themes/Simple/AvaloniaHex.axaml" />
+        <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
     </Application.Styles>
 </Application>

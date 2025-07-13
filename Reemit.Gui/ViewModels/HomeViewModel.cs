@@ -5,7 +5,9 @@ using Dock.Model.Controls;
 using DynamicData;
 using ReactiveUI;
 using Reemit.Disassembler;
+using Reemit.Disassembler.Clr.Disassembler;
 using Reemit.Gui.ViewModels.Controls.HexEditor;
+using Reemit.Gui.ViewModels.Controls.ILView;
 using Reemit.Gui.ViewModels.Controls.ModuleExplorer;
 using Reemit.Gui.ViewModels.Dockables;
 using Reemit.Gui.ViewModels.Navigation;
@@ -16,6 +18,7 @@ public class HomeViewModel : ReactiveObject, IRoutableViewModel
 {
     public ModuleExplorerTreeViewModel ModuleExplorerTreeViewModel { get; }
     public HexEditorViewModel HexEditorViewModel { get; }
+    public ILViewModel ILViewModel { get; }
     public IRootDock? Layout { get; }
 
     public HomeViewModel(IScreen hostScreen, IReadOnlyList<ClrModule> modules)
@@ -29,6 +32,7 @@ public class HomeViewModel : ReactiveObject, IRoutableViewModel
         HostScreen = hostScreen;
         ModuleExplorerTreeViewModel = new ModuleExplorerTreeViewModel(observableModules);
         HexEditorViewModel = new HexEditorViewModel();
+        ILViewModel = new ILViewModel(new InstructionEmitter());
 
         this.WhenAnyValue(x => x.ModuleExplorerTreeViewModel.SelectedNode)
             .Select(x => x?.Module.Bytes)
@@ -37,11 +41,11 @@ public class HomeViewModel : ReactiveObject, IRoutableViewModel
 
         NavigationMessageBus.RegisterMessageSource(
             this.WhenAnyValue(x => x.ModuleExplorerTreeViewModel.SelectedNode)
-                .Select(x => x as ModuleExplorerTypeNodeViewModel)
+                .Select(x => x as IRangeMappedNode)
                 .WhereNotNull()
-                .Select(x => new NavigationRangeRequestMessage(x.Name)));
+                .Select(x => new NavigationRequestMessage(x.Range, x)));
 
-        var factory = new DockFactory(ModuleExplorerTreeViewModel, HexEditorViewModel);
+        var factory = new DockFactory(ModuleExplorerTreeViewModel, HexEditorViewModel, ILViewModel);
         var layout = factory.CreateLayout();
         factory.InitLayout(layout);
         Layout = layout;

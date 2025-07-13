@@ -1,3 +1,4 @@
+using Reemit.Common;
 using Reemit.Disassembler.Clr.Metadata.Tables;
 using Reemit.Disassembler.Clr.Methods;
 using Reemit.Disassembler.Clr.Signatures;
@@ -9,7 +10,7 @@ public class ClrMethod(
     MethodSig signature,
     int maxStack,
     IReadOnlyList<ClrMethodParam> @params,
-    byte[] methodBody,
+    RangeMapped<byte[]> methodBody,
     ClrTypeInfo retType)
 {
     public string Name { get; } = name;
@@ -17,7 +18,7 @@ public class ClrMethod(
     public int MaxStack { get; } = maxStack;
     public IReadOnlyList<ClrMethodParam> Params { get; } = @params;
     public ClrTypeInfo RetType { get; } = retType;
-    public byte[] MethodBody { get; } = methodBody;
+    public RangeMapped<byte[]> MethodBody { get; } = methodBody;
 
     public int GenericParamCount { get; } =
         (int)(signature is GenericMethodSig genericMethodSig ? genericMethodSig.GenParamCount : 0);
@@ -44,7 +45,7 @@ public class ClrMethod(
                 .OrderBy(x => x.Sequence)
                 .Select((x, i) => new ClrMethodParam(context.StringsHeapStream.Read(x.Name),
                     typeSigMapper.Map(signature.Params[i].Type)))
-                .ToArray(), [], typeSigMapper.Map(signature.RetType.Type));
+                .ToArray(), new RangeMapped<byte[]>(), typeSigMapper.Map(signature.RetType.Type));
         }
 
         var corILMethodOffset = context.PEFile.GetFileOffset(methodDefRow.Rva);
@@ -52,7 +53,7 @@ public class ClrMethod(
 
         var methodHeader = MethodHeaderReader.ReadMethodHeader(corILMethodReader);
 
-        var methodBody = corILMethodReader.ReadBytes((int)methodHeader.CodeSize);
+        var methodBody = corILMethodReader.ReadMappedBytes((int)methodHeader.CodeSize);
 
         if (methodHeader is FatMethodHeader fatMethodHeader)
         {
