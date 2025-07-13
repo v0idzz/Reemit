@@ -5,7 +5,7 @@ namespace Reemit.Disassembler;
 
 public class TypeDefOrRefToClrTypeInfoMapper(ModuleReaderContext moduleReaderContext)
 {
-    public ClrTypeInfo ResolveDefOrRefCodedIndex(CodedIndex typeDefOrRefOrSpec)
+    public bool TryResolveDefOrRefCodedIndex(CodedIndex typeDefOrRefOrSpec, out ClrTypeInfo? clrTypeInfo)
     {
         uint name, @namespace;
 
@@ -26,14 +26,16 @@ public class TypeDefOrRefToClrTypeInfoMapper(ModuleReaderContext moduleReaderCon
                 @namespace = typeRef.TypeNamespace;
                 break;
             case MetadataTableName.TypeSpec:
-                throw new NotImplementedException("TypeSpec resolving isn't implemented");
+                clrTypeInfo = null;
+                return false;
             default:
                 throw new ArgumentOutOfRangeException();
         }
 
-        return ClrTypeInfo.CreateSimpleTypeInfo(
+        clrTypeInfo = ClrTypeInfo.CreateSimpleTypeInfo(
             moduleReaderContext.StringsHeapStream.Read(@namespace),
             moduleReaderContext.StringsHeapStream.Read(@name)
         );
+        return true;
     }
 }

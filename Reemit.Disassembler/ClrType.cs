@@ -41,7 +41,8 @@ public class ClrType
 
         var interfaces = interfaceRows
             .Where(i => i.Class == typeDefRow.Rid)
-            .Select(i => typeDefOrRefMapper.ResolveDefOrRefCodedIndex(i.Interface))
+            .Select(i => typeDefOrRefMapper.TryResolveDefOrRefCodedIndex(i.Interface, out var typeInfo) ? typeInfo : null)
+            .Where(i => i != null)
             .ToArray();
 
         /*
