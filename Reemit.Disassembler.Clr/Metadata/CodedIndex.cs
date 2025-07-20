@@ -33,6 +33,16 @@ public class CodedIndex
                     MetadataTableName.AssemblyRef,
                     MetadataTableName.TypeRef
                 ]
+            },
+            {
+                CodedIndexTagFamily.MemberRefParent,
+                [
+                    MetadataTableName.TypeDef,
+                    MetadataTableName.TypeRef,
+                    MetadataTableName.ModuleRef,
+                    MetadataTableName.MethodDef,
+                    MetadataTableName.TypeSpec
+                ]
             }
         };
     
