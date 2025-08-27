@@ -56,12 +56,13 @@ public class CodedIndex
             .Select(x => x.Value)
             .Max();
 
-        var read16Bits = maxNumberOfRows < Math.Pow(2, 16 - Math.Log2(tags.Length));
+        var read16Bits = maxNumberOfRows < Math.Pow(2, 16 - Math.Ceiling(Math.Log2(tags.Length)));
         var value = read16Bits 
             ? reader.ReadUInt16()
             : reader.ReadUInt32();
 
-        var bitsToEncodeTag = (int)Math.Floor(Math.Log2(tags.Length - 1) + 1);
+        var bitsToEncodeTag = (int)Math.Ceiling(Math.Log2(tags.Length));
+        
         var mask = (uint)((1 << bitsToEncodeTag) - 1);
             
         var tag = value & mask;
