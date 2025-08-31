@@ -28,7 +28,7 @@ public enum MetadataTableName : uint
     MemberRef = 0x0A,
     MethodDef = 0x06,
     MethodImpl = 0x19,
-    MethodSemantics = 0x19,
+    MethodSemantics = 0x18,
     MethodSpec = 0x2B,
     Module = 0x00,
     ModuleRef = 0x1A,
