@@ -41,6 +41,9 @@
       <None Update="Resources\blob_with_length_encoded_in_4_bytes.bin">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="Resources\userstringsheapstream.bin">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
