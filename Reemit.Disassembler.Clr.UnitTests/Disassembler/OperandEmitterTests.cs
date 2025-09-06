@@ -161,7 +161,7 @@ public class OperandEmitterTests
     {
         // Arrange
         // MemberRef, Rid: 16
-        byte[] metadataTokenBytes = [0x29, 0x0, 0x0, 0x70];
+        byte[] metadataTokenBytes = [0x10, 0x0, 0x0, 0x0A];
         var operand = new Operand(OperandType.MetadataToken, metadataTokenBytes);
         var emitter = new OperandEmitter(CreateEmptyUserStringsHeap());
         
@@ -169,7 +169,7 @@ public class OperandEmitterTests
         var result = EmitToString(operand, emitter);
         
         // Assert
-        Assert.Equal("MetadataToken { TableRef: MetadataToken, Index: 16 }", result);
+        Assert.Equal("MetadataToken { TableRef: MemberRef, Index: 16 }", result);
     }
 
     [Fact]
