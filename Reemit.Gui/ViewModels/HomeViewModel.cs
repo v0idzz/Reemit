@@ -5,7 +5,6 @@ using Dock.Model.Controls;
 using DynamicData;
 using ReactiveUI;
 using Reemit.Disassembler;
-using Reemit.Disassembler.Clr.Disassembler;
 using Reemit.Gui.ViewModels.Controls.HexEditor;
 using Reemit.Gui.ViewModels.Controls.ILView;
 using Reemit.Gui.ViewModels.Controls.ModuleExplorer;
@@ -32,7 +31,7 @@ public class HomeViewModel : ReactiveObject, IRoutableViewModel
         HostScreen = hostScreen;
         ModuleExplorerTreeViewModel = new ModuleExplorerTreeViewModel(observableModules);
         HexEditorViewModel = new HexEditorViewModel();
-        ILViewModel = new ILViewModel(new InstructionEmitter());
+        ILViewModel = new ILViewModel();
 
         this.WhenAnyValue(x => x.ModuleExplorerTreeViewModel.SelectedNode)
             .Select(x => x?.Module.Bytes)

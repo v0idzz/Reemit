@@ -13,8 +13,9 @@ public class ClrModule
     public IReadOnlyList<ClrType> Types { get; }
     public IReadOnlyList<ClrNamespace> Namespaces { get; }
     public IReadOnlyCollection<byte> Bytes { get; }
+    public UserStringsHeapStream UserStringsHeap { get; }
 
-    private ClrModule(RangeMapped<string> name, IReadOnlyList<ClrType>? types, ImmutableArray<byte> bytes)
+    private ClrModule(RangeMapped<string> name, IReadOnlyList<ClrType>? types, ImmutableArray<byte> bytes, UserStringsHeapStream userStringsHeap)
     {
         Name = name;
         Types = types ?? [];
@@ -24,6 +25,7 @@ public class ClrModule
             .ToArray()
             .AsReadOnly();
         Bytes = bytes;
+        UserStringsHeap = userStringsHeap;
     }
 
     public static ClrModule Open(string fileName)
@@ -60,6 +62,10 @@ public class ClrModule
         var blobStreamHeader = metadata.StreamHeaders.Single(x => x.Name == BlobHeapStream.Name);
         var blobStreamOffset = metadataOffset + blobStreamHeader.Offset;
         var blobStream = new BlobHeapStream(peFile.CreateReaderAt(blobStreamOffset), blobStreamHeader);
+        
+        var userStringsStreamHeader = metadata.StreamHeaders.Single(x => x.Name == UserStringsHeapStream.Name);
+        var userStringsStreamOffset = metadataOffset + userStringsStreamHeader.Offset;
+        var userStringsStream = new UserStringsHeapStream(peFile.CreateReaderAt(userStringsStreamOffset), userStringsStreamHeader);
 
         var context = new ModuleReaderContext(peFile, metadataStream, stringsStream, blobStream,
             new TableReferenceResolver(metadataStream.Rows));
@@ -68,6 +74,6 @@ public class ClrModule
 
         var name = stringsStream.ReadMapped(metadataStream.Module.Rows[0].Name);
 
-        return new ClrModule(name, types, bytes.ToImmutableArray());
+        return new ClrModule(name, types, bytes.ToImmutableArray(), userStringsStream);
     }
 }

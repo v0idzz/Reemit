@@ -12,7 +12,7 @@ public class OperandComparer : IEqualityComparer<Operand>
     {
         var hc = new HashCode();
         hc.Add(obj.OperandType);
-        hc.Add(obj.OperandValue.Count);
+        hc.Add(obj.OperandValue.Length);
 
         foreach (var b in obj.OperandValue)
         {

@@ -1,10 +1,13 @@
 ﻿using System.Text;
 using Reemit.Common;
+using Reemit.Disassembler.Clr.Metadata.Streams;
 
 namespace Reemit.Disassembler.Clr.Disassembler;
 
-public class InstructionEmitter
+public class InstructionEmitter(UserStringsHeapStream userStringsHeapStream)
 {
+    private readonly OperandEmitter _operandEmitter = new(userStringsHeapStream);
+    
     public string Emit(IReadOnlyCollection<RangeMapped<Instruction>> instructions)
     {
         var sb = new StringBuilder();
@@ -18,15 +21,8 @@ public class InstructionEmitter
             if (inst.Value.Operand.OperandValue.Any())
             {
                 sb.Append(' ');
-                sb.Append(inst.Value.Operand.OperandType);
-                sb.Append(" {");
-
-                var operandHex = string.Join(
-                    " ",
-                    inst.Value.Operand.OperandValue.Select(x => string.Format("{0:x2}", x)));
-
-                sb.Append(operandHex);
-                sb.Append('}');
+                
+                _operandEmitter.Emit(inst.Value.Operand, sb);
             }
 
             if (!inst.Value.OpcodeInfo.IsPrefix)

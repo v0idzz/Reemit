@@ -14,12 +14,8 @@ public class ILViewModel : ReactiveObject
     [ObservableAsProperty]
     public string? ILCode { get; set; }
 
-    private readonly InstructionEmitter _emitter;
-
-    public ILViewModel(InstructionEmitter emitter)
+    public ILViewModel()
     {
-        _emitter = emitter;
-
         NavigationMessageBus
             .ListenForNavigation()
             .Select(x => x.SelectedNode)
@@ -27,7 +23,7 @@ public class ILViewModel : ReactiveObject
             {
                 if (node is ModuleExplorerMethodNodeViewModel methodNode)
                 {
-                    return ToILCode(methodNode.Method);
+                    return ToILCode(methodNode.Module, methodNode.Method);
                 }
 
                 return null;
@@ -35,12 +31,13 @@ public class ILViewModel : ReactiveObject
             .ToPropertyEx(this, vm => vm.ILCode);
     }
 
-    private string ToILCode(ClrMethod method)
+    private string ToILCode(ClrModule module, ClrMethod method)
     {
         using var ms = new MemoryStream(method.MethodBody);
         var disassembler = new StreamDisassembler(ms);
 
         var instructions = disassembler.Disassemble();
-        return _emitter.Emit(instructions);
+        var emitter = new InstructionEmitter(module.UserStringsHeap);
+        return emitter.Emit(instructions);
     }
 }
