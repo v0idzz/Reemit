@@ -271,7 +271,7 @@
         <Rule color="Number">
             \b0[xX][0-9a-fA-F]+ # Hex
             |
-            \b[0-9]+ # Decimal
+            \b\d+(?:\.\d+)? # Decimal
         </Rule>
 
     </RuleSet>
