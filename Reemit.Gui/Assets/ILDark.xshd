@@ -7,6 +7,7 @@
     <Color name="TypeKeyword" foreground="#fc5fa3" exampleText="int32"/>
     <Color name="Label" foreground="#67b7a4" exampleText="IL_0001:"/>
     <Color name="Number" foreground="#d0bf69" exampleText="10"/>
+    <Color name="Modifier" foreground="#fc5fa3" fontWeight="bold" exampleText="private" />
 
     <RuleSet>
         <Span color="Comment" begin="//"/>
@@ -21,11 +22,11 @@
         </Span>
 
         <Rule color="Directive">
-            \.[a-zA-Z0-9_]+
+            \s\.[a-zA-Z0-9_]+
         </Rule>
 
         <Rule color="Label">
-            \b[a-zA-Z_][a-zA-Z0-9_]*:
+            IL_[0-9a-fA-F]{4}:
         </Rule>
 
         <Keywords color="TypeKeyword">
@@ -44,6 +45,44 @@
             <Word>native</Word>
             <Word>valuetype</Word>
             <Word>class</Word>
+            <Word>void</Word>
+        </Keywords>
+        
+        <Keywords color="Modifier">
+            <Word>public</Word>
+            <Word>private</Word>
+            <Word>family</Word>
+            <Word>assembly</Word>
+            <Word>famorassem</Word>
+            <Word>famandassem</Word>
+            <Word>static</Word>
+            <Word>literal</Word>
+            <Word>initonly</Word>
+            <Word>rtspecialname</Word>
+            <Word>specialname</Word>
+            <Word>hidebysig</Word>
+            <Word>abstract</Word>
+            <Word>virtual</Word>
+            <Word>sealed</Word>
+            <Word>final</Word>
+            <Word>newslot</Word>
+            <Word>extends</Word>
+            <Word>implements</Word>
+            <Word>cil</Word>
+            <Word>managed</Word>
+            <Word>preservesig</Word>
+            <Word>runtime</Word>
+            <Word>internalcall</Word>
+            <Word>instance</Word>
+            <Word>explicit</Word>
+            <Word>auto</Word>
+            <Word>ansi</Word>
+            <Word>unicode</Word>
+            <Word>autochar</Word>
+            <Word>beforefieldinit</Word>
+            <Word>serializable</Word>
+            <Word>nested</Word>
+            <Word>vararg</Word>
         </Keywords>
 
         <Keywords color="OpCode">
