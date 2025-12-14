@@ -26,9 +26,9 @@ public class StreamDisassemblerTests
         {
             CreateInstructionTestCase(
                 [
-                    new Instruction(Opcode.nop, Operand.None),
-                    new Instruction(Opcode.nop, Operand.None),
-                    new Instruction(Opcode.nop, Operand.None),
+                    new Instruction(0, Opcode.nop, Operand.None),
+                    new Instruction(1, Opcode.nop, Operand.None),
+                    new Instruction(2, Opcode.nop, Operand.None),
                 ],
                 [
                     0x00,
@@ -38,7 +38,7 @@ public class StreamDisassemblerTests
             CreateInstructionTestCase(
                 [
                     new Instruction(
-                        Opcode.call,
+                        0, Opcode.call,
                         new Operand(
                             OperandType.MetadataToken,
                             [ 0x50, 0x20, 0x30, 0x00 ])),
@@ -53,7 +53,7 @@ public class StreamDisassemblerTests
             CreateInstructionTestCase(
                 [
                     new Instruction(
-                        Opcode.@switch,
+                        0, Opcode.@switch,
                         new Operand(
                             OperandType.JumpTable,
                             [
@@ -73,5 +73,5 @@ public class StreamDisassemblerTests
     private static object[] CreateInstructionTestCase(
         IEnumerable<Instruction> expectedInstructions,
         byte[] bytecode) =>
-        new object[] { expectedInstructions, bytecode };
+        [expectedInstructions, bytecode];
 }
