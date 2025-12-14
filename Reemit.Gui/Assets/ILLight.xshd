@@ -1,0 +1,278 @@
+<?xml version="1.0"?>
+<SyntaxDefinition name="IL" extensions=".il" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+    <Color name="Comment" foreground="#5d6c79" exampleText="// comment"/>
+    <Color name="String" foreground="#c41a16" exampleText="&quot;Hello World&quot;"/>
+    <Color name="Directive" foreground="#9b2393" fontWeight="bold" exampleText=".method"/>
+    <Color name="OpCode" foreground="#d2691e" exampleText="ldarg.0"/>
+    <Color name="TypeKeyword" foreground="#9b2393" exampleText="int32"/>
+    <Color name="Label" foreground="#326d74" exampleText="IL_0001:"/>
+    <Color name="Number" foreground="#1c00cf" exampleText="10"/>
+
+    <RuleSet>
+        <Span color="Comment" begin="//"/>
+        <Span color="Comment" multiline="true" begin="/\*" end="\*/"/>
+
+        <Span color="String">
+            <Begin>"</Begin>
+            <End>"</End>
+            <RuleSet>
+                <Span begin="\\" end="."/>
+            </RuleSet>
+        </Span>
+
+        <Rule color="Directive">
+            \.[a-zA-Z0-9_]+
+        </Rule>
+
+        <Rule color="Label">
+            \b[a-zA-Z_][a-zA-Z0-9_]*:
+        </Rule>
+
+        <Keywords color="TypeKeyword">
+            <Word>bool</Word>
+            <Word>char</Word>
+            <Word>object</Word>
+            <Word>string</Word>
+            <Word>float32</Word>
+            <Word>float64</Word>
+            <Word>int8</Word>
+            <Word>int16</Word>
+            <Word>int32</Word>
+            <Word>int64</Word>
+            <Word>typedref</Word>
+            <Word>unsigned</Word>
+            <Word>native</Word>
+            <Word>valuetype</Word>
+            <Word>class</Word>
+        </Keywords>
+
+        <Keywords color="OpCode">
+            <Word>nop</Word>
+            <Word>break</Word>
+            <Word>ldarg.0</Word>
+            <Word>ldarg.1</Word>
+            <Word>ldarg.2</Word>
+            <Word>ldarg.3</Word>
+            <Word>ldloc.0</Word>
+            <Word>ldloc.1</Word>
+            <Word>ldloc.2</Word>
+            <Word>ldloc.3</Word>
+            <Word>stloc.0</Word>
+            <Word>stloc.1</Word>
+            <Word>stloc.2</Word>
+            <Word>stloc.3</Word>
+            <Word>ldarg.s</Word>
+            <Word>ldarga.s</Word>
+            <Word>starg.s</Word>
+            <Word>ldloc.s</Word>
+            <Word>ldloca.s</Word>
+            <Word>stloc.s</Word>
+            <Word>ldnull</Word>
+            <Word>ldc.i4.m1</Word>
+            <Word>ldc.i4.0</Word>
+            <Word>ldc.i4.1</Word>
+            <Word>ldc.i4.2</Word>
+            <Word>ldc.i4.3</Word>
+            <Word>ldc.i4.4</Word>
+            <Word>ldc.i4.5</Word>
+            <Word>ldc.i4.6</Word>
+            <Word>ldc.i4.7</Word>
+            <Word>ldc.i4.8</Word>
+            <Word>ldc.i4.s</Word>
+            <Word>ldc.i4</Word>
+            <Word>ldc.i8</Word>
+            <Word>ldc.r4</Word>
+            <Word>ldc.r8</Word>
+            <Word>dup</Word>
+            <Word>pop</Word>
+            <Word>jmp</Word>
+            <Word>call</Word>
+            <Word>calli</Word>
+            <Word>ret</Word>
+            <Word>br.s</Word>
+            <Word>brfalse.s</Word>
+            <Word>brtrue.s</Word>
+            <Word>beq.s</Word>
+            <Word>bge.s</Word>
+            <Word>bgt.s</Word>
+            <Word>ble.s</Word>
+            <Word>blt.s</Word>
+            <Word>bne.un.s</Word>
+            <Word>bge.un.s</Word>
+            <Word>bgt.un.s</Word>
+            <Word>ble.un.s</Word>
+            <Word>blt.un.s</Word>
+            <Word>br</Word>
+            <Word>brfalse</Word>
+            <Word>brtrue</Word>
+            <Word>beq</Word>
+            <Word>bge</Word>
+            <Word>bgt</Word>
+            <Word>ble</Word>
+            <Word>blt</Word>
+            <Word>bne.un</Word>
+            <Word>bge.un</Word>
+            <Word>bgt.un</Word>
+            <Word>ble.un</Word>
+            <Word>blt.un</Word>
+            <Word>switch</Word>
+            <Word>ldind.i1</Word>
+            <Word>ldind.u1</Word>
+            <Word>ldind.i2</Word>
+            <Word>ldind.u2</Word>
+            <Word>ldind.i4</Word>
+            <Word>ldind.u4</Word>
+            <Word>ldind.i8</Word>
+            <Word>ldind.i</Word>
+            <Word>ldind.r4</Word>
+            <Word>ldind.r8</Word>
+            <Word>ldind.ref</Word>
+            <Word>stind.ref</Word>
+            <Word>stind.i1</Word>
+            <Word>stind.i2</Word>
+            <Word>stind.i4</Word>
+            <Word>stind.i8</Word>
+            <Word>stind.r4</Word>
+            <Word>stind.r8</Word>
+            <Word>add</Word>
+            <Word>sub</Word>
+            <Word>mul</Word>
+            <Word>div</Word>
+            <Word>div.un</Word>
+            <Word>rem</Word>
+            <Word>rem.un</Word>
+            <Word>and</Word>
+            <Word>or</Word>
+            <Word>xor</Word>
+            <Word>shl</Word>
+            <Word>shr</Word>
+            <Word>shr.un</Word>
+            <Word>neg</Word>
+            <Word>not</Word>
+            <Word>conv.i1</Word>
+            <Word>conv.i2</Word>
+            <Word>conv.i4</Word>
+            <Word>conv.i8</Word>
+            <Word>conv.r4</Word>
+            <Word>conv.r8</Word>
+            <Word>conv.u4</Word>
+            <Word>conv.u8</Word>
+            <Word>callvirt</Word>
+            <Word>cpobj</Word>
+            <Word>ldobj</Word>
+            <Word>ldstr</Word>
+            <Word>newobj</Word>
+            <Word>castclass</Word>
+            <Word>isinst</Word>
+            <Word>conv.r.un</Word>
+            <Word>unbox</Word>
+            <Word>throw</Word>
+            <Word>ldfld</Word>
+            <Word>ldflda</Word>
+            <Word>stfld</Word>
+            <Word>ldsfld</Word>
+            <Word>ldsflda</Word>
+            <Word>stsfld</Word>
+            <Word>stobj</Word>
+            <Word>conv.ovf.i1.un</Word>
+            <Word>conv.ovf.i2.un</Word>
+            <Word>conv.ovf.i4.un</Word>
+            <Word>conv.ovf.i8.un</Word>
+            <Word>conv.ovf.u1.un</Word>
+            <Word>conv.ovf.u2.un</Word>
+            <Word>conv.ovf.u4.un</Word>
+            <Word>conv.ovf.u8.un</Word>
+            <Word>conv.ovf.i.un</Word>
+            <Word>conv.ovf.u.un</Word>
+            <Word>box</Word>
+            <Word>newarr</Word>
+            <Word>ldlen</Word>
+            <Word>ldelema</Word>
+            <Word>ldelem.i1</Word>
+            <Word>ldelem.u1</Word>
+            <Word>ldelem.i2</Word>
+            <Word>ldelem.u2</Word>
+            <Word>ldelem.i4</Word>
+            <Word>ldelem.u4</Word>
+            <Word>ldelem.i8</Word>
+            <Word>ldelem.i</Word>
+            <Word>ldelem.r4</Word>
+            <Word>ldelem.r8</Word>
+            <Word>ldelem.ref</Word>
+            <Word>stelem.i</Word>
+            <Word>stelem.i1</Word>
+            <Word>stelem.i2</Word>
+            <Word>stelem.i4</Word>
+            <Word>stelem.i8</Word>
+            <Word>stelem.r4</Word>
+            <Word>stelem.r8</Word>
+            <Word>stelem.ref</Word>
+            <Word>ldelem</Word>
+            <Word>stelem</Word>
+            <Word>unbox.any</Word>
+            <Word>conv.ovf.i1</Word>
+            <Word>conv.ovf.u1</Word>
+            <Word>conv.ovf.i2</Word>
+            <Word>conv.ovf.u2</Word>
+            <Word>conv.ovf.i4</Word>
+            <Word>conv.ovf.u4</Word>
+            <Word>conv.ovf.i8</Word>
+            <Word>conv.ovf.u8</Word>
+            <Word>refanyval</Word>
+            <Word>ckfinite</Word>
+            <Word>mkrefany</Word>
+            <Word>ldtoken</Word>
+            <Word>conv.u2</Word>
+            <Word>conv.u1</Word>
+            <Word>conv.i</Word>
+            <Word>conv.ovf.i</Word>
+            <Word>conv.ovf.u</Word>
+            <Word>add.ovf</Word>
+            <Word>add.ovf.un</Word>
+            <Word>mul.ovf</Word>
+            <Word>mul.ovf.un</Word>
+            <Word>sub.ovf</Word>
+            <Word>sub.ovf.un</Word>
+            <Word>endfinally</Word>
+            <Word>leave</Word>
+            <Word>leave.s</Word>
+            <Word>stind.i</Word>
+            <Word>conv.u</Word>
+            <Word>arglist</Word>
+            <Word>ceq</Word>
+            <Word>cgt</Word>
+            <Word>cgt.un</Word>
+            <Word>clt</Word>
+            <Word>clt.un</Word>
+            <Word>ldftn</Word>
+            <Word>ldvirtftn</Word>
+            <Word>ldarg</Word>
+            <Word>ldarga</Word>
+            <Word>starg</Word>
+            <Word>ldloc</Word>
+            <Word>ldloca</Word>
+            <Word>stloc</Word>
+            <Word>localloc</Word>
+            <Word>endfilter</Word>
+            <Word>unaligned.</Word>
+            <Word>volatile.</Word>
+            <Word>tail.</Word>
+            <Word>initobj</Word>
+            <Word>constrained.</Word>
+            <Word>cpblk</Word>
+            <Word>initblk</Word>
+            <Word>no.</Word>
+            <Word>rethrow</Word>
+            <Word>sizeof</Word>
+            <Word>refanytype</Word>
+            <Word>readonly.</Word>
+        </Keywords>
+
+        <Rule color="Number">
+            \b0[xX][0-9a-fA-F]+ # Hex
+            |
+            \b[0-9]+ # Decimal
+        </Rule>
+
+    </RuleSet>
+</SyntaxDefinition>
