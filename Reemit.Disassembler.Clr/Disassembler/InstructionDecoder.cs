@@ -1,17 +1,27 @@
 ﻿namespace Reemit.Disassembler.Clr.Disassembler;
 
-public class InstructionDecoder(Stream stream) : IDecoder<Instruction>
+public class InstructionDecoder : IDecoder<Instruction>
 {
-    private readonly BinaryReader _binaryReader = new(stream);
+    private readonly BinaryReader _binaryReader;
 
-    private readonly OpcodeDecoder _opcodeDecoder = new(stream);
+    private readonly OpcodeDecoder _opcodeDecoder;
+
+    private readonly long _initialPos;
+
+    public InstructionDecoder(Stream stream)
+    {
+        _binaryReader = new BinaryReader(stream);
+        _opcodeDecoder = new OpcodeDecoder(stream);
+        _initialPos = stream.Position;
+    }
 
     public Instruction Decode()
     {
+        var offset = _binaryReader.BaseStream.Position - _initialPos;
         var opcode = _opcodeDecoder.Decode();
         var operand = DecodeOperand(opcode);
 
-        return new Instruction(opcode, operand);
+        return new Instruction((uint)offset, opcode, operand);
     }
 
     private Operand DecodeOperand(OpcodeInfo opcodeInfo)

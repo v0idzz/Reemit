@@ -14,6 +14,10 @@ public class InstructionEmitter(UserStringsHeapStream userStringsHeapStream)
 
         foreach (var inst in instructions)
         {
+            sb.Append("IL_");
+            sb.Append(inst.Value.Offset.ToString("x4"));
+            sb.Append(": ");
+
             var mnemonic = MnemonicTable.GetMnemonic(inst.Value.OpcodeInfo);
 
             sb.Append(mnemonic);
